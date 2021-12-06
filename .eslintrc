@@ -1,0 +1,7 @@
+{
+  "extends": "@antfu",
+  "rules": {
+    "space-before-function-paren": ["error", "always"],
+    "curly": ["error", "all"]
+  }
+}
