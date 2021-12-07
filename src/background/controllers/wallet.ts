@@ -1,3 +1,5 @@
+import { onMessage } from 'webext-bridge'
+
 export class WalletController {
   private _isLocked = false
 
@@ -23,3 +25,20 @@ export class WalletController {
 }
 
 export const walletController = new WalletController()
+
+// Here we receive all the method invocation from ui, and redirect them to `walletController`,
+// and a Promise resolve the result of controller method invocation will be returned
+export function setupWalletController () {
+  onMessage('wallet-controller', async (data) => {
+    // eslint-disable-next-line no-console
+    const method = data.data.method
+    const params = data.data.params
+
+    // eslint-disable-next-line no-console
+    console.log('background received `wallet-controller`', method, params)
+
+    if (method) {
+      return await (walletController as any)[method].apply(walletController, params)
+    }
+  })
+}
