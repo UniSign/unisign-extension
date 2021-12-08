@@ -49,13 +49,13 @@
 - `src` - main source.
   - `contentScript` - scripts and components to be injected as `content_script`
   - `background` - scripts for background.
-  - `components` - auto-imported Vue components that shared in popup, notification and options page.
+  - `components` - auto-imported Vue components that shared in popup, popbox and options page.
   - `manifest.ts` - manifest for the extension.
   - `ui` - Scripts for ui
     - `popup` popup view
-    - `notification` notification view
+    - `popbox` popbox view
     - `options` options view
-    - `styles` - styles shared in popup, notification and options page
+    - `styles` - styles shared in popup, popbox and options page
 - `extension` - extension package root.
   - `assets` - static assets.
   - `dist` - built files, also serve stub entry for Vite on development.

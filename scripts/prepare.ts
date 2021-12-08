@@ -7,11 +7,11 @@ import { r, port, isDev, log } from './script-utils'
 /**
  * Stub index.html to use Vite in development
  */
-async function stubIndexHtml() {
+async function stubIndexHtml () {
   const views = [
     'options',
     'popup',
-    'notification',
+    'popbox',
   ]
 
   for (const view of views) {
@@ -35,7 +35,7 @@ async function stubIndexHtml() {
   log('PRE', `stub ${background}.html`)
 }
 
-function writeManifest() {
+function writeManifest () {
   execSync('npx esno ./scripts/manifest.ts', { stdio: 'inherit' })
 }
 

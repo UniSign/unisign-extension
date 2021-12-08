@@ -1,17 +1,15 @@
 /* eslint-disable no-console */
-import { onMessage } from 'webext-bridge'
 import { createApp } from 'vue'
+import { allowWindowMessaging, setNamespace } from 'webext-bridge'
 import App from '../ui/inpage/App.vue'
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 (() => {
   console.info('[unisign] Hello world from content script')
 
-  // communication example: send previous tab title from background page
-  onMessage('tab-prev', ({ data }) => {
-    console.log(`[unisign] Navigate from page "${data.title}"`)
-  })
-
+  allowWindowMessaging('unisign-popbox')
+  setNamespace('unisign-popbox')
+  //
   // mount component to context window
   const container = document.createElement('div')
   const root = document.createElement('div')
