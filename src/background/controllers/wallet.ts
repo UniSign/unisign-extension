@@ -1,5 +1,5 @@
 import { onMessage } from 'webext-bridge'
-import { createPopbox } from '~/tools/popbox'
+import { createPopup } from '~/background/tools/popup'
 
 export class WalletController {
   private _isLocked = false
@@ -26,7 +26,11 @@ export class WalletController {
   }
 
   async connect () {
-    return this._isConnected = true
+    await createPopup({
+      route: 'unlock',
+    })
+
+    return new Date().toString()
   }
 
   async disconnect () {
@@ -34,7 +38,7 @@ export class WalletController {
   }
 
   async signPlainMessage () {
-    await createPopbox({
+    await createPopup({
       route: 'sign-plain-message',
     })
 

@@ -7,7 +7,7 @@ const WINDOW_SIZE = {
   height: 600,
 }
 
-export const createPopbox = async ({ route, ...rest }: any): Promise<number | undefined> => {
+export const createPopup = async ({ route, ...rest }: any): Promise<number | undefined> => {
   const { top: cTop, left: cLeft, width } = await browser.windows.getCurrent({
     windowTypes: ['normal'],
   } as Windows.GetInfo)
@@ -17,7 +17,7 @@ export const createPopbox = async ({ route, ...rest }: any): Promise<number | un
 
   const win = await browser.windows.create({
     focused: true,
-    url: `dist/ui/popbox/index.html${route && `#/${route}`}`,
+    url: `dist/ui/popup/index.html${route && `#/${route}`}`,
     type: 'popup',
     top,
     left,
@@ -33,6 +33,6 @@ export const createPopbox = async ({ route, ...rest }: any): Promise<number | un
   return win.id
 }
 
-export const removePopbox = async (winId: number) => {
+export const removePopup = async (winId: number) => {
   return browser.windows.remove(winId)
 }

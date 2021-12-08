@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import LayoutDefault from './layouts/default.vue'
-import PageWelcome from './pages/PageWelcome.vue'
-import PageUnlock from './pages/PageUnlock.vue'
+import PageWelcome from './pages/welcome.vue'
+import PageUnlock from './pages/unlock.vue'
 
 const routes = [{
   path: '/',

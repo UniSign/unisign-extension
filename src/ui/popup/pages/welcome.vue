@@ -14,8 +14,8 @@
       Options Page
     </button>
 
-    <button class="btn mt-2" @click="openPopbox">
-      Popbox
+    <button class="btn mt-2" @click="openPopup">
+      Popup
     </button>
     <br>
 
@@ -42,8 +42,8 @@ export default {
       popResult,
 
       openOptionsPage,
-      async openPopbox () {
-        popResult.value = await wallet.signPlainMessage()
+      async openPopup () {
+        popResult.value = await wallet.connect()
       },
     }
   },

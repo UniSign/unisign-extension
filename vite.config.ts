@@ -94,7 +94,6 @@ export default defineConfig(({ command }) => ({
         background: r('src/background/index.html'),
         // ui
         popup: r('src/ui/popup/index.html'),
-        popbox: r('src/ui/popbox/index.html'),
         options: r('src/ui/options/index.html'),
       },
     },

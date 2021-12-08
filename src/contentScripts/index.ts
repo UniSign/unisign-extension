@@ -1,15 +1,11 @@
 /* eslint-disable no-console */
 import { createApp } from 'vue'
-import { allowWindowMessaging, setNamespace } from 'webext-bridge'
 import App from '../ui/inpage/App.vue'
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 (() => {
   console.info('[unisign] Hello world from content script')
 
-  allowWindowMessaging('unisign-popbox')
-  setNamespace('unisign-popbox')
-  //
   // mount component to context window
   const container = document.createElement('div')
   const root = document.createElement('div')
