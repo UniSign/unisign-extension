@@ -55,7 +55,7 @@ export const sharedConfig: UserConfig = {
       name: 'assets-rewrite',
       enforce: 'post',
       apply: 'build',
-      transformIndexHtml(html, { path }) {
+      transformIndexHtml (html, { path }) {
         return html.replace(/"\/assets\//g, `"${relative(dirname(path), '/assets')}/`)
       },
     },
@@ -94,7 +94,7 @@ export default defineConfig(({ command }) => ({
         background: r('src/background/index.html'),
         // ui
         popup: r('src/ui/popup/index.html'),
-        notification: r('src/ui/notification/index.html'),
+        popbox: r('src/ui/popbox/index.html'),
         options: r('src/ui/options/index.html'),
       },
     },

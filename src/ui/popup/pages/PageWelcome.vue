@@ -8,19 +8,26 @@
   <div class="page-welcome">
     Welcome
 
+    <br>
+
     <button class="btn mt-2" @click="openOptionsPage">
-      Open Options Page
+      Options Page
+    </button>
+
+    <button class="btn mt-2" @click="openPopbox">
+      Popbox
     </button>
     <br>
 
     <div class="mt-2">
-      <span class="opacity-50">Storage:</span> {{ storageDemo }}
+      <span class="opacity-50">PopResult:</span> {{ popResult }}
     </div>
   </div>
 </template>
 
 <script>
-import { storageDemo } from '~/utils/storage'
+import { ref } from 'vue'
+import { wallet } from '~/ui/controllers/wallet'
 
 function openOptionsPage () {
   browser.runtime.openOptionsPage()
@@ -29,10 +36,15 @@ function openOptionsPage () {
 export default {
   name: 'PageWelcome',
   setup () {
-    return {
-      openOptionsPage,
+    const popResult = ref('')
 
-      storageDemo,
+    return {
+      popResult,
+
+      openOptionsPage,
+      async openPopbox () {
+        popResult.value = await wallet.signPlainMessage()
+      },
     }
   },
 }

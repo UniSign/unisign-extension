@@ -1,7 +1,9 @@
 import { onMessage } from 'webext-bridge'
+import { createPopbox } from '~/tools/popbox'
 
 export class WalletController {
   private _isLocked = false
+  private _isConnected = false
 
   async bootstrap () {
 
@@ -21,6 +23,26 @@ export class WalletController {
 
   async isLocked () {
     return this._isLocked
+  }
+
+  async connect () {
+    return this._isConnected = true
+  }
+
+  async disconnect () {
+    return this._isConnected = false
+  }
+
+  async signPlainMessage () {
+    await createPopbox({
+      route: 'sign-plain-message',
+    })
+
+    return new Date().toString()
+  }
+
+  async isConnected () {
+    return this._isConnected
   }
 }
 

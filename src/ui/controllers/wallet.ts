@@ -9,7 +9,7 @@ export const wallet = new Proxy({}, {
       return sendMessage('wallet-controller', {
         method: key,
         params,
-      })
+      }, 'background')
     }
   },
 }) as any as WalletController
