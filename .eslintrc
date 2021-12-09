@@ -2,6 +2,7 @@
   "extends": "@antfu",
   "rules": {
     "space-before-function-paren": ["error", "always"],
-    "curly": ["error", "all"]
+    "curly": ["error", "multi-line"],
+    "no-console": "off"
   }
 }
