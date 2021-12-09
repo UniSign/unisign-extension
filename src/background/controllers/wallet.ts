@@ -1,5 +1,5 @@
-import { onMessage } from 'webext-bridge'
-import { createPopbox } from '~/tools/popbox'
+import CrxBridge from 'crx-bridge'
+import { createPopup } from '~/background/tools/popup'
 
 export class WalletController {
   private _isLocked = false
@@ -26,7 +26,11 @@ export class WalletController {
   }
 
   async connect () {
-    return this._isConnected = true
+    await createPopup({
+      route: 'unlock',
+    })
+
+    return new Date().toString()
   }
 
   async disconnect () {
@@ -34,7 +38,7 @@ export class WalletController {
   }
 
   async signPlainMessage () {
-    await createPopbox({
+    await createPopup({
       route: 'sign-plain-message',
     })
 
@@ -51,7 +55,7 @@ export const walletController = new WalletController()
 // Here we receive all the method invocation from ui, and redirect them to `walletController`,
 // and a Promise resolve the result of controller method invocation will be returned
 export function setupWalletController () {
-  onMessage('wallet-controller', async (data) => {
+  CrxBridge.onMessage('wallet-controller', async (data) => {
     // eslint-disable-next-line no-console
     const method = data.data.method
     const params = data.data.params

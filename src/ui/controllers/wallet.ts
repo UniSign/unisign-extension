@@ -1,4 +1,4 @@
-import { sendMessage } from 'webext-bridge'
+import CrxBridge from 'crx-bridge'
 import { WalletController } from '~/background/controllers/wallet'
 
 // Here we use Proxy to send every invocation to background through `webext-bridge`,
@@ -6,7 +6,7 @@ import { WalletController } from '~/background/controllers/wallet'
 export const wallet = new Proxy({}, {
   get (target: {}, key: string): any {
     return function (...params: any) {
-      return sendMessage('wallet-controller', {
+      return CrxBridge.sendMessage('wallet-controller', {
         method: key,
         params,
       }, 'background')
