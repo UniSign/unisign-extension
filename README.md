@@ -33,8 +33,6 @@
 
 ### Coding Style
 
-- [ESLint](https://eslint.org/) with [@antfu/eslint-config](https://github.com/antfu/eslint-config), single quotes, no semi
-
 ### Dev tools
 
 - [pnpm](https://pnpm.js.org/) - fast, disk space efficient package manager
