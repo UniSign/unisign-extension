@@ -14,8 +14,10 @@ specifiers:
   chokidar: ^3.5.2
   cross-env: ^7.0.3
   crx: ^5.0.1
+  crx-bridge: '2'
   eslint: ^7.32.0
   esno: ^0.10.0
+  events: ^3.3.0
   fs-extra: ^10.0.0
   kolorist: ^1.5.0
   npm-run-all: ^4.1.5
@@ -34,6 +36,8 @@ specifiers:
   webextension-polyfill: ^0.8.0
 
 dependencies:
+  crx-bridge: 2.2.0
+  events: 3.3.0
   vue-router: 4.0.12_vue@3.2.19
 
 devDependencies:
@@ -1676,6 +1680,12 @@ packages:
       which: 2.0.2
     dev: true
 
+  /crx-bridge/2.2.0:
+    resolution: {integrity: sha512-4lvu7C06jD4dvUpY4s6+9ScuwXr69nmWrwnPiNC+Cq/FgCit0PV3Jrd/nNhcHzg0PcKTr9+f/SF76oeWrWeUdQ==}
+    dependencies:
+      serialize-error: 2.1.0
+    dev: false
+
   /crx/5.0.1:
     resolution: {integrity: sha512-n/PzBx/fR1+xZCiJBats9y5zw/a+YBcoJ0ABnUaY56xb1RpXuFhsiCMpNY6WjVtylLzhUUXSWsbitesVg7v2vg==}
     engines: {node: '>=10'}
@@ -2562,6 +2572,11 @@ packages:
     resolution: {integrity: sha1-S4TxF3K28l93Uvx02XFTGsb1tiY=}
     deprecated: Use promise-toolbox/fromEvent instead
     dev: true
+
+  /events/3.3.0:
+    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
+    engines: {node: '>=0.8.x'}
+    dev: false
 
   /execa/4.1.0:
     resolution: {integrity: sha512-j5W0//W7f8UxAn8hXVnwG8tLwdiUy4FJLcSupCg6maBYZDpyBvTApK7KyuI4bKj8KOh1r2YH+6ucuYtJv1bTZA==}
@@ -4721,6 +4736,11 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /serialize-error/2.1.0:
+    resolution: {integrity: sha1-ULZ51WNc34Rme9yOWa9OW4HV9go=}
+    engines: {node: '>=0.10.0'}
+    dev: false
 
   /serialize-error/8.1.0:
     resolution: {integrity: sha512-3NnuWfM6vBYoy5gZFvHiYsVbafvI9vZv/+jlIigFn4oP4zjNPK3LhcY0xSCgeb1a5L8jO71Mit9LlNoi2UfDDQ==}

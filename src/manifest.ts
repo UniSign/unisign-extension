@@ -40,10 +40,11 @@ export async function getManifest () {
     ],
     content_scripts: [{
       matches: ['http://*/*', 'https://*/*'],
-      js: ['./dist/contentScripts/index.global.js'],
+      js: ['./dist/content-scripts/content.js'],
     }],
     web_accessible_resources: [
-      'dist/contentScripts/style.css',
+      'dist/content-scripts/provider.js',
+      'dist/content-scripts/style.css',
     ],
   }
 
