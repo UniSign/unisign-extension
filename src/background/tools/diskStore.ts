@@ -32,7 +32,7 @@ function autoSaveWithProxy<T extends object> (name: string, obj: T): T {
  */
 export async function loadDiskStore<T extends object> (
   name: string,
-  defaultValue = Object.create(null),
+  defaultValue: T = Object.create(null),
 ): Promise<T> {
   const storageCache = await storage.get(name) || await storage.set(name, defaultValue)
 
