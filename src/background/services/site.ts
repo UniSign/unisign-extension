@@ -1,0 +1,138 @@
+import LRU from 'lru-cache'
+import { loadDiskStore } from '~/background/tools/diskStore'
+import { UNISIGN_ORIGIN } from '~/constants'
+
+export interface SiteData {
+  origin: string
+  name: string
+  icon: string
+
+  chain_id: string // '0x123'
+
+  isPinned: boolean
+  hasSigned: boolean
+}
+
+interface SiteStore {
+  lruDumped: ReadonlyArray<LRU.Entry<string, SiteData>>
+}
+
+/**
+ * Used to manage every connected site, identified by origin
+ */
+export class SiteService {
+  private lrcCache = new LRU<string, SiteData>()
+  private store: SiteStore = {
+    lruDumped: [],
+  }
+
+  constructor () {
+    this.init().then(() => console.log('SiteService initialized'))
+  }
+
+  async init () {
+    this.store = await loadDiskStore('site')
+
+    const cache = this.store.lruDumped.map(item => ({
+      k: item.k,
+      v: item.v,
+      e: 0,
+    }))
+
+    this.lrcCache.load(cache)
+  }
+
+  /**
+   * sync storage back to persistent storage
+   */
+  sync () {
+    this.store.lruDumped = this.lrcCache.dump()
+  }
+
+  isInternalOrigin (origin: string) {
+    return origin === UNISIGN_ORIGIN
+  }
+
+  hasBeenConnected (origin: string): boolean {
+    if (this.isInternalOrigin(origin)) return true
+
+    return this.lrcCache.has(origin)
+  }
+
+  addSite (site: SiteData) {
+    this.lrcCache.set(origin, {
+      ...site,
+      isPinned: false,
+    })
+
+    this.sync()
+  }
+
+  getSite (origin: string) {
+    return this.lrcCache.get(origin)
+  }
+
+  /**
+   * visit the site data in lrc cache to promote the site
+   */
+  touchSite (origin: string) {
+    if (this.isInternalOrigin(origin)) return
+
+    this.lrcCache.get(origin)
+
+    this.sync()
+  }
+
+  updateSite (origin: string, value: Partial<SiteData>) {
+    if (!this.lrcCache.has(origin)) return
+    if (this.isInternalOrigin(origin)) return
+
+    const originValue = this.lrcCache.get(origin)
+    this.lrcCache.set(origin, Object.assign(originValue, value))
+
+    this.sync()
+  }
+
+  /**
+   * move site to the top
+   * @param origin
+   */
+  pinSite (origin: string) {
+    const site = this.getSite(origin)
+    if (!site) return
+    this.updateSite(origin, {
+      ...site,
+      isPinned: true,
+    })
+  }
+
+  unpinSite (origin: string) {
+    const site = this.getSite(origin)
+    if (!site) return
+    this.updateSite(origin, {
+      ...site,
+      isPinned: false,
+    })
+  }
+
+  removeSite (origin: string) {
+    this.lrcCache.del(origin)
+
+    this.sync()
+  }
+
+  getSites () {
+    return this.lrcCache.values()
+  }
+
+  getSitesSorted () {
+    const weight = (site: SiteData) => Number(site.isPinned) * 10 + Number(site.hasSigned)
+    return this.lrcCache.values().sort((a, b) => weight(a) - weight(b))
+  }
+
+  getSitesByChainId (chain: string) {
+    return this.lrcCache.values().filter(site => site.chain_id === chain)
+  }
+}
+
+export const siteService = new SiteService()
