@@ -4,7 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    UniInput: typeof import('E:/coding/unisign-extension/src/ui/components/uni-input.vue')['default']
+    UniInput: typeof import('E:/coding/unisign-extension/src/ui/components/UniInput.vue')['default']
   }
 }
 

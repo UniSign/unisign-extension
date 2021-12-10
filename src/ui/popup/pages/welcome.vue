@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 .page-welcome {
   background: url("/assets/page-welcome/page-welcome-bg.png") no-repeat;
-  background-size:100% 100%;  
+  background-size:100% 100%;
   width: 100%;
   height: 100%;
   h2 {
@@ -46,12 +46,12 @@
     color: #FFFFFF;
     line-height: 21px;
     opacity: 0.4;
-    &.canClick {
+    &._canClick {
       opacity: 1;
     }
     &:focus{
       outline: 0;
-    } 
+    }
   }
 }
 </style>
@@ -62,9 +62,11 @@
     <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-welcome/page-welcome-logo.png">
     <h2>Bring all crypto users into<span>Web3.0</span></h2>
     <div class="input-box">
-      <uni-input ref="passwordRef" v-model="password" showValidateText="The passwords do not match" placeholder="Set a password"></uni-input>
-      <uni-input ref="rePasswordRef" class="mt-[32px] mb-[32px]" v-model="rePassword" placeholder="Repeat"></uni-input>
-      <button class="uni-btn" :class="{'canClick':password && rePassword}" @click="submitBtn">Continue</button>
+      <uni-input ref="passwordRef" v-model="password" validate-text="The passwords do not match" placeholder="Set a password"></uni-input>
+      <uni-input ref="rePasswordRef" v-model="rePassword" class="mt-[32px] mb-[32px]" placeholder="Repeat"></uni-input>
+      <button class="uni-btn" :class="{'_canClick':password && rePassword}" @click="onClickSubmit">
+        Continue
+      </button>
     </div>
   </div>
 </template>
@@ -73,22 +75,22 @@
 import { ref } from 'vue'
 export default {
   name: 'PageWelcome',
-  setup (props,context) {
+  setup (props, context) {
     const password = ref('')
     const rePassword = ref('')
     const passwordRef = ref(null)
     const rePasswordRef = ref(null)
-    const submitBtn = ()=>{
-      if(!password.value || !passwordRef.value) return
+    const onClickSubmit = () => {
+      if (!password.value || !passwordRef.value) return
       rePassword.value !== password.value && rePasswordRef.value.validate()
     }
 
     return {
       password,
       rePassword,
-      submitBtn,
+      onClickSubmit,
       passwordRef,
-      rePasswordRef
+      rePasswordRef,
     }
   },
 }

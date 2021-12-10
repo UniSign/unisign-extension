@@ -17,7 +17,7 @@
                 outline:none;
                 border: 1px solid #FBAF34;
             }
-            &.error {
+            &._error {
                 outline:none;
                 border: 1px solid #F72B35;
             }
@@ -34,49 +34,51 @@
 </style>
 
 <template>
-    <div class="input-wrapper">
-        <input :class="{'error':showValidateText}" type="text" :value="modelValue" @input="iptChange" :placeholder="placeholder">
-        <p v-show="showValidateText">{{ validateText }}</p>
-    </div>
+  <div class="input-wrapper">
+    <input :class="{'_error':canShowValidateText}" type="text" :value="modelValue" :placeholder="placeholder" @input="iptChange">
+    <p v-show="canShowValidateText">
+      {{ validateText }}
+    </p>
+  </div>
 </template>
 
 <script>
-import { ref,toRefs } from 'vue'
+import { ref, toRefs } from 'vue'
 
 export default {
   props: {
     modelValue: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     placeholder: {
-        type: String,
-        required: false,
-        default:'Set a password'
+      type: String,
+      required: false,
+      default: 'Set a password',
     },
-    validateText:{
-        type: String,
-        required: false,
-        default:'The passwords do not match'
+    validateText: {
+      type: String,
+      required: false,
+      default: 'The passwords do not match',
+    },
+  },
+  setup (props, context) {
+    const canShowValidateText = ref(false)
+    const { validateText } = toRefs(props)
+    function iptChange (e) {
+      canShowValidateText.value = false
+      context.emit('update:modelValue', e.target.value)
+    }
+    const validate = () => {
+      if (validateText.value) {
+        canShowValidateText.value = true
+      }
+    }
+    return {
+      iptChange,
+      canShowValidateText,
+      validate,
     }
   },
-  setup(props, context) {
-        const showValidateText = ref(false)
-        const { validateText } = toRefs(props)
-        function iptChange(e) {
-            showValidateText.value = false
-            context.emit('update:modelValue', e.target.value)
-        }
-        const validate=()=> {
-            if(validateText.value) {
-                showValidateText.value = true
-            }
-        }
-        return {
-            iptChange,
-            showValidateText,
-            validate
-        }
-    }
 }
 </script>
