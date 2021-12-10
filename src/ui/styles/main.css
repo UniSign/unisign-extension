@@ -5,6 +5,15 @@ body,
   padding: 0;
 }
 
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+
 .btn {
   @apply px-4 py-1 rounded inline-block
     bg-teal-600 text-white cursor-pointer
