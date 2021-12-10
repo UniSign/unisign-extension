@@ -7,7 +7,7 @@
 <script lang="ts">
 import { storageDemo } from '~/utils/storage'
 export default {
-  setup() {
+  setup () {
     return {
       storageDemo,
     }
