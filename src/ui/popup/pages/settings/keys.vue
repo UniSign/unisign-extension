@@ -6,14 +6,18 @@
 
 <template>
   <div class="page-settings-keys">
+    <Iconfont name="anti-phishing" size="100" color="black"></Iconfont>
   </div>
 </template>
 
 <script>
+import Iconfont from '~/ui/components/Iconfont.vue'
 
 export default {
   name: 'PageSettingsKeys',
-  components: {},
+  components: {
+    Iconfont,
+  },
   data () {
     return {}
   },

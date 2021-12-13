@@ -8,6 +8,8 @@ import { r, port, isDev, log } from './script-utils'
  * Stub index.html to use Vite in development
  */
 async function stubIndexHtml () {
+  const iconfontUrl = 'https://at.alicdn.com/t/font_2960793_yo2qt6koylp.js'
+
   const views = [
     'options',
     'popup',
@@ -19,6 +21,8 @@ async function stubIndexHtml () {
     data = data
       .replace('"./main.ts"', `"http://localhost:${port}/ui/${view}/main.ts"`)
       .replace('<div id="app"></div>', '<div id="app">Vite server did not start</div>')
+      .replace('//at.alicdn.com/', iconfontUrl)
+
     await fs.writeFile(r(`extension/dist/ui/${view}/index.html`), data, 'utf-8')
     log('PRE', `stub ${view}.html`)
   }
