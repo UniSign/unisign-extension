@@ -28,8 +28,3 @@ html::-webkit-scrollbar {
     hover:opacity-100 hover:text-teal-600;
   font-size: 0.9em;
 }
-
-.main-container {
-  width: 350px;
-  height: 610px;
-}

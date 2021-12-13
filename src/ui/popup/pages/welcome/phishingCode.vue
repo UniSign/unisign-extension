@@ -1,57 +1,58 @@
 <style lang="scss" scoped>
 .page-phishing-code {
+  height: 100%;
+  padding: 78px 24px 0;
   background: url("/assets/page-welcome/page-welcome-bg.png") no-repeat;
   background-size:100% 100%;
-  padding: 78px 24px 0;
   h2 {
-    font-size: 24px;
+    font-size: $title-font-size;
     font-weight: 800;
-    color: #242C3F;
+    color: $main-color;
     line-height: 29px;
     text-align: center;
   }
   h3 {
-    width: 302px;
     display: block;
     margin: 8px auto 48px;
-    font-size: 14px;
+    width: 302px;
+    font-size: $detail-font-size;
     font-weight: 400;
-    color: #6F7684;
     line-height: 16px;
     text-align: center;
+    color: #6F7684;
   }
   input {
     width: 180px;
     height: 50px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #242C3F;
-    line-height: 50px;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.08);
     padding: 10px 12px;
-    text-align: center;
-    display: block;
     margin:0 auto 143px;
+    display: block;
+    border-radius: 8px;
+    font-size: $title-font-size;
+    font-weight: bold;
+    line-height: 50px;
+    text-align: center;
     font-family: monospace;
+    background: rgba(0, 0, 0, 0.08);
+    color: $main-color;
     &:focus {
         outline:none;
-        border: 1px solid #FBAF34;
+        border: 1px solid $input-boder-focus-color;
     }
     &._error {
         outline:none;
-        border: 1px solid #F72B35;
+        border: 1px solid $input-boder-error-color;
     }
   }
   .uni-btn {
     width: 100%;
     height: 50px;
-    background: #FBAF34;
     border-radius: 8px;
-    font-size: 18px;
+    font-size: $main-font-size;
     font-weight: 500;
-    color: #FFFFFF;
     line-height: 21px;
+    background: $main-btn-bg;
+    color: #FFFFFF;
     opacity: 0.4;
     &._canClick {
       opacity: 1;
@@ -64,7 +65,7 @@
 </style>
 
 <template>
-  <div class="page-phishing-code main-container">
+  <div class="page-phishing-code">
     <Iconfont class="block mx-auto mb-[31px]" name="anti-phishing" width="61" height="48" color="black"></Iconfont>
     <h2>Set an</h2>
     <h2>Anti-Phishing Code</h2>
@@ -80,12 +81,8 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Iconfont from '~/ui/components/Iconfont.vue'
 export default {
   name: 'PagePhishingCode',
-  components: {
-    Iconfont,
-  },
   setup (props, context) {
     const modelValue = ref('')
     const isError = ref(false)

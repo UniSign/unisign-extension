@@ -106,4 +106,11 @@ export default defineConfig(({ command }) => ({
       config: windiConfig,
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "./src/ui/styles/global.scss";',
+      },
+    },
+  },
 }))

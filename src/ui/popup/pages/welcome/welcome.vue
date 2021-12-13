@@ -1,46 +1,47 @@
 <style lang="scss" scoped>
 .page-welcome {
+  height: 100%;
   background: url("/assets/page-welcome/page-welcome-bg.png") no-repeat;
   background-size:100% 100%;
   h2 {
-    font-size: 18px;
-    font-weight: 400;
-    color: #242C3F;
+    margin-top: 13px;
     line-height: 21px;
     text-align: center;
-    margin-top: 13px;
+    font-size: $main-font-size;
+    font-weight: 400;
+    color: $main-color;
     span {
       margin-left: 1px;
-      display: inline-block;
-      background:#242C3F;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #FFFFFF;
-      line-height: 16px;
       padding: 2px 4px;
+      display: inline-block;
       box-sizing: border-box;
+      font-size: $detail-font-size;
+      font-weight: 600;
+      line-height: 16px;
+      border-radius: 4px;
+      background: $main-color;
+      color: #FFFFFF;
     }
   }
   .input-box {
     width: 302px;
     height: 270px;
-    background: rgba(255, 255, 255, 0.45);
     box-shadow: 0px 9px 12px 0px rgba(141, 145, 156, 0.2);
     border-radius: 22px;
     border: 1px solid #FFFFFF;
     margin: 78px auto 0;
     padding: 32px 24px 24px;
+    background: rgba(255, 255, 255, 0.45);
   }
   .uni-btn {
     width: 100%;
     height: 50px;
-    background: #FBAF34;
     border-radius: 8px;
-    font-size: 18px;
+    font-size: $main-font-size;
     font-weight: 500;
     color: #FFFFFF;
     line-height: 21px;
+    background: $main-btn-bg;
     opacity: 0.4;
     &._canClick {
       opacity: 1;
@@ -53,7 +54,7 @@
 </style>
 
 <template>
-  <div class="page-welcome main-container">
+  <div class="page-welcome">
     <img class="w-[350px] h-[78px]" src="/assets/page-welcome/page-welcome-top-bg.png">
     <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-welcome/page-welcome-logo.png">
     <h2>Bring all crypto users into<span>Web3.0</span></h2>
