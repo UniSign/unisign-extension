@@ -2,11 +2,8 @@
 .page-welcome {
   background: url("/assets/page-welcome/page-welcome-bg.png") no-repeat;
   background-size:100% 100%;
-  width: 100%;
-  height: 100%;
   h2 {
     font-size: 18px;
-    font-family: SFProDisplay-Regular, SFProDisplay;
     font-weight: 400;
     color: #242C3F;
     line-height: 21px;
@@ -41,7 +38,6 @@
     background: #FBAF34;
     border-radius: 8px;
     font-size: 18px;
-    font-family: SFProDisplay-Medium, SFProDisplay;
     font-weight: 500;
     color: #FFFFFF;
     line-height: 21px;
@@ -57,7 +53,7 @@
 </style>
 
 <template>
-  <div class="page-welcome w-[350px] h-[610px]">
+  <div class="page-welcome main-container">
     <img class="w-[350px] h-[78px]" src="/assets/page-welcome/page-welcome-top-bg.png">
     <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-welcome/page-welcome-logo.png">
     <h2>Bring all crypto users into<span>Web3.0</span></h2>
@@ -73,6 +69,7 @@
 
 <script>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
   name: 'PageWelcome',
   setup (props, context) {
@@ -80,9 +77,14 @@ export default {
     const rePassword = ref('')
     const passwordRef = ref(null)
     const rePasswordRef = ref(null)
+    const router = useRouter()
     const onClickSubmit = () => {
-      if (!password.value || !passwordRef.value) return
-      rePassword.value !== password.value && rePasswordRef.value.validate()
+      // if (!password.value || !passwordRef.value) return
+      // if (rePassword.value !== password.value) {
+      //   rePasswordRef.value.validate()
+      //   return
+      // }
+      router.push('/phishingCode')
     }
 
     return {

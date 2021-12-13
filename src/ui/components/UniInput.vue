@@ -7,7 +7,6 @@
             height: 50px;
             padding-left: 16px;
             font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
             color: #242C3F;
             line-height: 22px;
@@ -24,7 +23,6 @@
         }
         p {
             font-size: 12px;
-            font-family: SFProDisplay-Regular, SFProDisplay;
             font-weight: 400;
             color: #F72B35;
             line-height: 14px;
@@ -35,7 +33,7 @@
 
 <template>
   <div class="input-wrapper">
-    <input :class="{'_error':canShowValidateText}" type="text" :value="modelValue" :placeholder="placeholder" @input="iptChange">
+    <input :class="{'_error':canShowValidateText}" type="text" :value="modelValue" :placeholder="placeholder" @input="onInputChange">
     <p v-show="canShowValidateText">
       {{ validateText }}
     </p>
@@ -65,7 +63,7 @@ export default {
   setup (props, context) {
     const canShowValidateText = ref(false)
     const { validateText } = toRefs(props)
-    function iptChange (e) {
+    function onInputChange (e) {
       canShowValidateText.value = false
       context.emit('update:modelValue', e.target.value)
     }
@@ -75,7 +73,7 @@ export default {
       }
     }
     return {
-      iptChange,
+      onInputChange,
       canShowValidateText,
       validate,
     }
