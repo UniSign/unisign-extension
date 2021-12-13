@@ -3,39 +3,37 @@
         width: 254px;
         height: 50px;
         input {
-            width: 254px;
-            height: 50px;
-            padding-left: 16px;
-            font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #242C3F;
-            line-height: 22px;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.08);
-            &:focus {
-                outline:none;
-                border: 1px solid #FBAF34;
-            }
-            &._error {
-                outline:none;
-                border: 1px solid #F72B35;
-            }
+          width: 254px;
+          height: 50px;
+          padding-left: 16px;
+          border-radius: 8px;
+          font-size: $input-font-size;
+          font-weight: 400;
+          line-height: 22px;
+          background: rgba(0, 0, 0, 0.08);
+          color: $main-color;
+          &:focus {
+              outline:none;
+              border: 1px solid $input-boder-focus-color;
+          }
+          &._error {
+              outline:none;
+              border: 1px solid $input-boder-error-color;
+          }
         }
         p {
-            font-size: 12px;
-            font-family: SFProDisplay-Regular, SFProDisplay;
-            font-weight: 400;
-            color: #F72B35;
-            line-height: 14px;
-            margin-top: 2px;
+          margin-top: 2px;
+          font-size: $default-font-size;
+          font-weight: 400;
+          line-height: 14px;
+          color: $input-boder-error-color;
         }
     }
 </style>
 
 <template>
   <div class="input-wrapper">
-    <input :class="{'_error':canShowValidateText}" type="text" :value="modelValue" :placeholder="placeholder" @input="iptChange">
+    <input :class="{'_error':canShowValidateText}" type="text" :value="modelValue" :placeholder="placeholder" @input="onInputChange">
     <p v-show="canShowValidateText">
       {{ validateText }}
     </p>
@@ -65,7 +63,7 @@ export default {
   setup (props, context) {
     const canShowValidateText = ref(false)
     const { validateText } = toRefs(props)
-    function iptChange (e) {
+    function onInputChange (e) {
       canShowValidateText.value = false
       context.emit('update:modelValue', e.target.value)
     }
@@ -75,7 +73,7 @@ export default {
       }
     }
     return {
-      iptChange,
+      onInputChange,
       canShowValidateText,
       validate,
     }

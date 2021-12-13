@@ -1,0 +1,188 @@
+<style lang="scss" scoped>
+.page-begin {
+  position: relative;
+  height: 100%;
+  background-color: #DCE5F0;
+  .top-bg {
+    width: 100%;
+    height: 201px;
+    border-radius: 0px 0px 20px 20px;
+    background: #534CDD;
+  }
+  .top-line-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    left: 50%;
+    width: 100%;
+    height: 58px;
+    padding: 0 20px;
+    .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+  .central-content {
+    position: absolute;
+    top: 122px;
+    transform: translateX(-50%);
+    left: 50%;
+    box-shadow: 0px 6px 10px 0px rgba(141, 145, 156, 0.1);
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    width: 310px;
+    height: 267px;
+    background: #E9EDF3;
+    h2 {
+      margin-top: 64px;
+      text-align: center;
+      font-size: $title-font-size;
+      font-weight: 600;
+      line-height: 29px;
+      color: $main-color;
+    }
+    p {
+      margin-top: 16px;
+      text-align: center;
+      font-size: $detail-font-size;
+      font-weight: 400;
+      line-height: 16px;
+      color: #8D919C;
+    }
+    .uni-btn {
+      display: block;
+      width: 230px;
+      height: 50px;
+      margin:52px auto 0;
+      border-radius: 8px;
+      font-size: $main-font-size;
+      font-weight: 500;
+      line-height: 21px;
+      background: $main-btn-bg;
+      color: #FFFFFF;
+      opacity: 1;
+      &:focus{
+        outline: 0;
+      }
+    }
+  }
+  .key-icon {
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 74px;
+    width: 100px;
+    height: 100px;
+  }
+  >p {
+    position: absolute;
+    top: 577px;
+    transform: translateX(-50%);
+    left: 50%;
+    font-size: $detail-font-size;
+    font-weight: 400;
+    line-height: 16px;
+    color: #2A67C5;
+    cursor: pointer;
+  }
+  .foot-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    .ironman-box {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      img {
+        width: 8px;
+        height: 10px;
+        margin-right: 8px;
+      }
+      span {
+        font-size: $default-font-size;
+        font-weight: 600;
+        line-height: 14px;
+        color: $main-color;
+      }
+    }
+    .ironman-detail {
+      position: absolute;
+      bottom: 28px;
+      transform: translateX(-50%);
+      left: 50%;
+      padding: 7px 12px 12px;
+      box-sizing: border-box;
+      box-shadow: 0px 5px 6px 0px rgba(0, 0, 0, 0.16);
+      border-radius: 8px;
+      font-size: $detail-font-size;
+      font-weight: 500;
+      background: #11142D;
+      color: #FFFFFF;
+    }
+  }
+}
+</style>
+
+<template>
+  <div class="page-begin">
+    <div class="top-bg"></div>
+    <div class="top-line-box">
+      <div class="icon-wrapper cursor-pointer">
+        <Iconfont name="settings" size="20" color="#fff"></Iconfont>
+      </div>
+      <img class="w-[134px] h-[36px]" src="/assets/page-begin/nav-logo.png">
+      <div class="icon-wrapper cursor-pointer">
+        <Iconfont name="lock" size="20" color="#fff"></Iconfont>
+      </div>
+    </div>
+    <div class="central-content">
+      <h2>Let’s begin</h2>
+      <p>Create or import a key to start.</p>
+      <button class="uni-btn" @click="onClickSubmit">
+        Add Keys
+      </button>
+    </div>
+    <img class="key-icon" src="/assets/page-begin/key-icon.png">
+    <p>How to use?</p>
+    <div class="foot-box">
+      <div class="ironman-box" @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">
+        <img src="/assets/page-begin/identification-icon.png">
+        <span>Ironman</span>
+      </div>
+      <div v-show="isShowDetail" class="ironman-detail">
+        Anti-Phishing Code
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+export default {
+  name: 'PageBegin',
+  setup (props, context) {
+    const isShowDetail = ref(false)
+    const onClickSubmit = () => {
+    }
+    return {
+      onClickSubmit,
+      isShowDetail,
+    }
+  },
+}
+</script>
