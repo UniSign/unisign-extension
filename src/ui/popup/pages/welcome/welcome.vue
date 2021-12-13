@@ -79,11 +79,11 @@ export default {
     const rePasswordRef = ref(null)
     const router = useRouter()
     const onClickSubmit = () => {
-      // if (!password.value || !passwordRef.value) return
-      // if (rePassword.value !== password.value) {
-      //   rePasswordRef.value.validate()
-      //   return
-      // }
+      if (!password.value || !passwordRef.value) return
+      if (rePassword.value !== password.value) {
+        rePasswordRef.value.validate()
+        return
+      }
       router.push('/phishingCode')
     }
 

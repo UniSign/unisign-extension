@@ -2,7 +2,7 @@
 .page-phishing-code {
   background: url("/assets/page-welcome/page-welcome-bg.png") no-repeat;
   background-size:100% 100%;
-  padding: 0 24px;
+  padding: 78px 24px 0;
   h2 {
     font-size: 24px;
     font-weight: 800;
@@ -65,6 +65,7 @@
 
 <template>
   <div class="page-phishing-code main-container">
+    <Iconfont class="block mx-auto mb-[31px]" name="anti-phishing" width="61" height="48" color="black"></Iconfont>
     <h2>Set an</h2>
     <h2>Anti-Phishing Code</h2>
     <i class="iconfont icon-explore"></i>
@@ -79,18 +80,22 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import Iconfont from '~/ui/components/Iconfont.vue'
 export default {
   name: 'PagePhishingCode',
+  components: {
+    Iconfont,
+  },
   setup (props, context) {
     const modelValue = ref('')
     const isError = ref(false)
     const router = useRouter()
     const onClickSubmit = () => {
-      // if (!modelValue.value) return
-      // if (modelValue.value.length > 10) {
-      //   isError.value = true
-      //   return
-      // }
+      if (!modelValue.value) return
+      if (modelValue.value.length > 10) {
+        isError.value = true
+        return
+      }
       router.push('/begin')
     }
     const getRanNum = () => {

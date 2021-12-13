@@ -28,6 +28,14 @@ export default defineComponent({
       type: [Number, String],
       default: 24,
     },
+    width: {
+      type: [Number, String],
+      default: 24,
+    },
+    height: {
+      type: [Number, String],
+      default: 24,
+    },
     rounded: {
       type: Boolean,
       default: false,
@@ -36,8 +44,8 @@ export default defineComponent({
   setup (props) {
     const style = computed(() => {
       let style: { [key: string]: string } = {
-        height: `${props.size}px`,
-        width: `${props.size}px`,
+        height: props.height ? `${props.height}px` : `${props.size}px`,
+        width: props.width ? `${props.width}px` : `${props.size}px`,
       }
 
       if (props.color) {

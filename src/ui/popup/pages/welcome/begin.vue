@@ -20,6 +20,16 @@
     top: 0;
     transform: translateX(-50%);
     left: 50%;
+    padding: 0 20px;
+    .icon-wrapper {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
   .central-content {
     width: 310px;
@@ -108,6 +118,20 @@
       line-height: 14px;
       cursor: pointer;
     }
+    div {
+      background: #11142D;
+      box-shadow: 0px 5px 6px 0px rgba(0, 0, 0, 0.16);
+      font-size: 14px;
+      font-weight: 500;
+      color: #FFFFFF;
+      padding: 7px 12px 12px;
+      box-sizing: border-box;
+      position: absolute;
+      bottom: 28px;
+      transform: translateX(-50%);
+      left: 50%;
+      border-radius: 8px;
+    }
   }
 }
 </style>
@@ -116,7 +140,13 @@
   <div class="page-begin main-container">
     <div class="top-bg"></div>
     <div class="top-line-box">
+      <div class="icon-wrapper cursor-pointer">
+        <Iconfont name="settings" size="20" color="#fff"></Iconfont>
+      </div>
       <img class="w-[134px] h-[36px]" src="/assets/page-begin/nav-logo.png">
+      <div class="icon-wrapper cursor-pointer">
+        <Iconfont name="lock" size="20" color="#fff"></Iconfont>
+      </div>
     </div>
     <div class="central-content">
       <h2>Let’s begin</h2>
@@ -128,21 +158,30 @@
     <img class="key-icon" src="/assets/page-begin/key-icon.png">
     <p>How to use?</p>
     <div class="foot-box">
-      <img src="/assets/page-begin/identification-icon.png">
-      <span>Ironman</span>
+      <img src="/assets/page-begin/identification-icon.png" @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">
+      <span @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">Ironman</span>
+      <div v-show="isShowDetail">
+        Anti-Phishing Code
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import Iconfont from '~/ui/components/Iconfont.vue'
 export default {
   name: 'PageBegin',
+  components: {
+    Iconfont,
+  },
   setup (props, context) {
+    const isShowDetail = ref(false)
     const onClickSubmit = () => {
     }
     return {
       onClickSubmit,
+      isShowDetail,
     }
   },
 }
