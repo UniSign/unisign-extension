@@ -13,7 +13,7 @@ declare module 'vue-i18n' {
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomOptions {
-    $tt: typeof tt
+    $tt?: typeof tt
   }
 }
 

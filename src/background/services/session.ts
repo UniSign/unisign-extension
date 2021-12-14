@@ -1,4 +1,4 @@
-import CB, { Endpoint } from 'crx-bridge'
+import { messageBridge, Endpoint } from '~/utils/messages'
 import { siteService } from '~/background/services/site'
 
 export interface SessionData {
@@ -61,7 +61,7 @@ export class SessionService {
    */
   async sendMessage (session: Session, event: string, data: any): Promise<boolean> {
     if (session.endpoint) {
-      await CB.sendMessage('background-to-provider', { event, data }, session.endpoint)
+      await messageBridge.send('background-to-provider', { event, data }, session.endpoint)
       return true
     }
     return false
