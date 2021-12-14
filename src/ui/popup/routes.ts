@@ -4,6 +4,8 @@ import PageWelcome from './pages/welcome/welcome.vue'
 import PageUnlock from './pages/unlock.vue'
 import PagePhishingCode from './pages/welcome/phishingCode.vue'
 import PageBegin from './pages/welcome/begin.vue'
+import PageAddAddress from './pages/addAddress/addAddress.vue'
+import PageSelectWays from './pages/addAddress/selectWays.vue'
 
 const routes = [{
   path: '/',
@@ -21,6 +23,12 @@ const routes = [{
   }, {
     path: '/begin',
     component: PageBegin,
+  }, {
+    path: '/addAddress',
+    component: PageAddAddress,
+  }, {
+    path: '/selectWays/:key',
+    component: PageSelectWays,
   }],
 }]
 

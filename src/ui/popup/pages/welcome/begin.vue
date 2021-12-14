@@ -10,9 +10,6 @@
     background: #534CDD;
   }
   .top-line-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     position: absolute;
     top: 0;
     transform: translateX(-50%);
@@ -20,6 +17,9 @@
     width: 100%;
     height: 58px;
     padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     .icon-wrapper {
       display: flex;
       align-items: center;
@@ -58,11 +58,11 @@
       color: #8D919C;
     }
     .uni-btn {
-      display: block;
       width: 230px;
       height: 50px;
       margin:52px auto 0;
       border-radius: 8px;
+      display: block;
       font-size: $main-font-size;
       font-weight: 500;
       line-height: 21px;
@@ -93,48 +93,6 @@
     color: #2A67C5;
     cursor: pointer;
   }
-  .foot-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 20px;
-    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.08);
-    background: #FFFFFF;
-    .ironman-box {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      img {
-        width: 8px;
-        height: 10px;
-        margin-right: 8px;
-      }
-      span {
-        font-size: $default-font-size;
-        font-weight: 600;
-        line-height: 14px;
-        color: $main-color;
-      }
-    }
-    .ironman-detail {
-      position: absolute;
-      bottom: 28px;
-      transform: translateX(-50%);
-      left: 50%;
-      padding: 7px 12px 12px;
-      box-sizing: border-box;
-      box-shadow: 0px 5px 6px 0px rgba(0, 0, 0, 0.16);
-      border-radius: 8px;
-      font-size: $detail-font-size;
-      font-weight: 500;
-      background: #11142D;
-      color: #FFFFFF;
-    }
-  }
 }
 </style>
 
@@ -159,29 +117,22 @@
     </div>
     <img class="key-icon" src="/assets/page-begin/key-icon.png">
     <p>How to use?</p>
-    <div class="foot-box">
-      <div class="ironman-box" @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">
-        <img src="/assets/page-begin/identification-icon.png">
-        <span>Ironman</span>
-      </div>
-      <div v-show="isShowDetail" class="ironman-detail">
-        Anti-Phishing Code
-      </div>
-    </div>
+    <Ironman></Ironman>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 export default {
   name: 'PageBegin',
   setup (props, context) {
-    const isShowDetail = ref(false)
+    const router = useRouter()
     const onClickSubmit = () => {
+      router.push('/addAddress')
     }
     return {
       onClickSubmit,
-      isShowDetail,
     }
   },
 }

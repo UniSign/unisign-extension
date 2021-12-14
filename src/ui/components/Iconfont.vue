@@ -40,6 +40,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    opacity: {
+      type: [String],
+      default: '1',
+    },
   },
   setup (props) {
     const style = computed(() => {
@@ -50,6 +54,10 @@ export default defineComponent({
 
       if (props.color) {
         style.color = props.color
+      }
+
+      if (props.opacity) {
+        style.opacity = props.opacity
       }
 
       if (props.rounded && props.size) {

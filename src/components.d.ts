@@ -5,7 +5,9 @@
 declare module 'vue' {
   export interface GlobalComponents {
     Iconfont: typeof import('./ui/components/Iconfont.vue')['default']
+    Ironman: typeof import('./ui/components/Ironman.vue')['default']
     UniInput: typeof import('./ui/components/UniInput.vue')['default']
+    UniTab: typeof import('./ui/components/UniTab.vue')['default']
   }
 }
 

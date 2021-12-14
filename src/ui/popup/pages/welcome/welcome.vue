@@ -26,11 +26,11 @@
   .input-box {
     width: 302px;
     height: 270px;
+    margin: 78px auto 0;
+    padding: 32px 24px 24px;
     box-shadow: 0px 9px 12px 0px rgba(141, 145, 156, 0.2);
     border-radius: 22px;
     border: 1px solid #FFFFFF;
-    margin: 78px auto 0;
-    padding: 32px 24px 24px;
     background: rgba(255, 255, 255, 0.45);
   }
   .uni-btn {
@@ -59,8 +59,8 @@
     <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-welcome/page-welcome-logo.png">
     <h2>Bring all crypto users into<span>Web3.0</span></h2>
     <div class="input-box">
-      <uni-input ref="passwordRef" v-model="password" validate-text="The passwords do not match" placeholder="Set a password"></uni-input>
-      <uni-input ref="rePasswordRef" v-model="rePassword" class="mt-[32px] mb-[32px]" placeholder="Repeat"></uni-input>
+      <UniInput ref="passwordRef" v-model="password" validate-text="The passwords do not match" placeholder="Set a password"></UniInput>
+      <UniInput ref="rePasswordRef" v-model="rePassword" class="mt-[32px] mb-[32px]" placeholder="Repeat"></UniInput>
       <button class="uni-btn" :class="{'_canClick':password && rePassword}" @click="onClickSubmit">
         Continue
       </button>
@@ -71,6 +71,7 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 export default {
   name: 'PageWelcome',
   setup (props, context) {
