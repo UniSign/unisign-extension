@@ -6,14 +6,15 @@
   .key-box {
     padding: 12px 16px;
     .key-item-box {
-      display: flex;
-      align-items: center;
       width: 100%;
       height: 66px;
+
       margin-top: 12px;
       padding: 13px 17px 13px 10px;
       border-radius: 12px;
       border: 1px solid rgba(191, 191, 191, 0.09);
+      display: flex;
+      align-items: center;
       background: #F9F7F6;
       cursor: pointer;
       &:hover {
@@ -39,15 +40,15 @@
 
 <template>
   <div class="page-add-address">
-    <uni-tab></uni-tab>
+    <UniTab></UniTab>
     <div class="key-box">
-      <div v-for="(item,index) in keyArr" :key="`key${index}`" class="key-item-box" @click="$router.push(`/selectWays/${item.key}`)">
+      <div v-for="(item,index) in keyArr" :key="index" class="key-item-box" @click="$router.push(`/selectWays/${item.key}`)">
         <img :src="getImageUrl(item.key)">
         <span>{{ item.value }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
     </div>
-    <ironman></ironman>
+    <Ironman></Ironman>
   </div>
 </template>
 

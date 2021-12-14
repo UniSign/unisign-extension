@@ -10,9 +10,6 @@
     background: #534CDD;
   }
   .top-line-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     position: absolute;
     top: 0;
     transform: translateX(-50%);
@@ -20,6 +17,9 @@
     width: 100%;
     height: 58px;
     padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     .icon-wrapper {
       display: flex;
       align-items: center;
@@ -58,11 +58,11 @@
       color: #8D919C;
     }
     .uni-btn {
-      display: block;
       width: 230px;
       height: 50px;
       margin:52px auto 0;
       border-radius: 8px;
+      display: block;
       font-size: $main-font-size;
       font-weight: 500;
       line-height: 21px;
@@ -117,7 +117,7 @@
     </div>
     <img class="key-icon" src="/assets/page-begin/key-icon.png">
     <p>How to use?</p>
-    <ironman></ironman>
+    <Ironman></Ironman>
   </div>
 </template>
 

@@ -6,13 +6,13 @@
   .key-box {
     padding: 24px 16px;
     .key-item-box {
-      display: flex;
-      align-items: center;
       width: 100%;
       height: 66px;
       padding: 15px 16px 15px 10px;
       border-radius: 12px;
       border: 1px solid rgba(191, 191, 191, 0.09);
+      display: flex;
+      align-items: center;
       background: #F9F7F6;
       cursor: pointer;
       &:hover {
@@ -41,7 +41,7 @@
 
 <template>
   <div class="page-add-address">
-    <uni-tab></uni-tab>
+    <UniTab></UniTab>
     <div class="key-box">
       <div v-if="isMnemonicWords" class="key-item-box mb-[24px]">
         <div>
@@ -86,7 +86,7 @@
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
     </div>
-    <ironman></ironman>
+    <Ironman></Ironman>
   </div>
 </template>
 

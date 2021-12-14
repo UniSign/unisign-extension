@@ -7,9 +7,7 @@ declare module 'vue' {
     Iconfont: typeof import('./ui/components/Iconfont.vue')['default']
     Ironman: typeof import('./ui/components/Ironman.vue')['default']
     UniInput: typeof import('./ui/components/UniInput.vue')['default']
-    'UniInput copy': typeof import('./ui/components/UniInput copy.vue')['default']
     UniTab: typeof import('./ui/components/UniTab.vue')['default']
-    'UniTab copy': typeof import('./ui/components/UniTab copy.vue')['default']
   }
 }
 
