@@ -30,11 +30,9 @@ export default defineComponent({
     },
     width: {
       type: [Number, String],
-      default: 24,
     },
     height: {
       type: [Number, String],
-      default: 24,
     },
     rounded: {
       type: Boolean,

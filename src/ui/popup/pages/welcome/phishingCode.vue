@@ -44,23 +44,6 @@
         border: 1px solid $input-boder-error-color;
     }
   }
-  .uni-btn {
-    width: 100%;
-    height: 50px;
-    border-radius: 8px;
-    font-size: $main-font-size;
-    font-weight: 500;
-    line-height: 21px;
-    background: $main-btn-bg;
-    color: #FFFFFF;
-    opacity: 0.4;
-    &._canClick {
-      opacity: 1;
-    }
-    &:focus{
-      outline: 0;
-    }
-  }
 }
 </style>
 
@@ -72,9 +55,7 @@
     <i class="iconfont icon-explore"></i>
     <h3>The Anti-Phishing Code is a security feature. It will be included in all windows about UniSign. This Code helping you to prevent phishing attemtps.</h3>
     <input v-model="modelValue" :class="{'_error':isError}" type="text">
-    <button class="uni-btn" :class="{'_canClick':modelValue}" @click="onClickSubmit">
-      Continue
-    </button>
+    <UniBtn :can-click="!!modelValue" @submit-click="onClickSubmit"></UniBtn>
   </div>
 </template>
 

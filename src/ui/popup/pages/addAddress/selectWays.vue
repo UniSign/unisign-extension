@@ -50,7 +50,7 @@
         <span>Derive From Mnemonic</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div v-else class="key-item-box mb-[24px]">
+      <div v-else class="key-item-box mb-[24px]" @click="$router.push(`/createMnemonic/${$route.params.key}`)">
         <div>
           <Iconfont name="create" size="17" color="#6D8AF3"></Iconfont>
         </div>
@@ -96,7 +96,7 @@ import { ref } from 'vue'
 export default {
   name: 'PageAddAddress',
   setup () {
-    const isMnemonicWords = ref(true)
+    const isMnemonicWords = ref(false)
     return {
       isMnemonicWords,
     }

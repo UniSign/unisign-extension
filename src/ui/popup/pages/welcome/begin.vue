@@ -58,20 +58,9 @@
       color: #8D919C;
     }
     .uni-btn {
-      width: 230px;
-      height: 50px;
       margin:52px auto 0;
-      border-radius: 8px;
+      width: 230px;
       display: block;
-      font-size: $main-font-size;
-      font-weight: 500;
-      line-height: 21px;
-      background: $main-btn-bg;
-      color: #FFFFFF;
-      opacity: 1;
-      &:focus{
-        outline: 0;
-      }
     }
   }
   .key-icon {
@@ -111,9 +100,7 @@
     <div class="central-content">
       <h2>Let’s begin</h2>
       <p>Create or import a key to start.</p>
-      <button class="uni-btn" @click="onClickSubmit">
-        Add Keys
-      </button>
+      <UniBtn class="uni-btn" value="Add Keys" @submit-click="onClickSubmit"></UniBtn>
     </div>
     <img class="key-icon" src="/assets/page-begin/key-icon.png">
     <p>How to use?</p>
