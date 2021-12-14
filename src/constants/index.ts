@@ -39,3 +39,16 @@ export const CHAINS: Record<CHAIN_IDENTIFIER, ChainData> = {
     tokenLogo: '',
   },
 }
+
+export enum LOCALES {
+  en = 'en',
+  zhCN = 'zh-CN'
+}
+
+export const LocaleOptions = [{
+  text: 'English',
+  value: LOCALES.en,
+}, {
+  text: '中文',
+  value: LOCALES.zhCN,
+}]
