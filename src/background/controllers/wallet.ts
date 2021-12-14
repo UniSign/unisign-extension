@@ -1,5 +1,5 @@
 import { settingsService } from '~/background/services/settings'
-import { createPopup } from '~/background/tools/popup'
+import { windows } from '~/background/tools/windows'
 import { messageBridge } from '~/utils/messages'
 
 export class WalletController {
@@ -27,9 +27,8 @@ export class WalletController {
   }
 
   async connect () {
-    await createPopup({
-      route: 'unlock',
-    })
+    // todo: this should be replaced by approvalService afterwards
+    await windows.createApproval('unlock')
 
     return new Date().toString()
   }
@@ -39,9 +38,7 @@ export class WalletController {
   }
 
   async signPlainMessage () {
-    await createPopup({
-      route: 'sign-plain-message',
-    })
+    await windows.createApproval('sign-plain-message')
 
     return new Date().toString()
   }
