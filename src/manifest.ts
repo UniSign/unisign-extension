@@ -55,8 +55,9 @@ export async function getManifest () {
     delete manifest.content_scripts
     manifest.permissions?.push('webNavigation')
 
+    // todo: figure out how to remove unsafe-eval which introduced by vue-i18n@next
     // this is required on dev for Vite script to load
-    manifest.content_security_policy = `script-src \'self\' http://localhost:${port} https://at.alicdn.com; object-src \'self\'`
+    manifest.content_security_policy = `script-src \'self\' \'unsafe-eval\' http://localhost:${port} https://at.alicdn.com; object-src \'self\'`
   }
 
   return manifest

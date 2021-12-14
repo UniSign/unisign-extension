@@ -1,4 +1,5 @@
 import CrxBridge from 'crx-bridge'
+import { settingsService } from '~/background/services/settings'
 import { createPopup } from '~/background/tools/popup'
 
 export class WalletController {
@@ -48,6 +49,10 @@ export class WalletController {
   async isConnected () {
     return this._isConnected
   }
+
+  getLocale = settingsService.getLocale
+
+  setLocale = settingsService.setLocale
 }
 
 export const walletController = new WalletController()
