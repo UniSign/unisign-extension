@@ -1,10 +1,8 @@
 import { EventEmitter } from 'events'
-import CrxBridge from 'crx-bridge'
 import { onDomReady } from './utils'
+import { messageBridge } from '~/utils/messages'
 
-// we can only use crx-bridge@2.2 now, as there is bug with crx-bridge@3.0 and webext-bridge according to the issue below
-// https://github.com/zikaari/crx-bridge/issues/11
-CrxBridge.setNamespace('unisign-extension-provider')
+messageBridge.setNamespace()
 
 export class UniSignProvider extends EventEmitter {
   isUniSign = true
@@ -32,7 +30,7 @@ export class UniSignProvider extends EventEmitter {
       this._requestPromiseCheckVisibility()
     })
 
-    CrxBridge.onMessage('background-to-provider', (event) => {
+    messageBridge.on('background-to-provider', (event) => {
       this._handleBackgroundMessage(event.data.event, event.data.data)
     })
 
@@ -42,7 +40,7 @@ export class UniSignProvider extends EventEmitter {
 
       const name = document.title || ($('head > meta[name="title"]') as HTMLMetaElement)?.content || origin
 
-      CrxBridge.sendMessage('provider-to-background', {
+      messageBridge.send('provider-to-background', {
         method: 'new_tab',
         params: {
           icon, name, origin,

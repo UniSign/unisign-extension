@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { createApp } from 'vue'
-import CrxBridge from 'crx-bridge'
 import App from '../ui/inpage/App.vue'
+import { messageBridge } from '~/utils/messages'
 import './provider'
 
-CrxBridge.allowWindowMessaging('unisign-extension-provider')
+messageBridge.allowWindowMessaging()
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 ;(() => {

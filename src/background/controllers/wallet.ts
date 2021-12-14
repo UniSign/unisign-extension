@@ -1,6 +1,6 @@
-import CrxBridge from 'crx-bridge'
 import { settingsService } from '~/background/services/settings'
 import { createPopup } from '~/background/tools/popup'
+import { messageBridge } from '~/utils/messages'
 
 export class WalletController {
   private _isLocked = false
@@ -60,7 +60,7 @@ export const walletController = new WalletController()
 // Here we receive all the method invocation from ui, and redirect them to `walletController`,
 // and a Promise resolve the result of controller method invocation will be returned
 export function setupWalletController () {
-  CrxBridge.onMessage('wallet-controller', async (data) => {
+  messageBridge.on('wallet-controller', async (data) => {
     // eslint-disable-next-line no-console
     const method = data.data.method
     const params = data.data.params
