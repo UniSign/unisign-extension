@@ -19,6 +19,7 @@ specifiers:
   crx-bridge: '2'
   eslint: ^7.32.0
   esno: ^0.10.0
+  eth-rpc-errors: ^4.0.3
   events: ^3.3.0
   fs-extra: ^10.0.0
   i18n-abc: ^0.5.0
@@ -44,6 +45,7 @@ specifiers:
 
 dependencies:
   crx-bridge: 2.2.0
+  eth-rpc-errors: 4.0.3
   events: 3.3.0
   js-crc: 0.2.0
   lodash: 4.17.21
@@ -2861,6 +2863,12 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /eth-rpc-errors/4.0.3:
+    resolution: {integrity: sha512-Z3ymjopaoft7JDoxZcEb3pwdGh7yiYMhOwm2doUt6ASXlMavpNlK6Cre0+IMl2VSGyEU9rkiperQhp5iRxn5Pg==}
+    dependencies:
+      fast-safe-stringify: 2.0.8
+    dev: false
+
   /event-to-promise/0.8.0:
     resolution: {integrity: sha1-S4TxF3K28l93Uvx02XFTGsb1tiY=}
     deprecated: Use promise-toolbox/fromEvent instead
@@ -2956,7 +2964,6 @@ packages:
 
   /fast-safe-stringify/2.0.8:
     resolution: {integrity: sha512-lXatBjf3WPjmWD6DpIZxkeSsCOwqI0maYMpgDlx8g4U2qi4lbjA9oH/HD2a87G+KfsUmo5WbJFmqBZlPxtptag==}
-    dev: true
 
   /fastify-warning/0.2.0:
     resolution: {integrity: sha512-s1EQguBw/9qtc1p/WTY4eq9WMRIACkj+HTcOIK1in4MV5aFaQC9ZCIt0dJ7pr5bIf4lPpHvAtP2ywpTNgs7hqw==}

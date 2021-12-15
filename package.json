@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "crx-bridge": "2",
+    "eth-rpc-errors": "^4.0.3",
     "events": "^3.3.0",
     "js-crc": "^0.2.0",
     "lodash": "^4.17.21",

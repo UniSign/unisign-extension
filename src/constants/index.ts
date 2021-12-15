@@ -1,7 +1,5 @@
 import { ChainData } from '~/background/services/chain'
 
-export const IS_WINDOWS = /windows/i.test(navigator.userAgent)
-
 export const UNISIGN_ORIGIN = 'https://unisign.org'
 
 export enum CHAIN_IDENTIFIER {
