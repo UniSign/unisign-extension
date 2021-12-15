@@ -7,7 +7,7 @@ interface ChainStore {
 
 export interface ChainData {
   name: string // Bitcoin BSC
-  identifier: string // BTC BSC
+  identifier: CHAIN_IDENTIFIER // BTC BSC
   tokenSymbol: string // BTC BNB
   tokenLogo: string
   coinType: number // based on slip-44 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
