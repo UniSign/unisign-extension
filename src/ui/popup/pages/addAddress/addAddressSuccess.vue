@@ -9,7 +9,7 @@
       font-weight: bold;
       line-height: 38px;
       text-align: center;
-      color: main-color;
+      color: $main-color;
     }
   }
   .uni-btn {
@@ -29,7 +29,7 @@
       <img class="w-[189px] h-[161px] mx-auto mt-[77px]" src="/assets/page-addAddress/success-bg.png">
       <h2>Success</h2>
     </div>
-    <UniBtn class="uni-btn" @click="$router.push(`/selectWays/${$route.params.key}`)">
+    <UniBtn class="uni-btn" @click="$router.push(`/addAddress`)">
       Start to use
     </UniBtn>
     <Ironman></Ironman>

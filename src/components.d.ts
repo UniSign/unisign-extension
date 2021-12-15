@@ -10,6 +10,7 @@ declare module 'vue' {
     UniInput: typeof import('./ui/components/UniInput.vue')['default']
     UniMsg: typeof import('./ui/components/UniMsg.vue')['default']
     UniTab: typeof import('./ui/components/UniTab.vue')['default']
+    UniTextArea: typeof import('./ui/components/UniTextArea.vue')['default']
   }
 }
 
