@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    <UniBtn class="uni-btn" @submit-click="$router.push(`/chooseTheRightOrder/${$route.params.key}`)"></UniBtn>
+    <UniBtn class="uni-btn" @click="$router.push(`/chooseTheRightOrder/${$route.params.key}`)"></UniBtn>
     <Ironman></Ironman>
   </div>
 </template>

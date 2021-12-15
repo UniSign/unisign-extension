@@ -9,7 +9,7 @@
     background: $main-btn-bg;
     color: #FFFFFF;
     opacity: 0.4;
-    &._canClick {
+    &._disabled {
       opacity: 1;
     }
     &:focus{
@@ -19,8 +19,8 @@
 </style>
 
 <template>
-  <button class="uni-btn" :class="{'_canClick':canClick}" @click="onClickSubmit">
-    {{ value }}
+  <button class="uni-btn" :class="{'_disabled':disabled}" @click="click">
+    <slot>Continue</slot>
   </button>
 </template>
 
@@ -28,24 +28,19 @@
 
 export default {
   props: {
-    canClick: {
+    disabled: {
       type: Boolean,
       required: false,
       default: true,
     },
-    value: {
-      type: String,
-      required: false,
-      default: 'Continue',
-    },
   },
-  emits: ['submitClick'],
+  emits: ['click'],
   setup (props, context) {
-    function onClickSubmit (e) {
-      context.emit('submitClick')
+    function click (e) {
+      context.emit('click', e.target.value)
     }
     return {
-      onClickSubmit,
+      click,
     }
   },
 }

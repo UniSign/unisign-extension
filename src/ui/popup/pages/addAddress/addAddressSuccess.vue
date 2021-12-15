@@ -24,12 +24,14 @@
 
 <template>
   <div class="page-add-address-success">
-    <UniTab title="Create Mnemonic"></UniTab>
+    <UniTab :disabled="true" title="Create Mnemonic"></UniTab>
     <div class="central-content">
       <img class="w-[189px] h-[161px] mx-auto mt-[77px]" src="/assets/page-addAddress/success-bg.png">
       <h2>Success</h2>
     </div>
-    <UniBtn class="uni-btn" value="Start to use" @submit-click="onClickSubmit"></UniBtn>
+    <UniBtn class="uni-btn" @click="$router.push(`/selectWays/${$route.params.key}`)">
+      Start to use
+    </UniBtn>
     <Ironman></Ironman>
   </div>
 </template>
@@ -39,11 +41,6 @@
 export default {
   name: 'PageAddAddressSuccess',
   setup () {
-    const onClickSubmit = () => {
-    }
-    return {
-      onClickSubmit,
-    }
   },
 }
 </script>

@@ -77,7 +77,7 @@
 <template>
   <div class="page-choose-the-right-order">
     <transition name="fade">
-      <UniMsg v-if="canShowMsg" @closeMsg="canShowMsg= false"></UniMsg>
+      <UniMsg v-if="canShowMsg" @close="canShowMsg= false"></UniMsg>
     </transition>
     <UniTab title="Create Mnemonic"></UniTab>
     <div class="central-content">
@@ -89,12 +89,12 @@
         </div>
       </div>
       <div class="mnemonic-choose-box">
-        <div v-for="(item,index) in mnemonicChooseArr" :key="index" class="mnemonic-item" :class="{'_invisible':_isNullOrEmpty(item)}" @click="chooseMnemonic(index)">
+        <div v-for="(item,index) in mnemonicChooseArr" :key="index" class="mnemonic-item" :class="{'_invisible':isNullOrEmpty(item)}" @click="chooseMnemonic(index)">
           <p>{{ item }}</p>
         </div>
       </div>
     </div>
-    <UniBtn class="uni-btn" :can-click="canClickBtn" @submit-click="onClickSubmit"></UniBtn>
+    <UniBtn class="uni-btn" :disabled="canClickBtn" @click="onClickSubmit"></UniBtn>
     <Ironman></Ironman>
   </div>
 </template>
@@ -107,9 +107,6 @@ import { isNullOrEmpty } from '~/utils/index.ts'
 export default {
   name: 'PageCreateMnemonic',
   setup () {
-    const _isNullOrEmpty = (...args) => {
-      return isNullOrEmpty(...args)
-    }
     const router = useRouter()
     const route = useRoute()
     const canShowMsg = ref(false)
@@ -145,7 +142,10 @@ export default {
     const chooseMnemonic = (index) => {
       if (isNullOrEmpty(mnemonicChooseArr[index])) return
       const emptyIndex = mnemonicArr.findIndex(item => isNullOrEmpty(item))
-      if (mnemonicChooseArr[index] !== mnemonicCorrectArr[emptyIndex]) return canShowMsg.value = true
+      if (mnemonicChooseArr[index] !== mnemonicCorrectArr[emptyIndex]) {
+        canShowMsg.value = true
+        return
+      }
       mnemonicArr.splice(emptyIndex, 1, mnemonicChooseArr[index])
       mnemonicChooseArr.splice(index, 1, '')
     }
@@ -157,7 +157,7 @@ export default {
       router.push(`/addAddressSuccess/${route.params.key}`)
     }
     return {
-      _isNullOrEmpty,
+      isNullOrEmpty,
       mnemonicArr,
       mnemonicChooseArr,
       chooseMnemonic,

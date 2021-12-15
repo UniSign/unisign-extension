@@ -49,11 +49,11 @@ export default {
       default: 'Incorrect order',
     },
   },
-  emits: ['closeMsg'],
+  emits: ['close'],
   setup (props, context) {
     onMounted(() => {
       setTimeout(() => {
-        context.emit('closeMsg')
+        context.emit('close')
       }, 3000)
     })
     return {

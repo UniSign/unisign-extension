@@ -100,7 +100,9 @@
     <div class="central-content">
       <h2>Let’s begin</h2>
       <p>Create or import a key to start.</p>
-      <UniBtn class="uni-btn" value="Add Keys" @submit-click="onClickSubmit"></UniBtn>
+      <UniBtn class="uni-btn" @click="onClickSubmit">
+        Add Keys
+      </UniBtn>
     </div>
     <img class="key-icon" src="/assets/page-begin/key-icon.png">
     <p>How to use?</p>
