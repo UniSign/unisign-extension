@@ -6,6 +6,9 @@ import PagePhishingCode from './pages/welcome/phishingCode.vue'
 import PageBegin from './pages/welcome/begin.vue'
 import PageAddAddress from './pages/addAddress/addAddress.vue'
 import PageSelectWays from './pages/addAddress/selectWays.vue'
+import PageCreateMnemonic from './pages/addAddress/createMnemonic.vue'
+import PageChooseTheRightOrder from './pages/addAddress/chooseTheRightOrder.vue'
+import PageAddAddressSuccess from './pages/addAddress/addAddressSuccess.vue'
 
 const routes = [{
   path: '/',
@@ -29,6 +32,15 @@ const routes = [{
   }, {
     path: '/selectWays/:key',
     component: PageSelectWays,
+  }, {
+    path: '/createMnemonic/:key',
+    component: PageCreateMnemonic,
+  }, {
+    path: '/chooseTheRightOrder/:key',
+    component: PageChooseTheRightOrder,
+  }, {
+    path: '/addAddressSuccess/:key',
+    component: PageAddAddressSuccess,
   }],
 }]
 

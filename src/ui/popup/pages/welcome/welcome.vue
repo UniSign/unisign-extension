@@ -26,29 +26,12 @@
   .input-box {
     width: 302px;
     height: 270px;
-    margin: 78px auto 0;
-    padding: 32px 24px 24px;
     box-shadow: 0px 9px 12px 0px rgba(141, 145, 156, 0.2);
     border-radius: 22px;
     border: 1px solid #FFFFFF;
+    margin: 78px auto 0;
+    padding: 32px 24px 24px;
     background: rgba(255, 255, 255, 0.45);
-  }
-  .uni-btn {
-    width: 100%;
-    height: 50px;
-    border-radius: 8px;
-    font-size: $main-font-size;
-    font-weight: 500;
-    color: #FFFFFF;
-    line-height: 21px;
-    background: $main-btn-bg;
-    opacity: 0.4;
-    &._canClick {
-      opacity: 1;
-    }
-    &:focus{
-      outline: 0;
-    }
   }
 }
 </style>
@@ -61,9 +44,7 @@
     <div class="input-box">
       <UniInput ref="passwordRef" v-model="password" validate-text="The passwords do not match" placeholder="Set a password"></UniInput>
       <UniInput ref="rePasswordRef" v-model="rePassword" class="mt-[32px] mb-[32px]" placeholder="Repeat"></UniInput>
-      <button class="uni-btn" :class="{'_canClick':password && rePassword}" @click="onClickSubmit">
-        Continue
-      </button>
+      <UniBtn :disabled="!!(password && rePassword)" @click="onClickSubmit"></UniBtn>
     </div>
   </div>
 </template>
@@ -81,7 +62,7 @@ export default {
     const rePasswordRef = ref(null)
     const router = useRouter()
     const onClickSubmit = () => {
-      if (!password.value || !passwordRef.value) return
+      if (!password.value || !rePassword.value) return
       if (rePassword.value !== password.value) {
         rePasswordRef.value.validate()
         return
