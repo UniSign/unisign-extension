@@ -257,8 +257,72 @@
     color: #2A67C5;
     cursor: pointer;
   }
-  .iconman {
-    position: relative;
+  .qr-code-box {
+    padding: 24px;
+    .qr-code {
+      margin: 25px auto 15px;
+      display: block;
+      width: 206px;
+      height: 206px;
+    }
+    .qr-code-detail {
+      padding: 8px 14px;
+      border: 1px solid rgba(191, 191, 191, 0.09);
+      border-radius: 8px;
+      font-size: $detail-font-size;
+      font-weight: bold;
+      text-align: center;
+      line-height: 16px;
+      word-wrap: break-word;
+      word-break: break-all;
+      background: #F9F7F6;
+    }
+  }
+  .switch-key-box {
+    padding-bottom: 61px;
+    .switch-key-content {
+      .derived-box,.imported-box {
+        padding: 0 10px;
+        margin-bottom: 8px;
+        h2 {
+          margin: 16px 0 8px 16px;
+          font-size: $detail-font-size;
+          line-height: 16px;
+          color: #8D919C;
+        }
+        >div {
+          padding: 11px 16px 11px 8px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          &:hover {
+            background-color: #EEEEEE;
+          }
+          img {
+            margin-right: 12px;
+          }
+          span {
+            font-size: $detail-font-size;
+            font-weight: bold;
+            color: #242C3F;
+            line-height: 16px;
+          }
+          .icon-font {
+            margin-left: auto;
+          }
+        }
+      }
+    }
+    .switch-key-btn-box{
+      position: absolute;
+      bottom: 0;
+      padding: 12px;
+      width: 100%;
+      box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.06);
+      .switch-key-btn {
+        height: 37px;
+      }
+    }
   }
 }
 
@@ -322,12 +386,15 @@
         </div>
       </div>
       <img class="w-[134px] h-[36px]" :src="`/assets/page-begin/nav-${isScroll?'logo-scroll':'logo'}.png`">
-      <div class="icon-wrapper cursor-pointer">
+      <router-link
+        class="icon-wrapper cursor-pointer"
+        to="/locked"
+      >
         <Iconfont name="lock" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
           Lock
         </div>
-      </div>
+      </router-link>
     </div>
     <div class="central-bg-1"></div>
     <div class="central-bg-2"></div>
@@ -349,7 +416,7 @@
               Copy Address
             </div>
           </div>
-          <div class="icon-wrapper mr-[16px] cursor-pointer">
+          <div class="icon-wrapper mr-[16px] cursor-pointer" @click="isShowQRCodeDialog = true">
             <Iconfont name="qrcode" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
               QR Code
@@ -362,14 +429,14 @@
               Transfer
             </div>
           </div>
-          <div class="switch cursor-pointer">
+          <div class="switch cursor-pointer" @click="isShowSwitchKeyDialog = true">
             Switch
           </div>
         </div>
       </div>
     </div>
     <img class="key-icon" src="/assets/page-begin/key-icon.png">
-    <div class="connect-box">
+    <div v-if="!isBegin" class="connect-box">
       <div class="status-item">
         <Iconfont name="current" size="14"></Iconfont>
         <span>Current connect</span>
@@ -387,7 +454,7 @@
         </div>
       </div>
     </div>
-    <div class="await-connect-box">
+    <div v-if="!isBegin" class="await-connect-box">
       <div class="status-item">
         <Iconfont name="connected" size="14" color="#6F7684"></Iconfont>
         <span>Connected Apps</span>
@@ -414,7 +481,39 @@
     <p v-if="isBegin">
       How to use?
     </p>
-    <Ironman class="iconman"></Ironman>
+    <Ironman :style="{'position':isBegin?'absolute':'relative'}"></Ironman>
+    <UniDialog class="qr-code-box" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
+      <div class="qr-code">
+      </div>
+      <div class="qr-code-detail">
+        0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD
+      </div>
+    </UniDialog>
+    <UniDialog class="switch-key-box" :visible="isShowSwitchKeyDialog" title="Switch Key" @cancel="handleSwitchCancel">
+      <div class="switch-key-content">
+        <div class="derived-box">
+          <h2>Derived from Mnemonic</h2>
+          <div>
+            <img class="w-[26px] h-[26px]" src="/assets/page-addAddress/key-bch.png">
+            <span>0xydsh…38dfsdf</span>
+            <Iconfont class="icon-font" name="checked" size="12" color="#FFBC5D"></Iconfont>
+          </div>
+        </div>
+        <div class="imported-box">
+          <h2>Imported</h2>
+          <div>
+            <img class="w-[26px] h-[26px]" src="/assets/page-addAddress/key-bch.png">
+            <span>0xydsh…38dfsdf</span>
+            <Iconfont class="icon-font" name="unchecked" size="12" color="##E1E1E1"></Iconfont>
+          </div>
+        </div>
+      </div>
+      <div class="switch-key-btn-box">
+        <UniBtn class="switch-key-btn" @click="isShowSwitchKeyDialog = false">
+          Add Key
+        </UniBtn>
+      </div>
+    </UniDialog>
   </div>
 </template>
 
@@ -430,6 +529,8 @@ export default {
     const topLineBoxRef = ref(null)
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
+    const isShowQRCodeDialog = ref(false)
+    const isShowSwitchKeyDialog = ref(false)
     onMounted(() => {
       window.onscroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -453,12 +554,22 @@ export default {
     const onClickSubmit = () => {
       router.push('/addAddress')
     }
+    const handleQRCancel = () => {
+      isShowQRCodeDialog.value = false
+    }
+    const handleSwitchCancel = () => {
+      isShowSwitchKeyDialog.value = false
+    }
     return {
       onClickSubmit,
       isBegin,
       topLineBoxRef,
       iconFontColor,
       isScroll,
+      handleQRCancel,
+      isShowQRCodeDialog,
+      handleSwitchCancel,
+      isShowSwitchKeyDialog,
     }
   },
 }

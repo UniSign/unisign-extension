@@ -40,7 +40,7 @@
         validate-text="Incorrect private key"
         :placeholder="`${$route.params.key} private key`"
       ></UniTextArea>
-      <UniBtn :disabled="!!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
+      <UniBtn :disabled="!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>
     <Ironman></Ironman>
   </div>

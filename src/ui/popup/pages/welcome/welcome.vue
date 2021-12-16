@@ -42,7 +42,7 @@
     <div class="input-box">
       <UniInput ref="passwordRef" v-model="password" validate-text="The passwords do not match" placeholder="Set a password"></UniInput>
       <UniInput ref="rePasswordRef" v-model="rePassword" class="mt-[32px] mb-[32px]" placeholder="Repeat"></UniInput>
-      <UniBtn :disabled="!!(password && rePassword)" @click="onClickSubmit"></UniBtn>
+      <UniBtn :disabled="!!(!password || !rePassword)" @click="onClickSubmit"></UniBtn>
     </div>
   </div>
 </template>

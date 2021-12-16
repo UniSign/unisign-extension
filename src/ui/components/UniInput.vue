@@ -2,6 +2,7 @@
     .input-wrapper {
         width: 254px;
         height: 50px;
+        position: relative;
         input {
           width: 254px;
           height: 50px;
@@ -16,6 +17,24 @@
           &._error {
               outline:none;
               border: 1px solid $input-boder-error-color;
+          }
+        }
+        div {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          padding: 10px;
+          border-radius: 4px;
+          background: #FFFFFF;
+          cursor: pointer;
+          .icon-font{
+            color:#242C3F;
+          }
+          &:hover {
+            background: #FBAF34;
+            .icon-font{
+              color:#FFFFFF;
+            }
           }
         }
         p {
@@ -36,6 +55,9 @@
       :placeholder="placeholder"
       @input="onInputChange"
     >
+    <div v-if="showLocked" @click="triggerValidate">
+      <Iconfont class="icon-font" name="arrow-enter" size="18"></Iconfont>
+    </div>
     <p v-show="canShowValidateText">
       {{ validateText }}
     </p>
@@ -76,7 +98,13 @@ export default {
       required: false,
       default: 'The passwords do not match',
     },
+    showLocked: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
+  emits: ['update:modelValue', 'triggerValidate'],
   setup (props, context) {
     const canShowValidateText = ref(false)
     const { validateText } = toRefs(props)
@@ -89,10 +117,14 @@ export default {
         canShowValidateText.value = true
       }
     }
+    function triggerValidate (e) {
+      context.emit('triggerValidate', e.target.value)
+    }
     return {
       onInputChange,
       canShowValidateText,
       validate,
+      triggerValidate,
     }
   },
 }

@@ -44,7 +44,7 @@
         validate-text="Incorrect password"
         placeholder="Password of the keystore file"
       ></UniInput>
-      <UniBtn :disabled="!!(keystore&&password)" class="uni-btn" @click="onClickSubmit"></UniBtn>
+      <UniBtn :disabled="!!(!keystore || !password)" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>
     <Ironman></Ironman>
   </div>

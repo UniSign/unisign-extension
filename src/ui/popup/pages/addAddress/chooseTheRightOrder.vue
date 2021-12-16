@@ -88,7 +88,7 @@
         </div>
       </div>
     </div>
-    <UniBtn class="uni-btn" :disabled="canClickBtn" @click="onClickSubmit"></UniBtn>
+    <UniBtn class="uni-btn" :disabled="!canClickBtn" @click="onClickSubmit"></UniBtn>
     <Ironman></Ironman>
   </div>
 </template>

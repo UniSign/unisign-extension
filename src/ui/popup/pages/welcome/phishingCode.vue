@@ -52,7 +52,7 @@
     <i class="iconfont icon-explore"></i>
     <h3>The Anti-Phishing Code is a security feature. It will be included in all windows about UniSign. This Code helping you to prevent phishing attemtps.</h3>
     <input v-model="modelValue" :class="{'_error':isError}" type="text">
-    <UniBtn :disabled="!!modelValue" @click="onClickSubmit"></UniBtn>
+    <UniBtn :disabled="!modelValue" @click="onClickSubmit"></UniBtn>
   </div>
 </template>
 
