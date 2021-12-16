@@ -1,16 +1,14 @@
 <style lang="scss" scoped>
     .input-wrapper {
-        width: 254px;
-        height: 50px;
-        input {
-          width: 254px;
-          height: 50px;
-          padding-left: 16px;
+        textarea {
+          padding: 12px 16px;
           border-radius: 8px;
           font-size: $input-font-size;
           font-weight: 400;
-          line-height: 22px;
+          line-height: 19px;
+          background: #F7F8FA;
           color: $main-color;
+          resize: none;
           &:focus {
               outline:none;
               border: 1px solid $input-boder-focus-color;
@@ -21,7 +19,8 @@
           }
         }
         p {
-          margin-top: 2px;
+          margin-top: -4px;
+          margin-left: 16px;
           font-size: $default-font-size;
           font-weight: 400;
           line-height: 14px;
@@ -32,14 +31,14 @@
 
 <template>
   <div class="input-wrapper" :style="{'width':width}">
-    <input
-      :style="{'width':width,'height':height,'backgroundColor':backgroundColor}"
+    <textarea
+      :style="{'width':width,'height':height}"
       :class="{'_error':canShowValidateText}"
-      type="text"
       :value="modelValue"
       :placeholder="placeholder"
       @input="onInputChange"
     >
+    </textarea>
     <p v-show="canShowValidateText">
       {{ validateText }}
     </p>
@@ -54,17 +53,12 @@ export default {
     width: {
       type: String,
       required: false,
-      default: '254px',
+      default: '302px',
     },
     height: {
       type: String,
       required: false,
-      default: '50px',
-    },
-    backgroundColor: {
-      type: String,
-      required: false,
-      default: 'rgba(0, 0, 0, 0.08)',
+      default: '95px',
     },
     modelValue: {
       type: String,
@@ -73,12 +67,12 @@ export default {
     placeholder: {
       type: String,
       required: false,
-      default: 'Set a password',
+      default: 'Bitcoin private key',
     },
     validateText: {
       type: String,
       required: false,
-      default: 'The passwords do not match',
+      default: 'Incorrect private key',
     },
   },
   setup (props, context) {

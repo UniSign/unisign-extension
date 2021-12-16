@@ -57,21 +57,21 @@
         <span>Create Mnemonic</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div class="key-item-box" style="border-radius: 12px 12px 0px 0px;">
+      <div class="key-item-box" style="border-radius: 12px 12px 0px 0px;" @click="$router.push(`/importPrivateKey/${$route.params.key}`)">
         <div>
           <Iconfont name="key" size="17" color="#8E98B2"></Iconfont>
         </div>
         <span>Import by priority key</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div v-if="!isMnemonicWords" class="key-item-box" style="border-radius: 0px;">
+      <div v-if="!isMnemonicWords" class="key-item-box" style="border-radius: 0px;" @click="$router.push(`/importMnemonic/${$route.params.key}`)">
         <div>
           <Iconfont name="mnemonic" size="17" color="#B2EED7"></Iconfont>
         </div>
         <span>Import by Mnemonic</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div class="key-item-box" style="border-radius: 0px 0px 12px 12px;">
+      <div class="key-item-box" style="border-radius: 0px 0px 12px 12px;" @click="$router.push(`/importKeystoreFile/${$route.params.key}`)">
         <div>
           <Iconfont name="keystore" size="17" color="#FFCC59"></Iconfont>
         </div>

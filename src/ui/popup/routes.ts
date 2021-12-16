@@ -9,6 +9,9 @@ import PageSelectWays from './pages/addAddress/selectWays.vue'
 import PageCreateMnemonic from './pages/addAddress/createMnemonic.vue'
 import PageChooseTheRightOrder from './pages/addAddress/chooseTheRightOrder.vue'
 import PageAddAddressSuccess from './pages/addAddress/addAddressSuccess.vue'
+import PageImportPrivateKey from './pages/import/importPrivateKey.vue'
+import PageImportMnemonic from './pages/import/importMnemonic.vue'
+import PageImportKeystoreFile from './pages/import/importKeystoreFile.vue'
 
 const routes = [{
   path: '/',
@@ -41,6 +44,15 @@ const routes = [{
   }, {
     path: '/addAddressSuccess/:key',
     component: PageAddAddressSuccess,
+  }, {
+    path: '/importPrivateKey/:key',
+    component: PageImportPrivateKey,
+  }, {
+    path: '/importMnemonic/:key',
+    component: PageImportMnemonic,
+  }, {
+    path: '/importKeystoreFile/:key',
+    component: PageImportKeystoreFile,
   }],
 }]
 
