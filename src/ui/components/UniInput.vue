@@ -8,9 +8,7 @@
           padding-left: 16px;
           border-radius: 8px;
           font-size: $input-font-size;
-          font-weight: 400;
           line-height: 22px;
-          color: $main-color;
           &:focus {
               outline:none;
               border: 1px solid $input-boder-focus-color;
@@ -22,8 +20,6 @@
         }
         p {
           margin-top: 2px;
-          font-size: $default-font-size;
-          font-weight: 400;
           line-height: 14px;
           color: $input-boder-error-color;
         }

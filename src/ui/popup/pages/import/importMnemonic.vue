@@ -10,7 +10,6 @@
       font-weight: bold;
       line-height: 29px;
       text-align: center;
-      color: $main-color;
     }
   }
   .uni-btn {

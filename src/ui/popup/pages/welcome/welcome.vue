@@ -8,8 +8,6 @@
     line-height: 21px;
     text-align: center;
     font-size: $main-font-size;
-    font-weight: 400;
-    color: $main-color;
     span {
       margin-left: 1px;
       padding: 2px 4px;

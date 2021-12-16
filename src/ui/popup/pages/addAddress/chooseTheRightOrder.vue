@@ -11,7 +11,6 @@
       font-size: $title-font-size;
       font-weight: bold;
       line-height: 29px;
-      color: $main-color;
     }
     .mnemonic-box,.mnemonic-choose-box {
       display: flex;
@@ -30,8 +29,6 @@
         }
         span {
           margin: 0 11px 0 6px;
-          font-size: $default-font-size;
-          font-weight: 400;
           line-height: 14px;
           color: #C9CCD3;
         }
@@ -51,9 +48,6 @@
         &._invisible {
           border: none;
           background-color: #ffffff;
-        }
-        p {
-          color: $main-color;
         }
       }
     }
