@@ -2,35 +2,35 @@ import { ChainData } from '~/background/services/chain'
 
 export const UNISIGN_ORIGIN = 'https://unisign.org'
 
-export enum CHAIN_IDENTIFIER {
+export enum ChainIdentifier {
   BTC = 'BTC',
   DOGE = 'DOGE',
   CKB = 'CKB',
 }
 
-export const CHAINS: Record<CHAIN_IDENTIFIER, ChainData> = {
-  [CHAIN_IDENTIFIER.BTC]: {
+export const CHAINS: Record<ChainIdentifier, ChainData> = {
+  [ChainIdentifier.BTC]: {
     name: 'Bitcoin',
-    identifier: CHAIN_IDENTIFIER.BTC,
-    tokenSymbol: CHAIN_IDENTIFIER.BTC,
+    identifier: ChainIdentifier.BTC,
+    tokenSymbol: ChainIdentifier.BTC,
     coinType: 0,
     chainId: undefined,
     logo: '',
     tokenLogo: '',
   },
-  [CHAIN_IDENTIFIER.DOGE]: {
+  [ChainIdentifier.DOGE]: {
     name: 'Doge',
-    identifier: CHAIN_IDENTIFIER.DOGE,
-    tokenSymbol: CHAIN_IDENTIFIER.DOGE,
+    identifier: ChainIdentifier.DOGE,
+    tokenSymbol: ChainIdentifier.DOGE,
     coinType: 3,
     chainId: undefined,
     logo: '',
     tokenLogo: '',
   },
-  [CHAIN_IDENTIFIER.CKB]: {
+  [ChainIdentifier.CKB]: {
     name: 'Nervos',
-    identifier: CHAIN_IDENTIFIER.CKB,
-    tokenSymbol: CHAIN_IDENTIFIER.CKB,
+    identifier: ChainIdentifier.CKB,
+    tokenSymbol: ChainIdentifier.CKB,
     coinType: 309,
     chainId: undefined,
     logo: '',

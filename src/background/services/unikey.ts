@@ -1,6 +1,6 @@
 import { personalService } from '~/background/services/personal'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { CHAIN_IDENTIFIER } from '~/constants'
+import { ChainIdentifier } from '~/constants'
 
 export enum UnikeyType {
   blockchain = 'blockchain',
@@ -34,7 +34,7 @@ export interface UnikeyBase {
   keyType: UnikeyType
   keyringType: KeyringType
 
-  chainId?: CHAIN_IDENTIFIER
+  chainId?: ChainIdentifier
 
   brand?: WalletConnectBrand | HardwareBrand
   brandName?: string
@@ -43,7 +43,7 @@ export interface UnikeyBase {
 export interface UnikeyChain extends UnikeyBase {
   keyType: UnikeyType.blockchain
 
-  chainId: CHAIN_IDENTIFIER
+  chainId: ChainIdentifier
 }
 
 export interface UniKeyOpenPGP extends UnikeyBase {

@@ -1,13 +1,13 @@
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { CHAIN_IDENTIFIER, CHAINS } from '~/constants'
+import { ChainIdentifier, CHAINS } from '~/constants'
 
 interface ChainStore {
-  enabledChains: CHAIN_IDENTIFIER[]
+  enabledChains: ChainIdentifier[]
 }
 
 export interface ChainData {
   name: string // Bitcoin BSC
-  identifier: CHAIN_IDENTIFIER // BTC BSC
+  identifier: ChainIdentifier // BTC BSC
   tokenSymbol: string // BTC BNB
   tokenLogo: string
   coinType: number // based on slip-44 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
@@ -24,7 +24,7 @@ export class ChainService {
   }
 
   async init () {
-    const supportedChains = Object.values(CHAIN_IDENTIFIER)
+    const supportedChains = Object.values(ChainIdentifier)
 
     this.store = await loadDiskStore<ChainStore>('chains', {
       enabledChains: supportedChains,
@@ -41,14 +41,14 @@ export class ChainService {
     return this.store.enabledChains.map(chainEnum => this.supportedChains.find(chain => chain.identifier === chainEnum)!)
   }
 
-  enableChain (id: CHAIN_IDENTIFIER): void {
+  enableChain (id: ChainIdentifier): void {
     if (!this.store.enabledChains.includes(id)) {
       // todo: this may not be able to invoke the auto save process.
       this.store.enabledChains.push(id)
     }
   }
 
-  disableChain (id: CHAIN_IDENTIFIER) {
+  disableChain (id: ChainIdentifier) {
     this.store.enabledChains = this.store.enabledChains.filter(chain => chain !== id)
   }
 }
