@@ -11,13 +11,11 @@
       font-size: $title-font-size;
       font-weight: bold;
       line-height: 29px;
-      color: $main-color;
     }
     >p {
       margin-bottom: 32px;
       text-align: center;
       font-size: $detail-font-size;
-      font-weight: 400;
       line-height: 16px;
       color: #6F7684;
     }
@@ -38,15 +36,12 @@
         }
         span {
           margin: 0 11px 0 6px;
-          font-size: $default-font-size;
-          font-weight: 400;
           line-height: 14px;
           color: #C9CCD3;
         }
         p {
           font-size: $detail-font-size;
           font-weight: bold;
-          color: $main-color;
           line-height: 16px;
         }
       }
