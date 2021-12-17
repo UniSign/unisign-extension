@@ -28,7 +28,6 @@
       span {
         font-size: $input-font-size;
         font-weight: 500;
-        color: $main-color;
       }
       .arrow-right {
         margin-left: auto;

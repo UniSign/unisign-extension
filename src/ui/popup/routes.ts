@@ -12,6 +12,7 @@ import PageAddAddressSuccess from './pages/addAddress/addAddressSuccess.vue'
 import PageImportPrivateKey from './pages/import/importPrivateKey.vue'
 import PageImportMnemonic from './pages/import/importMnemonic.vue'
 import PageImportKeystoreFile from './pages/import/importKeystoreFile.vue'
+import PageLocked from './pages/welcome/locked.vue'
 
 const routes = [{
   path: '/',
@@ -53,6 +54,9 @@ const routes = [{
   }, {
     path: '/importKeystoreFile/:key',
     component: PageImportKeystoreFile,
+  }, {
+    path: '/locked',
+    component: PageLocked,
   }],
 }]
 

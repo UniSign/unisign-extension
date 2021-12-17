@@ -10,7 +10,6 @@
       font-weight: bold;
       line-height: 29px;
       text-align: center;
-      color: $main-color;
     }
   }
   .uni-btn {
@@ -36,7 +35,7 @@
         validate-text="Incorrect mnemonic"
         :placeholder="`Enter ${$route.params.key} mnemonic, separated by space`"
       ></UniTextArea>
-      <UniBtn :disabled="!!mnemonic" class="uni-btn" @click="onClickSubmit"></UniBtn>
+      <UniBtn :disabled="!mnemonic" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>
     <Ironman></Ironman>
   </div>

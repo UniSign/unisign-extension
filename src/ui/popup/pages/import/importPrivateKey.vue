@@ -10,7 +10,6 @@
       font-weight: bold;
       line-height: 29px;
       text-align: center;
-      color: $main-color;
       &:nth-child(2) {
         margin-top: 0;
       }
@@ -41,7 +40,7 @@
         validate-text="Incorrect private key"
         :placeholder="`${$route.params.key} private key`"
       ></UniTextArea>
-      <UniBtn :disabled="!!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
+      <UniBtn :disabled="!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>
     <Ironman></Ironman>
   </div>

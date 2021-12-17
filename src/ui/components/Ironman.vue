@@ -20,10 +20,8 @@
         margin-right: 8px;
       }
       span {
-        font-size: $default-font-size;
         font-weight: 600;
         line-height: 14px;
-        color: $main-color;
       }
     }
     .ironman-detail {

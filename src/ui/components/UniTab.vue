@@ -28,7 +28,6 @@
         font-size: $input-font-size;
         font-weight: bold;
         line-height: 58px;
-        color: $main-color;
       }
     }
 </style>

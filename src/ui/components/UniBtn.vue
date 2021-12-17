@@ -8,9 +8,9 @@
     line-height: 21px;
     background: $main-btn-bg;
     color: #FFFFFF;
-    opacity: 0.4;
+    opacity: 1;
     &._disabled {
-      opacity: 1;
+      opacity: 0.4;
     }
     &:focus{
       outline: 0;
@@ -31,7 +31,7 @@ export default {
     disabled: {
       type: Boolean,
       required: false,
-      default: true,
+      default: false,
     },
   },
   emits: ['click'],

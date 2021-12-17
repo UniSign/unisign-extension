@@ -7,7 +7,6 @@
   h2 {
     font-size: $title-font-size;
     font-weight: 800;
-    color: $main-color;
     line-height: 29px;
     text-align: center;
   }
@@ -16,7 +15,6 @@
     margin: 8px auto 48px;
     width: 302px;
     font-size: $detail-font-size;
-    font-weight: 400;
     line-height: 16px;
     text-align: center;
     color: #6F7684;
@@ -34,7 +32,6 @@
     text-align: center;
     font-family: monospace;
     background: rgba(0, 0, 0, 0.08);
-    color: $main-color;
     &:focus {
         outline:none;
         border: 1px solid $input-boder-focus-color;
@@ -55,7 +52,7 @@
     <i class="iconfont icon-explore"></i>
     <h3>The Anti-Phishing Code is a security feature. It will be included in all windows about UniSign. This Code helping you to prevent phishing attemtps.</h3>
     <input v-model="modelValue" :class="{'_error':isError}" type="text">
-    <UniBtn :disabled="!!modelValue" @click="onClickSubmit"></UniBtn>
+    <UniBtn :disabled="!modelValue" @click="onClickSubmit"></UniBtn>
   </div>
 </template>
 

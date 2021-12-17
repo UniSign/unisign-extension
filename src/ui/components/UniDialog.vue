@@ -1,0 +1,78 @@
+<style lang="scss" scoped>
+  .dialog-wrapper{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 318px;
+    min-height: 275px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 19px 22px 0px rgba(141, 145, 156, 0.3);
+    overflow: hidden;
+    background: #FFFFFF;
+    .title{
+      padding: 16px 16px 16px 24px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0px 1px 0px 0px rgba(141, 145, 156, 0.12);
+      h2 {
+        font-size: $title-font-size;
+        font-weight: bold;
+      }
+      .close {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+    }
+  }
+</style>
+
+<template>
+  <div v-if="visible" class="dialog-wrapper">
+    <div class="title">
+      <h2>{{ title }}</h2>
+      <div class="close" @click="cancel">
+        <Iconfont name="close" size="16" color="#8D919C"></Iconfont>
+      </div>
+    </div>
+    <div class="content">
+      <slot></slot>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+
+export default {
+  props: {
+    visible: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    title: {
+      type: String,
+      required: false,
+      default: 'Account Detail',
+    },
+  },
+  emits: ['cancel'],
+  setup (props, context) {
+    const cancel = () => {
+      context.emit('cancel')
+    }
+    return {
+      cancel,
+    }
+  },
+}
+</script>
