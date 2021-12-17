@@ -13,6 +13,13 @@ import PageImportPrivateKey from './pages/import/importPrivateKey.vue'
 import PageImportMnemonic from './pages/import/importMnemonic.vue'
 import PageImportKeystoreFile from './pages/import/importKeystoreFile.vue'
 import PageLocked from './pages/welcome/locked.vue'
+import PageSettings from './pages/settings/settings.vue'
+import PageLanguageSettings from './pages/settings/languageSettings.vue'
+import PageConnect from './pages/connect/connect.vue'
+import PageSignPlainMessage from './pages/connect/signPlainMessage.vue'
+import PageSignTypedMessage from './pages/connect/signTypedMessage.vue'
+import PageSignTransaction from './pages/connect/signTransaction.vue'
+import PageDecodeMessage from './pages/connect/decodeMessage.vue'
 
 const routes = [{
   path: '/',
@@ -57,6 +64,27 @@ const routes = [{
   }, {
     path: '/locked',
     component: PageLocked,
+  }, {
+    path: '/settings',
+    component: PageSettings,
+  }, {
+    path: '/languageSettings',
+    component: PageLanguageSettings,
+  }, {
+    path: '/connect',
+    component: PageConnect,
+  }, {
+    path: '/signPlainMessage',
+    component: PageSignPlainMessage,
+  }, {
+    path: '/signTypedMessage',
+    component: PageSignTypedMessage,
+  }, {
+    path: '/signTransaction',
+    component: PageSignTransaction,
+  }, {
+    path: '/decodeMessage',
+    component: PageDecodeMessage,
   }],
 }]
 

@@ -34,7 +34,7 @@
     <UniInput
       ref="passwordRef"
       v-model="password"
-      :show-locked="true"
+      show-locked
       class="uni-input"
       :validate-text="validataText"
       placeholder="Enter password"
