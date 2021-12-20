@@ -140,20 +140,7 @@
     position: absolute;
     bottom: 20px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-    .reject {
-      margin-right: 20px;
-      width: 141px;
-      border: 1px solid rgba(221, 76, 76, 0.1);
-      background: rgba(221, 76, 76, 0.05);
-      color: #D45D5D;
-    }
-    .allow {
-      width: 141px;
-    }
   }
 }
 </style>
@@ -204,12 +191,11 @@
       </div>
     </div>
     <div class="btn-box">
-      <UniBtn class="reject">
-        Reject
-      </UniBtn>
-      <UniBtn class="allow">
-        Allow
-      </UniBtn>
+      <UniDoubleBtn>
+        <template #allow>
+          Sign
+        </template>
+      </UniDoubleBtn>
     </div>
     <Ironman></Ironman>
   </div>

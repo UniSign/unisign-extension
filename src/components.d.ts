@@ -8,6 +8,7 @@ declare module 'vue' {
     Ironman: typeof import('./ui/components/Ironman.vue')['default']
     UniBtn: typeof import('./ui/components/UniBtn.vue')['default']
     UniDialog: typeof import('./ui/components/UniDialog.vue')['default']
+    UniDoubleBtn: typeof import('./ui/components/UniDoubleBtn.vue')['default']
     UniInput: typeof import('./ui/components/UniInput.vue')['default']
     UniMsg: typeof import('./ui/components/UniMsg.vue')['default']
     UniTab: typeof import('./ui/components/UniTab.vue')['default']
