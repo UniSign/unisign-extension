@@ -504,7 +504,7 @@
           <div>
             <img class="w-[26px] h-[26px]" src="/assets/page-addAddress/key-bch.png">
             <span>0xydsh…38dfsdf</span>
-            <Iconfont class="icon-font" name="unchecked" size="12" color="##E1E1E1"></Iconfont>
+            <Iconfont class="icon-font" name="unchecked" size="12" color="#E1E1E1"></Iconfont>
           </div>
         </div>
       </div>
