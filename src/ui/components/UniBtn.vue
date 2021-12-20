@@ -12,6 +12,9 @@
     &._disabled {
       opacity: 0.4;
     }
+    &._error {
+      background: $error-btn-bg;
+    }
     &:focus{
       outline: 0;
     }
@@ -19,12 +22,13 @@
 </style>
 
 <template>
-  <button class="uni-btn" :class="{'_disabled':disabled}" @click="click">
+  <button class="uni-btn" :class="{'_disabled':disabled,'_error':error}" @click="click">
     <slot>Continue</slot>
   </button>
 </template>
 
 <script>
+import { toRefs } from 'vue'
 
 export default {
   props: {
@@ -33,10 +37,17 @@ export default {
       required: false,
       default: false,
     },
+    error: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   emits: ['click'],
   setup (props, context) {
+    const { disabled } = toRefs(props)
     function click (e) {
+      if (disabled.value) return
       context.emit('click', e.target.value)
     }
     return {

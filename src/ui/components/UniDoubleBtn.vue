@@ -29,6 +29,9 @@
     .allow {
       background: #FBAF34;
       color: #FFFFFF;
+      &._disabled {
+        opacity: 0.4;
+      }
     }
   }
 </style>
@@ -40,7 +43,7 @@
         Reject
       </slot>
     </button>
-    <button class="allow" @click="onAllowClick">
+    <button class="allow" :class="{'_disabled':disabled}" @click="onAllowClick">
       <slot name="allow">
         Allow
       </slot>
@@ -49,16 +52,24 @@
 </template>
 
 <script>
+import { toRefs } from 'vue'
 
 export default {
   props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   emits: ['rejectClick', 'allowClick'],
   setup (props, context) {
+    const { disabled } = toRefs(props)
     function onRejectClick (e) {
       context.emit('rejectClick', e.target.value)
     }
     function onAllowClick (e) {
+      if (disabled.value) return
       context.emit('allowClick', e.target.value)
     }
     return {
