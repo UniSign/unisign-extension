@@ -1,55 +1,113 @@
+import { approvalService } from '~/background/services/approval'
+import { chainService } from '~/background/services/chain'
+// import { keyringService } from '~/background/services/keyring'
+import { pageCacheService } from '~/background/services/pageCache'
+import { personalService } from '~/background/services/personal'
+import { sessionService } from '~/background/services/session'
 import { settingsService } from '~/background/services/settings'
+import { SiteData, siteService } from '~/background/services/site'
+import { unikeyService } from '~/background/services/unikey'
 import { windows } from '~/background/tools/windows'
 import { messageBridge } from '~/utils/messages'
 
+// todo: the payload of all events needs to be carefully considered
+export const Events = {
+  unlock: 'unlock',
+  lock: 'lock',
+  accountsChanged: 'accountsChanged',
+  chainChanged: 'chainChanged',
+}
+
 export class WalletController {
-  private _isLocked = false
-  private _isConnected = false
-
   async bootstrap () {
-
   }
 
-  async isBooted () {
-
+  async isBootstrapped () {
   }
 
-  async lock (): Promise<boolean> {
-    return this._isLocked = true
+  async lock () {
+    // await keyringService.setLocked()
+    sessionService.broadcast(Events.accountsChanged, [])
+    sessionService.broadcast(Events.lock)
   }
 
-  async unlock (): Promise<boolean> {
-    return this._isLocked = false
+  async unlock (password: string) {
+    // await keyringService.submitPassword(password)
+    sessionService.broadcast(Events.unlock)
   }
 
-  async isLocked () {
-    return this._isLocked
-  }
+  // isLocked = keyringService.isLocked
+  isLocked = () => false
 
-  async connect () {
-    // todo: this should be replaced by approvalService afterwards
-    await windows.createApproval('unlock')
+  // ----- personal -------
+  getIsPopupOpened = personalService.getIsPopupOpened
+  setIsPopupOpened = personalService.setIsPopupOpened
+  resetCurrentUnikey = personalService.resetCurrentUnikey
+  setCurrentUnikey = personalService.setCurrentUnikey
 
-    return new Date().toString()
-  }
+  // ----- keyring -------
+  getAllVisibleUnikeys = unikeyService.getAllVisibleUnikeys
+  showUnikey = unikeyService.showUnikey
+  hideUnikey = unikeyService.hideUnikey
 
-  async disconnect () {
-    return this._isConnected = false
-  }
+  // ----- chains -------
+  getSupportedChains = chainService.getSupportedChains
+  getEnabledChains = chainService.getEnabledChains
+  enableChain = chainService.enableChain
+  disabledChain = chainService.disableChain
 
-  async signPlainMessage () {
-    await windows.createApproval('sign-plain-message')
-
-    return new Date().toString()
-  }
-
-  async isConnected () {
-    return this._isConnected
-  }
-
+  // ----- settings -------
   getLocale = settingsService.getLocale
-
   setLocale = settingsService.setLocale
+
+  // ----- approval -------
+  getApproval = approvalService.getApproval
+  resolveApproval = approvalService.resolveApproval
+  rejectApproval = approvalService.rejectApproval
+
+  // ----- pageCache -------
+  hasPageCache = pageCacheService.has
+  setPageCache = pageCacheService.set
+  clearPageCache = pageCacheService.clear
+  getPageCache () {
+    if (this.isLocked()) return null
+    return pageCacheService.get()
+  }
+
+  // sites
+  getSite = siteService.getSite
+  pinSite = siteService.pinSite
+  unpinSite = siteService.unpinSite
+  getSites = siteService.getSites
+  getSitesSorted = siteService.getSitesSorted
+  getSitesByChain = siteService.getSitesByChainId
+  async getCurrentSite () {
+    const { id: tabId } = await windows.getCurrentTab()
+    if (!tabId) return
+
+    const session = sessionService.get(tabId)
+    if (!session) return
+
+    return siteService.getSiteSilently(session.origin)
+  }
+
+  updateSiteAndSession (origin: string, data: SiteData) {
+    siteService.updateSite(origin, data)
+    // todo: determine the payload of chainChanged event
+    sessionService.broadcast(Events.chainChanged, {
+      // chain: '',
+      // networkVersion: '',
+    }, data.origin)
+  }
+
+  removeSiteAndSession (origin: string) {
+    sessionService.broadcast(Events.accountsChanged, [], origin)
+    siteService.removeSite(origin)
+  }
+
+  // ----- keyring -------
+  // ----- todo -------
+  // ----- keyring -------
 }
 
 export const walletController = new WalletController()

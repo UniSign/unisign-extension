@@ -48,4 +48,9 @@ export const windows = {
   remove (windowId: number) {
     return browser.windows.remove(windowId)
   },
+
+  async getCurrentTab () {
+    const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+    return tabs[0]
+  },
 }

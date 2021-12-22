@@ -33,6 +33,16 @@ export class Session {
 export class SessionService {
   private map = new Map<number, Session>()
 
+  constructor () {
+    this.init()
+  }
+
+  init () {
+    browser.tabs.onRemoved.addListener((tabId) => {
+      this.delete(tabId)
+    })
+  }
+
   get (tabId: number) {
     return this.map.get(tabId)
   }
@@ -68,12 +78,12 @@ export class SessionService {
   }
 
   /**
-   * broadcast a message to all the connected site
+   * broadcast a message to all the sessions or only the sessions with target origin
    * @param event
    * @param data
-   * @param origin
+   * @param targetOrigin
    */
-  broadcast (event: string, data?: any, origin?: string) {
+  broadcast (event: string, data?: any, targetOrigin?: string) {
     let connectedSession: Session[] = []
 
     this.map.forEach((session) => {
@@ -82,8 +92,8 @@ export class SessionService {
       }
     })
 
-    if (origin) {
-      connectedSession = connectedSession.filter(session => session.origin === origin)
+    if (targetOrigin) {
+      connectedSession = connectedSession.filter(session => session.origin === targetOrigin)
     }
 
     connectedSession.forEach(async (session) => {

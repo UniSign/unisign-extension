@@ -73,6 +73,14 @@ export class SiteService {
   }
 
   /**
+   * get a site without updating the sequence
+   * @param origin
+   */
+  getSiteSilently (origin: string) {
+    return this.lrcCache.peek(origin)
+  }
+
+  /**
    * visit the site data in lrc cache to promote the site
    */
   touchSite (origin: string) {

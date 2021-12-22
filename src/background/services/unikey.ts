@@ -11,7 +11,7 @@ export enum KeyringType {
   keypair = 'keypair',
 
   mnemonic = 'mnemonic',
-  hardware = 'hardware',
+  hardware = 'hardware', // todo: this should be more specific
   walletConnect = 'walletConnect',
 }
 
