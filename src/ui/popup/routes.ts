@@ -16,6 +16,9 @@ import PageLocked from './pages/welcome/locked.vue'
 import PageSettings from './pages/settings/settings.vue'
 import PageLanguageSettings from './pages/settings/languageSettings.vue'
 import PageKeyManagement from './pages/settings/keyManagement.vue'
+import PageSecurityAndBackup from './pages/settings/securityAndBackup.vue'
+import PageAdvancedReset from './pages/settings/advancedReset.vue'
+import PageImportAnotherMnemonic from './pages/settings/importAnotherMnemonic.vue'
 import PageConnect from './pages/connect/connect.vue'
 import PageSignPlainMessage from './pages/connect/signPlainMessage.vue'
 import PageSignTypedMessage from './pages/connect/signTypedMessage.vue'
@@ -74,6 +77,15 @@ const routes = [{
   }, {
     path: '/keyManagement',
     component: PageKeyManagement,
+  }, {
+    path: '/securityAndBackup',
+    component: PageSecurityAndBackup,
+  }, {
+    path: '/advancedReset',
+    component: PageAdvancedReset,
+  }, {
+    path: '/importAnotherMnemonic',
+    component: PageImportAnotherMnemonic,
   }, {
     path: '/connect',
     component: PageConnect,

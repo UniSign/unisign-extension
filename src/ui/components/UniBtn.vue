@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import { toRefs } from 'vue'
 
 export default {
   props: {
@@ -45,9 +44,7 @@ export default {
   },
   emits: ['click'],
   setup (props, context) {
-    const { disabled } = toRefs(props)
     function click (e) {
-      if (disabled.value) return
       context.emit('click', e.target.value)
     }
     return {
