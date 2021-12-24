@@ -1,4 +1,11 @@
 <style lang="scss" scoped>
+.model {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.24);
   .dialog-wrapper{
     position: fixed;
     top: 50%;
@@ -19,6 +26,10 @@
       h2 {
         font-size: $title-font-size;
         font-weight: bold;
+        line-height: 29px;
+        &._error {
+          color: $error-btn-bg;
+        }
       }
       .close {
         position: absolute;
@@ -33,20 +44,33 @@
       }
     }
   }
+}
+.fade-enter-active, .fade-leave-active{
+  transition: opacity 0.3s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 </style>
 
 <template>
-  <div v-if="visible" class="dialog-wrapper">
-    <div class="title">
-      <h2>{{ title }}</h2>
-      <div class="close" @click="cancel">
-        <Iconfont name="close" size="16" color="#8D919C"></Iconfont>
+  <transition name="fade">
+    <div v-if="visible" class="model">
+      <div class="dialog-wrapper">
+        <div class="title">
+          <h2 :class="{'_error':error}">
+            {{ title }}
+          </h2>
+          <div class="close" @click="cancel">
+            <Iconfont name="close" size="16" color="#8D919C"></Iconfont>
+          </div>
+        </div>
+        <div class="content">
+          <slot></slot>
+        </div>
       </div>
     </div>
-    <div class="content">
-      <slot></slot>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -63,6 +87,11 @@ export default {
       type: String,
       required: false,
       default: 'Account Detail',
+    },
+    error: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   emits: ['cancel'],

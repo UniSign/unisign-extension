@@ -15,6 +15,7 @@ import PageImportKeystoreFile from './pages/import/importKeystoreFile.vue'
 import PageLocked from './pages/welcome/locked.vue'
 import PageSettings from './pages/settings/settings.vue'
 import PageLanguageSettings from './pages/settings/languageSettings.vue'
+import PageKeyManagement from './pages/settings/keyManagement.vue'
 import PageConnect from './pages/connect/connect.vue'
 import PageSignPlainMessage from './pages/connect/signPlainMessage.vue'
 import PageSignTypedMessage from './pages/connect/signTypedMessage.vue'
@@ -70,6 +71,9 @@ const routes = [{
   }, {
     path: '/languageSettings',
     component: PageLanguageSettings,
+  }, {
+    path: '/keyManagement',
+    component: PageKeyManagement,
   }, {
     path: '/connect',
     component: PageConnect,

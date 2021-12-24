@@ -26,7 +26,6 @@
     height: 270px;
     box-shadow: 0px 9px 12px 0px rgba(141, 145, 156, 0.2);
     border-radius: 22px;
-    border: 1px solid #FFFFFF;
     margin: 78px auto 0;
     padding: 32px 24px 24px;
     background: rgba(255, 255, 255, 0.45);
