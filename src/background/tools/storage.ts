@@ -11,7 +11,8 @@ export const storage = {
       return _cache.get(key)
     }
 
-    const value = await browser.storage.local.get(key)
+    // storage.local.get will ALWAYS return a object with the target key on it -- if there is a value for the key.
+    const value = (await browser.storage.local.get(key))[key]
 
     _cache.set(key, value)
 

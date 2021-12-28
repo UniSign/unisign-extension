@@ -1,3 +1,4 @@
+import './polyfill'
 import { setupWalletController } from '~/background/controllers/wallet'
 
 // only on dev mode

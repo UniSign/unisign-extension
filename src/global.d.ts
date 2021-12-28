@@ -4,3 +4,5 @@ declare module '*.vue' {
   const component: any
   export default component
 }
+
+type valueOf<T> = T[keyof T]
