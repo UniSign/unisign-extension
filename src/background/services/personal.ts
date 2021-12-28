@@ -1,5 +1,7 @@
+import { sessionService } from '~/background/services/session'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { Unikey, unikeyService } from '~/background/services/unikey'
+import { Events } from '~/background/controllers/wallet'
 
 interface PersonalStore {
   currentUnikey?: Unikey | null
@@ -29,6 +31,8 @@ export class PersonalService {
 
     if (unikey) {
       this.store.currentUnikey = unikey
+
+      sessionService.broadcast(Events.accountsChanged, [unikey.key])
     }
   }
 
