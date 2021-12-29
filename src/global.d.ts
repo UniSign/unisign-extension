@@ -6,3 +6,8 @@ declare module '*.vue' {
 }
 
 type valueOf<T> = T[keyof T]
+
+// shim for lib.dom.d.ts which lacks target on InputEvent
+interface InputEvent {
+  target: HTMLInputElement
+}

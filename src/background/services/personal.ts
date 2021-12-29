@@ -22,7 +22,7 @@ export class PersonalService {
     })
   }
 
-  getCurrentUniKey () {
+  getCurrentUnikey () {
     return this.store.currentUnikey
   }
 
