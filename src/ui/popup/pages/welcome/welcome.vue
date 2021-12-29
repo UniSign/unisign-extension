@@ -41,10 +41,12 @@
     <img class="w-[350px] h-[78px]" src="/assets/page-welcome/page-welcome-top-bg.png">
     <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-welcome/page-welcome-logo.png">
     <h2>Bring all crypto users into<span>Web3.0</span></h2>
+
     <div class="input-box">
       <UniInput ref="passwordRef" v-model="password" validate-text="The passwords do not match" placeholder="Set a password"></UniInput>
       <UniInput ref="rePasswordRef" v-model="rePassword" class="mt-[32px] mb-[32px]" placeholder="Repeat"></UniInput>
       <UniBtn :disabled="!!(password && rePassword)" @click="onClickSubmit"></UniBtn>
+      <router-link to="/test">test</router-link>
     </div>
   </div>
 </template>
