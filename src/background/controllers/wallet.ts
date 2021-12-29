@@ -1,6 +1,8 @@
+import bip39 from 'bip39'
 import { approvalService } from '~/background/services/approval'
 import { chainService } from '~/background/services/chain'
-// import { keyringService } from '~/background/services/keyring'
+// import { KeyringType, keyringService } from '~/background/services/keyring'
+import { KeyringBase, KeyringHD } from '~/background/services/keyring/keyring'
 import { pageCacheService } from '~/background/services/pageCache'
 import { personalService } from '~/background/services/personal'
 import { sessionService } from '~/background/services/session'
@@ -9,6 +11,9 @@ import { SiteData, siteService } from '~/background/services/site'
 import { unikeyService } from '~/background/services/unikey'
 import { windows } from '~/background/tools/windows'
 import { messageBridge } from '~/utils/messages'
+
+const keyringService: any = {}
+type KeyringType = any
 
 // todo: the payload of all events needs to be carefully considered
 export const Events = {
@@ -19,33 +24,41 @@ export const Events = {
 }
 
 export class WalletController {
-  async bootstrap () {
-  }
-
-  async isBootstrapped () {
-  }
+  // ----- basic -------
+  setup = keyringService.setup
+  isSetup = keyringService.isSetup
+  isLocked = keyringService.isLocked
 
   async lock () {
-    // await keyringService.setLocked()
+    await keyringService.setLocked()
     sessionService.broadcast(Events.accountsChanged, [])
     sessionService.broadcast(Events.lock)
   }
 
   async unlock (password: string) {
-    // await keyringService.submitPassword(password)
+    await keyringService.submitPassword(password)
     sessionService.broadcast(Events.unlock)
   }
 
-  // isLocked = keyringService.isLocked
-  isLocked = () => false
+  verifyPassword = keyringService.verifyPassword
 
   // ----- personal -------
   getIsPopupOpened = personalService.getIsPopupOpened
   setIsPopupOpened = personalService.setIsPopupOpened
   resetCurrentUnikey = personalService.resetCurrentUnikey
   setCurrentUnikey = personalService.setCurrentUnikey
+  private async setCurrentUnikeyFromKeyring (keyring: KeyringBase, index = 0) {
+    const accounts = await keyring.getAccounts()
+    const account = accounts[index < 0 ? index + accounts.length : index]
 
-  // ----- keyring -------
+    if (!account) {
+      throw new Error(`the ${index} account of ${keyring.type} does not exists`)
+    }
+
+    personalService.setCurrentUnikey(account)
+  }
+
+  // ----- unikey -------
   getAllVisibleUnikeys = unikeyService.getAllVisibleUnikeys
   showUnikey = unikeyService.showUnikey
   hideUnikey = unikeyService.hideUnikey
@@ -106,7 +119,47 @@ export class WalletController {
   }
 
   // ----- keyring -------
-  // ----- todo -------
+  clearKeyrings = keyringService.clearKeyrings
+
+  async getPrivateKey (password: string, address: string, type: KeyringType) {
+    await this.verifyPassword(password)
+
+    const keyring = await keyringService.getKeyringForAccount(address, type)
+
+    if (!keyring) return null
+
+    return await keyring.exportAccount(address)
+  }
+
+  private _getMnemonic (): string {
+    const keyring = keyringService.getKeyringByType(KeyringType.BtcHD) as KeyringHD
+
+    return keyring.mnemonic
+  }
+
+  async getMnemonic (password: string) {
+    await this.verifyPassword(password)
+
+    return this._getMnemonic()
+  }
+
+  hasMnemonic (): boolean {
+    return Boolean(this._getMnemonic())
+  }
+
+  generateMnemonic () {
+    return bip39.generateMnemonic()
+  }
+
+  async importPrivateKey (privateKey: string, type: KeyringType) {
+    const keyring = await keyringService.importPrivateKey(privateKey, type)
+    await this.setCurrentUnikeyFromKeyring(keyring)
+  }
+
+  async importMnemonic (mnemonic: string) {
+    const keyring = await keyringService.createNewVaultAndRestore(mnemonic)
+    await this.setCurrentUnikeyFromKeyring(keyring)
+  }
   // ----- keyring -------
 }
 
@@ -127,4 +180,6 @@ export function setupWalletController () {
       return await (walletController as any)[method].apply(walletController, params)
     }
   })
+
+  ;(window as any).walletController = walletController
 }

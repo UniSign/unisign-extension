@@ -24,6 +24,7 @@ import PageSignPlainMessage from './pages/connect/signPlainMessage.vue'
 import PageSignTypedMessage from './pages/connect/signTypedMessage.vue'
 import PageSignTransaction from './pages/connect/signTransaction.vue'
 import PageDecodeMessage from './pages/connect/decodeMessage.vue'
+import PageTest from './pages/test.vue'
 
 const routes = [{
   path: '/',
@@ -32,6 +33,9 @@ const routes = [{
   children: [{
     path: '/',
     component: PageWelcome,
+  }, {
+    path: '/test',
+    component: PageTest,
   }, {
     path: '/unlock',
     component: PageUnlock,

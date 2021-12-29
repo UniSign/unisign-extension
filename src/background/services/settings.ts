@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { LOCALES } from '~/constants'
 
@@ -6,10 +7,17 @@ interface SettingsStore {
   antiPhishingCode: string
 }
 
-export class SettingsService {
+class AutoBindService {
+  constructor () {
+    autoBind(this)
+  }
+}
+
+export class SettingsService extends AutoBindService {
   store!: SettingsStore
 
   constructor () {
+    super()
     this.init().then(() => console.log('SettingsService initialized'))
   }
 
@@ -44,3 +52,9 @@ export class SettingsService {
 }
 
 export const settingsService = new SettingsService()
+//
+// console.log(`keys: ${Object.keys(settingsService)}`)
+//
+// for (const key in settingsService) {
+//   console.log(`2222`, key)
+// }
