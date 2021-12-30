@@ -1,4 +1,4 @@
-import bip39 from 'bip39'
+import * as bip39 from 'bip39'
 import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
 
 interface BtcWallet {
@@ -24,12 +24,6 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   mnemonic = ''
   wallets: BtcWallet[] = []
   root!: BtcWallet
-
-  constructor (opts: BtcHdKeyringOpts) {
-    super()
-
-    this.deserialize(opts)
-  }
 
   async deserialize(opts: any): Promise<void>
   async deserialize (opts: BtcHdKeyringOpts): Promise<void> {

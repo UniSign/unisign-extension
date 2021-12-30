@@ -14,10 +14,21 @@ export const sharedConfig: UserConfig = {
   resolve: {
     alias: {
       '~/': `${r('src')}/`,
+      // some deps need `stream` in node core libs, but vite does not polyfill those libs, so we have to alias them ourselves.
+      // https://github.com/vitejs/vite/issues/5398#issuecomment-950288364
+      'stream': 'readable-stream',
+
+      // todo: there may be a chance for a new package polyfills all the missing packages
+      // https://github.com/vitejs/vite/issues/847
+      // https://github.com/vitejs/vite/issues/728
     },
   },
   define: {
-    __DEV__: isDev,
+    '__DEV__': isDev,
+    // since vite does not polyfill process.env, we have to define it ourselves
+    'process.env': process.env,
+    // readable-stream need `process.version`
+    'process.version': `'${process.version}'`,
   },
   plugins: [
     Vue(),
@@ -66,9 +77,7 @@ export const sharedConfig: UserConfig = {
       '@vueuse/core',
       'webextension-polyfill',
     ],
-    exclude: [
-      'vue-demi',
-    ],
+    exclude: [],
   },
 }
 

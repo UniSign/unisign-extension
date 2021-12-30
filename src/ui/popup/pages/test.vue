@@ -52,13 +52,18 @@
     <fieldset>
       <legend>Setup</legend>
 
-      <button @click="reset">
+      <button @click="onClickReset">
         reset
       </button>
       isSetup: {{ isSetup }}
       <br>
 
-      <button @click="setup">
+      <button @click="onClickGenerateMnemonic">
+        generate
+      </button>mnemonic: {{ mnemonic }}
+      <br>
+
+      <button @click="onClickSetup">
         setup
       </button>
 
@@ -116,14 +121,19 @@ export default {
     // setup
     const isSetup = ref(false)
     const passwordForSetup = ref('')
+    const mnemonic = ref('')
     function onChangePasswordForSetup (e: InputEvent) {
       passwordForSetup.value = e.target.value
     }
-    async function setup () {
+    async function onClickGenerateMnemonic () {
+      mnemonic.value = await wallet.generateMnemonic()
+    }
+
+    async function onClickSetup () {
       await wallet.setup(passwordForSetup.value)
       isSetup.value = await wallet.isSetup()
     }
-    async function reset () {
+    async function onClickReset () {
       await wallet.reset()
       await sleep(1000) // wait for background fully reloaded
       window.location.reload()
@@ -156,9 +166,11 @@ export default {
 
       // setup
       isSetup,
+      mnemonic,
       passwordForSetup,
-      setup,
-      reset,
+      onClickGenerateMnemonic,
+      onClickSetup,
+      onClickReset,
 
       // isLocked
       isLocked,

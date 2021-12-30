@@ -73,6 +73,7 @@
     "js-crc": "^0.2.0",
     "lodash": "^4.17.21",
     "lru-cache": "^6.0.0",
+    "readable-stream": "^3.6.0",
     "vue": "^3.2.26",
     "vue-i18n": "^9.2.0-beta.23",
     "vue-router": "^4.0.12",
