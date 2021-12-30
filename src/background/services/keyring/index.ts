@@ -3,7 +3,7 @@
 import { EventEmitter } from 'events'
 import autoBind from 'auto-bind'
 import { ObservableStore } from '@metamask/obs-store'
-import * as bip39 from 'bip39'
+import { generateMnemonic, validateMnemonic } from 'bip39'
 // @ts-ignore
 import encryptor from 'browser-passworder'
 import { ethErrors } from 'eth-rpc-errors'
@@ -146,7 +146,7 @@ export class KeyringService extends EventEmitter {
   }
 
   async generateMnemonic () {
-    this.mnemonic = bip39.generateMnemonic()
+    this.mnemonic = generateMnemonic()
     return this.mnemonic
   }
 
@@ -193,7 +193,7 @@ export class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
   createNewVaultAndRestore (mnemonic: string): Promise<KeyringHD> {
-    if (!bip39.validateMnemonic(mnemonic)) {
+    if (!validateMnemonic(mnemonic)) {
       return Promise.reject(new Error('Mnemonic is invalid.'))
     }
 

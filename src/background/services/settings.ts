@@ -1,16 +1,10 @@
-import autoBind from 'auto-bind'
+import { AutoBindService } from '~/background/services/base/auto-bind'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { LocaleOptions, LOCALES } from '~/constants'
 
 interface SettingsStore {
   locale: LOCALES
   antiPhishingCode: string
-}
-
-class AutoBindService {
-  constructor () {
-    autoBind(this)
-  }
 }
 
 export class SettingsService extends AutoBindService {

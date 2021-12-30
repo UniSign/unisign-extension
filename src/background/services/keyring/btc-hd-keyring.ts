@@ -1,4 +1,4 @@
-import * as bip39 from 'bip39'
+import { mnemonicToSeed } from 'bip39'
 import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
 
 interface BtcWallet {
@@ -67,7 +67,7 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   }
 
   private async initFromMnemonic (mnemonic: string) {
-    const seed = await bip39.mnemonicToSeed(mnemonic)
+    const seed = await mnemonicToSeed(mnemonic)
     this.root = {
       publicKey: seed.toString(),
       privateKey: seed.toString(),

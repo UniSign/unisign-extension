@@ -68,7 +68,7 @@
       </button>
 
       <label>
-        <input :value="passwordForSetup" @change="onChangePasswordForSetup">
+        <input v-model="passwordForSetup">
         password
       </label>
     </fieldset>
@@ -81,17 +81,41 @@
       <button @click="onClickLock">
         Lock
       </button>
+      <br>
       <button @click="onClickUnlock">
         Unlock
       </button>
+      <label>
+        <input v-model="passwordForUnlock">
+        password
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>chains</legend>
+
+      <b>enabledChains:</b>
+      <ul>
+        <li v-for="chain in enabledChains" :key="chain.identifier">{{chain.name}} {{ chain.identifier }}</li>
+      </ul>
+
+      <b>supportedChains:</b>
+      <ul>
+        <li v-for="chain in supportedChains" :key="chain.identifier">
+          {{chain.name}} {{ chain.identifier }}
+          <button @click="onClickEnableChain(chain.identifier)">✅</button>
+          <button @click="onClickDisableChain(chain.identifier)">❌</button>
+        </li>
+      </ul>
     </fieldset>
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
+import { ChainData } from '~/background/services/chain'
 import { wallet } from '~/ui/controllers/wallet'
-import { LocaleOptions, LOCALES } from '~/constants'
+import { ChainIdentifier, LocaleOptions, LOCALES } from '~/constants'
 import { sleep } from '~/utils'
 
 export default {
@@ -117,14 +141,10 @@ export default {
       antiPhishingCode.value = await wallet.getAntiPhishingCode()
     })
 
-    // todo: implement setup process
     // setup
     const isSetup = ref(false)
-    const passwordForSetup = ref('')
+    const passwordForSetup = ref('11111111')
     const mnemonic = ref('')
-    function onChangePasswordForSetup (e: InputEvent) {
-      passwordForSetup.value = e.target.value
-    }
     async function onClickGenerateMnemonic () {
       mnemonic.value = await wallet.generateMnemonic()
     }
@@ -151,7 +171,24 @@ export default {
     }
     async function onClickUnlock () {
       await wallet.unlock(passwordForUnlock.value)
+      isLocked.value = await wallet.isLocked()
     }
+
+    // Chains
+    const supportedChains = ref<ChainData[]>([])
+    const enabledChains = ref<ChainData[]>([])
+    async function onClickEnableChain (identifier: ChainIdentifier) {
+      await wallet.enableChain(identifier)
+      enabledChains.value = await wallet.getEnabledChains()
+    }
+    async function onClickDisableChain (identifier: ChainIdentifier) {
+      await wallet.disabledChain(identifier)
+      enabledChains.value = await wallet.getEnabledChains()
+    }
+    onMounted(async () => {
+      supportedChains.value = await wallet.getSupportedChains()
+      enabledChains.value = await wallet.getEnabledChains()
+    })
 
     return {
       // locale
@@ -164,7 +201,7 @@ export default {
       antiPhishingCode,
       onChangeAntiPhishingCode,
 
-      // setup
+      // Setup
       isSetup,
       mnemonic,
       passwordForSetup,
@@ -172,12 +209,17 @@ export default {
       onClickSetup,
       onClickReset,
 
-      // isLocked
+      // Lock
       isLocked,
       passwordForUnlock,
-      onChangePasswordForSetup,
       onClickLock,
       onClickUnlock,
+
+      // Chains
+      supportedChains,
+      enabledChains,
+      onClickEnableChain,
+      onClickDisableChain,
     }
   },
 }
