@@ -60,19 +60,11 @@
     width: 302px;
   }
 }
-.fade-enter-active, .fade-leave-active{
-  transition: opacity 0.5s ease;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
 </style>
 
 <template>
   <div class="page-choose-the-right-order">
-    <transition name="fade">
-      <UniMsg v-if="canShowMsg" @close="canShowMsg= false"></UniMsg>
-    </transition>
+    <UniMsg :visible="canShowMsg" error content="Incorrect order" @close="canShowMsg= false"></UniMsg>
     <UniTab title="Create Mnemonic"></UniTab>
     <div class="central-content">
       <h2>Keep it carefully</h2>

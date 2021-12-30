@@ -1,33 +1,47 @@
 <style lang="scss" scoped>
-  .uni-msg {
-    position: fixed;
-    z-index: 1000;
-    top: 7px;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.06);
-    border-radius: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: $input-font-size;
-    font-weight: 600;
-    color: #FFFFFF;
-    text-align: center;
-  }
+.uni-msg {
+  position: fixed;
+  z-index: 1000;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.06);
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $input-font-size;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-align: center;
+}
+.fade-enter-active, .fade-leave-active{
+  transition: opacity 0.3s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 </style>
 
 <template>
-  <div class="uni-msg" :style="{'width':width,'height':height,'background-color':type==='success'?'#41C190':'#EE5757'}">
-    <Iconfont :name="type==='success'?'checked':'error'" size="16" color="#fff" class="mr-[8px]"></Iconfont>
-    {{ content }}
-  </div>
+  <transition name="fade">
+    <div v-if="visible" class="uni-msg" :style="{'width':width,'height':height,'background-color':error?'#EE5757':'#41C190'}">
+      <Iconfont :name="error?'error':'checked'" size="16" color="#fff" class="mr-[8px]"></Iconfont>
+      {{ content }}
+    </div>
+  </transition>
 </template>
 
 <script>
+import { watch } from 'vue'
 
 export default {
   props: {
+    visible: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     width: {
       type: String,
       required: false,
@@ -38,20 +52,23 @@ export default {
       required: false,
       default: '44px',
     },
-    type: {
-      type: String,
+    error: {
+      type: Boolean,
       required: false,
-      default: 'error',
+      default: false,
     },
     content: {
       type: String,
       required: false,
-      default: 'Incorrect order',
+      default: 'Saved',
     },
   },
   emits: ['close'],
   setup (props, context) {
-    onMounted(() => {
+    watch(() => props.visible, (newVal, oldVal) => {
+      if (oldVal === true) {
+        return
+      }
       setTimeout(() => {
         context.emit('close')
       }, 3000)
