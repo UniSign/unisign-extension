@@ -5,7 +5,7 @@ import { messageBridge } from '~/utils/messages'
 // and return the Promise which will eventually resolve a data from `walletController`
 export const wallet = new Proxy({}, {
   get (target: {}, key: string): any {
-    return function (...params: any) {
+    return function (...params: any[]) {
       return messageBridge.send('wallet-controller', {
         method: key,
         params,

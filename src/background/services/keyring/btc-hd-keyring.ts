@@ -1,4 +1,4 @@
-import bip39 from 'bip39'
+import { mnemonicToSeed } from 'bip39'
 import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
 
 interface BtcWallet {
@@ -24,12 +24,6 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   mnemonic = ''
   wallets: BtcWallet[] = []
   root!: BtcWallet
-
-  constructor (opts: BtcHdKeyringOpts) {
-    super()
-
-    this.deserialize(opts)
-  }
 
   async deserialize(opts: any): Promise<void>
   async deserialize (opts: BtcHdKeyringOpts): Promise<void> {
@@ -73,7 +67,7 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   }
 
   private async initFromMnemonic (mnemonic: string) {
-    const seed = await bip39.mnemonicToSeed(mnemonic)
+    const seed = await mnemonicToSeed(mnemonic)
     this.root = {
       publicKey: seed.toString(),
       privateKey: seed.toString(),
