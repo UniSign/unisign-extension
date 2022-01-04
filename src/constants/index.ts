@@ -50,3 +50,5 @@ export const LocaleOptions = [{
   text: '中文',
   value: LOCALES.zhCN,
 }]
+
+export const UIPopupName = 'ui_popup'

@@ -1,5 +1,6 @@
 import './polyfill'
-import { setupWalletController } from '~/background/controllers/wallet'
+import { setupWalletController, walletController } from '~/background/controllers/wallet'
+import { UIPopupName } from '~/constants'
 
 // only on dev mode
 if (import.meta.hot) {
@@ -11,6 +12,18 @@ if (import.meta.hot) {
 browser.runtime.onInstalled.addListener((): void => {
   // eslint-disable-next-line no-console
   console.log('Extension installed')
+})
+
+browser.runtime.onConnect.addListener((port) => {
+  console.log('connected', port)
+
+  if (port.name === UIPopupName) {
+    walletController.setIsPopupOpened(true)
+
+    port.onDisconnect.addListener(() => {
+      walletController.setIsPopupOpened(false)
+    })
+  }
 })
 
 setupWalletController()
