@@ -52,21 +52,26 @@
     <fieldset>
       <legend>Setup</legend>
 
+      <div>
+        <button @click="onClickGenerateMnemonic">
+          generate mnemonic
+        </button>: {{ mnemonic }}
+
+        <br>
+        <button @click="onClickImportMnemonic">
+          import mnemonic
+        </button>
+      </div>
+
       <button @click="onClickReset">
         reset
       </button>
       isSetup: {{ isSetup }}
       <br>
 
-      <button @click="onClickGenerateMnemonic">
-        generate
-      </button>mnemonic: {{ mnemonic }}
-      <br>
-
       <button @click="onClickSetup">
         setup
       </button>
-
       <label>
         <input v-model="passwordForSetup">
         password
@@ -92,21 +97,63 @@
     </fieldset>
 
     <fieldset>
-      <legend>chains</legend>
+      <legend>Chains</legend>
 
       <b>enabledChains:</b>
       <ul>
-        <li v-for="chain in enabledChains" :key="chain.identifier">{{chain.name}} {{ chain.identifier }}</li>
+        <li v-for="chain in enabledChains" :key="chain.identifier">
+          {{ chain.name }} {{ chain.identifier }}
+        </li>
       </ul>
 
+      <hr>
       <b>supportedChains:</b>
       <ul>
         <li v-for="chain in supportedChains" :key="chain.identifier">
-          {{chain.name}} {{ chain.identifier }}
-          <button @click="onClickEnableChain(chain.identifier)">✅</button>
-          <button @click="onClickDisableChain(chain.identifier)">❌</button>
+          {{ chain.name }} {{ chain.identifier }}
+          <button @click="onClickEnableChain(chain.identifier)">
+            ✅
+          </button>
+          <button @click="onClickDisableChain(chain.identifier)">
+            ❌
+          </button>
         </li>
       </ul>
+    </fieldset>
+
+    <fieldset>
+      <legend>Unikey</legend>
+
+      <b>visibleUnikeys</b>
+      <ul>
+        <li v-for="unikey in visibleUnikeys" :key="unikey.key">
+          {{ unikey.key }}
+        </li>
+      </ul>
+
+      <b>
+        unikeys
+        <button @click="onClickGetUnikeys">Get</button>
+      </b>
+      <ul>
+        <li v-for="unikey in unikeys" :key="unikey.key">
+
+          <button @click="onClickShowUnikey(unikey)">
+            ✅
+          </button>
+          <button @click="onClickHideUnikey(unikey)">
+            ❌
+          </button>
+          <button @click="onClickSetCurrentUnikey(unikey)">👁</button>
+          {{ unikey.key.slice(0,20) }}...
+        </li>
+      </ul>
+    </fieldset>
+
+    <fieldset>
+      <legend>Personal</legend>
+
+      currentUnikey: {{ currentUnikey?.key }}
     </fieldset>
   </div>
 </template>
@@ -117,6 +164,7 @@ import { ChainData } from '~/background/services/chain'
 import { wallet } from '~/ui/controllers/wallet'
 import { ChainIdentifier, LocaleOptions, LOCALES } from '~/constants'
 import { sleep } from '~/utils'
+import { Unikey } from '~/background/services/unikey'
 
 export default {
   name: 'PageTest',
@@ -148,9 +196,11 @@ export default {
     async function onClickGenerateMnemonic () {
       mnemonic.value = await wallet.generateMnemonic()
     }
-
+    async function onClickImportMnemonic () {
+      await wallet.importMnemonic(mnemonic.value)
+    }
     async function onClickSetup () {
-      await wallet.setup(passwordForSetup.value)
+      await wallet.setupWallet(passwordForSetup.value)
       isSetup.value = await wallet.isSetup()
     }
     async function onClickReset () {
@@ -190,6 +240,33 @@ export default {
       enabledChains.value = await wallet.getEnabledChains()
     })
 
+    // unikey
+    const unikeys = ref<Unikey[]>([])
+    const visibleUnikeys = ref<Unikey[]>([])
+    const currentUnikey = ref<Unikey| null>(null)
+    async function onClickGetUnikeys () {
+      unikeys.value = await wallet.getUnikeys()
+    }
+    async function onClickShowUnikey (unikey: Unikey) {
+      await wallet.showUnikey(unikey.key)
+      visibleUnikeys.value = await wallet.getVisibleUnikeys()
+    }
+    async function onClickHideUnikey (unikey: Unikey) {
+      await wallet.hideUnikey(unikey.key)
+      visibleUnikeys.value = await wallet.getVisibleUnikeys()
+      currentUnikey.value = await wallet.getCurrentUnikey()
+    }
+    async function onClickSetCurrentUnikey (unikey: Unikey) {
+      await wallet.setCurrentUnikey(unikey.key)
+      currentUnikey.value = await wallet.getCurrentUnikey()
+    }
+    onMounted(async () => {
+      unikeys.value = await wallet.getUnikeys()
+      visibleUnikeys.value = await wallet.getVisibleUnikeys()
+
+      currentUnikey.value = await wallet.getCurrentUnikey()
+    })
+
     return {
       // locale
       locale,
@@ -206,6 +283,7 @@ export default {
       mnemonic,
       passwordForSetup,
       onClickGenerateMnemonic,
+      onClickImportMnemonic,
       onClickSetup,
       onClickReset,
 
@@ -220,6 +298,15 @@ export default {
       enabledChains,
       onClickEnableChain,
       onClickDisableChain,
+
+      // unikey
+      unikeys,
+      visibleUnikeys,
+      currentUnikey,
+      onClickGetUnikeys,
+      onClickShowUnikey,
+      onClickHideUnikey,
+      onClickSetCurrentUnikey,
     }
   },
 }

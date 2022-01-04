@@ -1,8 +1,8 @@
 // forked from https://github.com/MetaMask/KeyringController/blob/main/index.js
 
 import { EventEmitter } from 'events'
-import autoBind from 'auto-bind'
 import { ObservableStore } from '@metamask/obs-store'
+import autoBind from 'auto-bind'
 import { generateMnemonic, validateMnemonic } from 'bip39'
 // @ts-ignore
 import encryptor from 'browser-passworder'
@@ -12,28 +12,19 @@ import { EthSimpleKeyring } from './eth-simple-keyring'
 import { BtcHdKeyring } from '~/background/services/keyring/btc-hd-keyring'
 import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
 import {
-  KeyringBase, KeyringHD, KeyringHdOpts,
+  KeyringBase,
+  KeyringHD,
+  KeyringHdOpts,
   KeyringSimple,
   KeyringSimpleOpts,
+  KeyringType,
   SerializedKeyringData,
-} from '~/background/services/keyring/keyring'
+} from '~/background/services/keyring/types'
+import { Unikey, UniKeyChainKeyPair, UnikeyChainMnemonic, UnikeyType } from '~/background/services/unikey'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { storage } from '~/background/tools/storage'
 
 const keyringTypes = [BtcSimpleKeyring, BtcHdKeyring, EthSimpleKeyring, EthHdKeyring]
-
-export enum KeyringType {
-  BtcSimple = 'BTC Simple Key Pair', // BtcSimpleKeyring.type
-  BtcHD = 'BTC HD Key Tree', // BtcHdKeyring.type
-  EthSimple = 'ETH Simple Key Pair', // EthSimpleKeyring.type
-  EthHD = 'ETH HD Key Tree', // EthHdKeyring.type
-
-  // not in use
-  WalletConnect = 'WalletConnect',
-  OpenPGP = 'openPGP',
-  Ledger = 'Ledger Hardware',
-  Trezor = 'Trezor Hardware'
-}
 
 // this is just a simple implementation of ObservableStore as ObservableStore can not be build with vite naturally
 // class ObservableStore<T> {
@@ -436,6 +427,20 @@ export class KeyringService extends EventEmitter {
 
     return Promise.all(
       keyrings.map(keyring => keyring.getAccounts()),
+    ).then(keyringArrays => keyringArrays.flat())
+  }
+
+  async getUnikeys (): Promise<Unikey[]> {
+    return Promise.all(
+      this.keyrings.map(keyring => keyring.getAccounts()
+        .then(accounts => accounts.map((account) => {
+          return {
+            key: account,
+            keyType: UnikeyType.blockchain,
+            keyringType: keyring.type,
+          } as UnikeyChainMnemonic | UniKeyChainKeyPair
+        })),
+      ),
     ).then(keyringArrays => keyringArrays.flat())
   }
 

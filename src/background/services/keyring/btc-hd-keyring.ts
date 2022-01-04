@@ -33,6 +33,7 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
     await this.initFromMnemonic(opts.mnemonic)
 
     if (opts.numberOfAccounts) {
+      // @ts-ignore
       await this.addAccounts(opts.numberOfAccounts)
     }
   }
@@ -46,20 +47,23 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
     })
   }
 
-  addAccounts (numberOfAccounts = 1) {
+  addAccounts (): Promise<any>
+  addAccounts (numberOfAccounts = 1): Promise<BtcWallet[]> {
     const oldLen = this.wallets.length
 
-    const newWallet: BtcWallet[] = []
+    const newWallets: BtcWallet[] = []
 
     for (let i = oldLen; i < oldLen + numberOfAccounts; i++) {
-      this.wallets.push()
-      newWallet.push({
+      const wallet = {
         privateKey: `bc123${i}`,
         publicKey: `bc456${i}`,
-      })
+      }
+
+      this.wallets.push(wallet)
+      newWallets.push(wallet)
     }
 
-    return Promise.resolve()
+    return Promise.resolve(newWallets)
   }
 
   getAccounts () {

@@ -1,7 +1,7 @@
 import { approvalService } from '~/background/services/approval'
 import { chainService } from '~/background/services/chain'
-import { KeyringType, keyringService } from '~/background/services/keyring'
-import { KeyringBase, KeyringHD } from '~/background/services/keyring/keyring'
+import { keyringService } from '~/background/services/keyring'
+import { KeyringBase, KeyringHD, KeyringType } from '~/background/services/keyring/types'
 import { pageCacheService } from '~/background/services/pageCache'
 import { personalService } from '~/background/services/personal'
 import { sessionService } from '~/background/services/session'
@@ -22,7 +22,15 @@ export const Events = {
 
 export class WalletController {
   // ----- basic -------
-  setup = keyringService.setup
+  async setupWallet (password: string) {
+    await keyringService.setup(password)
+
+    const unikeys = await keyringService.getUnikeys()
+
+    await personalService.setCurrentUnikey(unikeys[0].key)
+    await unikeyService.setUnikeys(unikeys)
+  }
+
   isSetup = keyringService.isSetup
   async reset () {
     await storage.clear()
@@ -49,7 +57,6 @@ export class WalletController {
 
   getCurrentUnikey = personalService.getCurrentUnikey
   setCurrentUnikey = personalService.setCurrentUnikey
-  resetCurrentUnikey = personalService.resetCurrentUnikey
 
   private async setCurrentUnikeyFromKeyring (keyring: KeyringBase, index = 0) {
     const accounts = await keyring.getAccounts()
@@ -63,7 +70,8 @@ export class WalletController {
   }
 
   // ----- unikey -------
-  getAllVisibleUnikeys = unikeyService.getAllVisibleUnikeys
+  getUnikeys = unikeyService.getUnikeys
+  getVisibleUnikeys = unikeyService.getVisibleUnikeys
   showUnikey = unikeyService.showUnikey
   hideUnikey = unikeyService.hideUnikey
 
@@ -161,8 +169,12 @@ export class WalletController {
   }
 
   async importMnemonic (mnemonic: string) {
-    const keyring = await keyringService.createNewVaultAndRestore(mnemonic)
-    await this.setCurrentUnikeyFromKeyring(keyring)
+    await keyringService.createNewVaultAndRestore(mnemonic)
+
+    const unikeys = await keyringService.getUnikeys()
+
+    await personalService.setCurrentUnikey(unikeys[0].key)
+    await unikeyService.setUnikeys(unikeys)
   }
   // ----- keyring -------
 }
