@@ -1,4 +1,5 @@
-import { KeyringType } from '~/background/services/keyring'
+import { AutoBindService } from '~/background/services/base/auto-bind'
+import { KeyringType } from '~/background/services/keyring/types'
 import { personalService } from '~/background/services/personal'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { ChainIdentifier } from '~/constants'
@@ -72,30 +73,38 @@ interface UnikeyStore {
   _saver: number // used to invoke a safe action of diskStore
 }
 
-class UnikeyService {
+class UnikeyService extends AutoBindService {
   store!: UnikeyStore
 
   constructor () {
+    super()
     this.init().then(() => console.log('UnikeyService initialized'))
   }
 
   async init () {
     this.store = await loadDiskStore('unikey', {
-      currentUnikey: null,
       unikeys: [],
       _saver: 0,
-    })
+    } as UnikeyStore)
   }
 
   findUnikeyByKey (key: string) {
     return this.store.unikeys.find(unikey => unikey.key === key)
   }
 
-  getAllVisibleUnikeys () {
+  setUnikeys (unikeys: Unikey[]) {
+    this.store.unikeys = unikeys
+  }
+
+  async getUnikeys () {
+    return this.store.unikeys
+  }
+
+  async getVisibleUnikeys () {
     return this.store.unikeys.filter(unikey => !unikey.hidden)
   }
 
-  hideUnikey (key: string) {
+  async hideUnikey (key: string) {
     const uniKey = this.store.unikeys.find(unikey => unikey.key === key)
     if (!uniKey) return
 
@@ -103,10 +112,10 @@ class UnikeyService {
 
     this.store._saver++
 
-    personalService.resetCurrentUnikey()
+    await personalService.resetCurrentUnikey()
   }
 
-  showUnikey (key: string) {
+  async showUnikey (key: string) {
     const uniKey = this.store.unikeys.find(unikey => unikey.key === key)
     if (!uniKey) return
 
