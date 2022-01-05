@@ -94,6 +94,37 @@ class UnikeyService extends AutoBindService {
     this.store.unikeys = unikeys
   }
 
+  /**
+   * Add unikey to a proper position
+   * @param newUnikey
+   * @param {boolean} isHD if the new key is from HD wallet, it should be close to other keys from the same HD wallet.
+   */
+  addUnikey (newUnikey: Unikey, isHD = true) {
+    if (isHD) {
+      let lastHDAccountIndex = 0
+      let length = 0
+
+      this.store.unikeys.forEach((unikey, index) => {
+        if (unikey.keyringType === newUnikey.keyringType) {
+          lastHDAccountIndex = index
+          length++
+        }
+      })
+
+      newUnikey.nickname = `Mnemonic ${length}`
+
+      this.store.unikeys.splice(lastHDAccountIndex, 0, newUnikey)
+    }
+    else {
+      this.store.unikeys.push(newUnikey)
+    }
+  }
+
+  updateUnikey (newKey: Unikey) {
+    const targetUnikey = this.store.unikeys.find(unikey => unikey.key === newKey.key)
+    Object.assign(targetUnikey, newKey)
+  }
+
   async getUnikeys () {
     return this.store.unikeys
   }

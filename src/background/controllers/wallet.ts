@@ -7,9 +7,10 @@ import { personalService } from '~/background/services/personal'
 import { sessionService } from '~/background/services/session'
 import { settingsService } from '~/background/services/settings'
 import { SiteData, siteService } from '~/background/services/site'
-import { unikeyService } from '~/background/services/unikey'
+import { UnikeyChainMnemonic, unikeyService, UnikeyType } from '~/background/services/unikey'
 import { storage } from '~/background/tools/storage'
 import { windows } from '~/background/tools/windows'
+import { ChainIdentifier, CHAINS } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
 // todo: the payload of all events needs to be carefully considered
@@ -58,6 +59,12 @@ export class WalletController {
   getCurrentUnikey = personalService.getCurrentUnikey
   setCurrentUnikey = personalService.setCurrentUnikey
 
+  /**
+   * set current unikey from specific keyring
+   * @param keyring
+   * @param {number} index can be negative, indicating index from backwards
+   * @private
+   */
   private async setCurrentUnikeyFromKeyring (keyring: KeyringBase, index = 0) {
     const accounts = await keyring.getAccounts()
     const account = accounts[index < 0 ? index + accounts.length : index]
@@ -134,17 +141,6 @@ export class WalletController {
 
   // ----- keyring -------
   clearKeyrings = keyringService.clearKeyrings
-
-  async getPrivateKey (password: string, address: string, type: KeyringType) {
-    await keyringService.verifyPassword(password)
-
-    const keyring = await keyringService.getKeyringForAccount(address, type)
-
-    if (!keyring) return null
-
-    return await keyring.exportAccount(address)
-  }
-
   generateMnemonic = keyringService.generateMnemonic
 
   private _getMnemonic (): string {
@@ -163,11 +159,10 @@ export class WalletController {
     return Boolean(this._getMnemonic())
   }
 
-  async importPrivateKey (privateKey: string, type: KeyringType) {
-    const keyring = await keyringService.importPrivateKey(privateKey, type)
-    await this.setCurrentUnikeyFromKeyring(keyring)
-  }
-
+  /**
+   * Import mnemonic and replace previously generated HD accounts
+   * @param mnemonic
+   */
   async importMnemonic (mnemonic: string) {
     await keyringService.createNewVaultAndRestore(mnemonic)
 
@@ -176,6 +171,41 @@ export class WalletController {
     await personalService.setCurrentUnikey(unikeys[0].key)
     await unikeyService.setUnikeys(unikeys)
   }
+
+  async deriveNewAccountFromMnemonic (identifier: ChainIdentifier) {
+    const type = CHAINS[identifier].HDKeyringType
+    const keyring = keyringService.getKeyringByType(type)
+
+    const newAccount = await keyringService.addNewAccount(keyring)
+
+    unikeyService.addUnikey({
+      key: newAccount,
+      keyType: UnikeyType.blockchain,
+      keyringType: keyring.type,
+      nickname: '',
+      hidden: false,
+      chainId: ChainIdentifier.BTC,
+    } as UnikeyChainMnemonic)
+
+    // this should be at the last
+    await this.setCurrentUnikeyFromKeyring(keyring, -1)
+  }
+
+  async getPrivateKey (password: string, address: string, type: KeyringType) {
+    await keyringService.verifyPassword(password)
+
+    const keyring = await keyringService.getKeyringForAccount(address, type)
+
+    if (!keyring) return null
+
+    return await keyring.exportAccount(address)
+  }
+
+  async importPrivateKey (privateKey: string, type: KeyringType) {
+    const keyring = await keyringService.importPrivateKey(privateKey, type)
+    await this.setCurrentUnikeyFromKeyring(keyring)
+  }
+
   // ----- keyring -------
 }
 

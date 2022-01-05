@@ -344,17 +344,21 @@ export class KeyringService extends EventEmitter {
    * @param {KeyringBase} selectedKeyring - The currently selected keyring.
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
-  addNewAccount (selectedKeyring: KeyringBase) {
+  addNewAccount (selectedKeyring: KeyringBase): Promise<string> {
+    let newAccount: string
+
     return selectedKeyring
       .addAccounts(1)
       .then((accounts) => {
-        accounts.forEach((hexAccount) => {
-          this.emit('newAccount', hexAccount)
+        accounts.forEach((account) => {
+          newAccount = account
+          this.emit('newAccount', account)
         })
       })
       .then(() => this.persistAllKeyrings())
       .then(() => this.updateMemStoreKeyrings())
       .then(() => this.fullUpdate())
+      .then(() => newAccount)
   }
 
   /**

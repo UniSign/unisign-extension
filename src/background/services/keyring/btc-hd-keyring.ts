@@ -4,6 +4,7 @@ import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyri
 interface BtcWallet {
   privateKey: string
   publicKey: string
+  address: string
 }
 
 interface BtcHdKeyringOpts {
@@ -13,24 +14,29 @@ interface BtcHdKeyringOpts {
 }
 
 const type = 'BTC HD Key Tree'
-const hdPathString = 'm/44\'/60\'/0\'/0' // todo: replace it with bitcoin path
+
+const defaultOpts: BtcHdKeyringOpts = {
+  mnemonic: '',
+  hdPath: 'm/44\'/60\'/0\'/0', // todo: replace it with bitcoin path
+  numberOfAccounts: 1,
+}
 
 export class BtcHdKeyring extends BtcSimpleKeyring {
   static type = type
   type = type
 
   opts!: BtcHdKeyringOpts
-  hdPath = hdPathString
   mnemonic = ''
   wallets: BtcWallet[] = []
   root!: BtcWallet
 
   async deserialize(opts: any): Promise<void>
-  async deserialize (opts: BtcHdKeyringOpts): Promise<void> {
-    this.opts = opts
-    this.mnemonic = opts.mnemonic
+  async deserialize (opts: Partial<BtcHdKeyringOpts> = {}): Promise<void> {
+    this.opts = Object.assign(opts, defaultOpts)
 
-    await this.initFromMnemonic(opts.mnemonic)
+    this.mnemonic = this.opts.mnemonic
+
+    await this.initFromMnemonic(this.mnemonic)
 
     if (opts.numberOfAccounts) {
       // @ts-ignore
@@ -43,12 +49,12 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
     return Promise.resolve({
       mnemonic: this.mnemonic,
       numberOfAccounts: this.wallets.length,
-      hdPath: this.hdPath,
+      hdPath: this.opts.hdPath,
     })
   }
 
   addAccounts (): Promise<any>
-  addAccounts (numberOfAccounts = 1): Promise<BtcWallet[]> {
+  addAccounts (numberOfAccounts = 1): Promise<string[]> {
     const oldLen = this.wallets.length
 
     const newWallets: BtcWallet[] = []
@@ -57,17 +63,18 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
       const wallet = {
         privateKey: `bc123${i}`,
         publicKey: `bc456${i}`,
+        address: `bc789${i}`,
       }
 
       this.wallets.push(wallet)
       newWallets.push(wallet)
     }
 
-    return Promise.resolve(newWallets)
+    return Promise.resolve(newWallets.map(w => w.address))
   }
 
   getAccounts () {
-    return Promise.resolve(this.wallets.map(w => w.publicKey))
+    return Promise.resolve(this.wallets.map(w => w.address))
   }
 
   private async initFromMnemonic (mnemonic: string) {
@@ -75,6 +82,7 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
     this.root = {
       publicKey: seed.toString(),
       privateKey: seed.toString(),
+      address: seed.toString(),
     }
   }
 }

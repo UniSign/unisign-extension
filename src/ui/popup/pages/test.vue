@@ -117,6 +117,9 @@
           <button @click="onClickDisableChain(chain.identifier)">
             ❌
           </button>
+          <button @click="onClickDeriveAddress(chain.identifier)">
+            Derive
+          </button>
         </li>
       </ul>
     </fieldset>
@@ -137,14 +140,15 @@
       </b>
       <ul>
         <li v-for="unikey in unikeys" :key="unikey.key">
-
           <button @click="onClickShowUnikey(unikey)">
             ✅
           </button>
           <button @click="onClickHideUnikey(unikey)">
             ❌
           </button>
-          <button @click="onClickSetCurrentUnikey(unikey)">👁</button>
+          <button @click="onClickSetCurrentUnikey(unikey)">
+            👁
+          </button>
           {{ unikey.key.slice(0,20) }}...
         </li>
       </ul>
@@ -214,7 +218,7 @@ export default {
 
     // lock
     const isLocked = ref(false)
-    const passwordForUnlock = ref('')
+    const passwordForUnlock = ref('11111111')
     async function onClickLock () {
       await wallet.lock()
       isLocked.value = await wallet.isLocked()
@@ -260,12 +264,19 @@ export default {
       await wallet.setCurrentUnikey(unikey.key)
       currentUnikey.value = await wallet.getCurrentUnikey()
     }
-    onMounted(async () => {
+    async function onUnikeysChanged () {
       unikeys.value = await wallet.getUnikeys()
       visibleUnikeys.value = await wallet.getVisibleUnikeys()
-
       currentUnikey.value = await wallet.getCurrentUnikey()
-    })
+    }
+    onMounted(onUnikeysChanged)
+
+    // keyring
+    async function onClickDeriveAddress (identifier: ChainIdentifier) {
+      await wallet.deriveNewAccountFromMnemonic(identifier)
+
+      await onUnikeysChanged()
+    }
 
     return {
       // locale
@@ -307,6 +318,9 @@ export default {
       onClickShowUnikey,
       onClickHideUnikey,
       onClickSetCurrentUnikey,
+
+      // keyring
+      onClickDeriveAddress,
     }
   },
 }
