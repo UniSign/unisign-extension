@@ -1,12 +1,14 @@
 import { approvalService } from '~/background/services/approval'
 import { chainService } from '~/background/services/chain'
-// import { keyringService } from '~/background/services/keyring'
+import { KeyringType, keyringService } from '~/background/services/keyring'
+import { KeyringBase, KeyringHD } from '~/background/services/keyring/keyring'
 import { pageCacheService } from '~/background/services/pageCache'
 import { personalService } from '~/background/services/personal'
 import { sessionService } from '~/background/services/session'
 import { settingsService } from '~/background/services/settings'
 import { SiteData, siteService } from '~/background/services/site'
 import { unikeyService } from '~/background/services/unikey'
+import { storage } from '~/background/tools/storage'
 import { windows } from '~/background/tools/windows'
 import { messageBridge } from '~/utils/messages'
 
@@ -19,33 +21,48 @@ export const Events = {
 }
 
 export class WalletController {
-  async bootstrap () {
+  // ----- basic -------
+  setup = keyringService.setup
+  isSetup = keyringService.isSetup
+  async reset () {
+    await storage.clear()
+    window.location.reload()
   }
 
-  async isBootstrapped () {
-  }
+  verifyPassword = keyringService.verifyPassword
 
+  isLocked = keyringService.isLocked
   async lock () {
-    // await keyringService.setLocked()
+    await keyringService.setLocked()
     sessionService.broadcast(Events.accountsChanged, [])
     sessionService.broadcast(Events.lock)
   }
 
   async unlock (password: string) {
-    // await keyringService.submitPassword(password)
+    await keyringService.submitPassword(password)
     sessionService.broadcast(Events.unlock)
   }
-
-  // isLocked = keyringService.isLocked
-  isLocked = () => false
 
   // ----- personal -------
   getIsPopupOpened = personalService.getIsPopupOpened
   setIsPopupOpened = personalService.setIsPopupOpened
-  resetCurrentUnikey = personalService.resetCurrentUnikey
-  setCurrentUnikey = personalService.setCurrentUnikey
 
-  // ----- keyring -------
+  getCurrentUnikey = personalService.getCurrentUnikey
+  setCurrentUnikey = personalService.setCurrentUnikey
+  resetCurrentUnikey = personalService.resetCurrentUnikey
+
+  private async setCurrentUnikeyFromKeyring (keyring: KeyringBase, index = 0) {
+    const accounts = await keyring.getAccounts()
+    const account = accounts[index < 0 ? index + accounts.length : index]
+
+    if (!account) {
+      throw new Error(`the ${index} account of ${keyring.type} does not exists`)
+    }
+
+    personalService.setCurrentUnikey(account)
+  }
+
+  // ----- unikey -------
   getAllVisibleUnikeys = unikeyService.getAllVisibleUnikeys
   showUnikey = unikeyService.showUnikey
   hideUnikey = unikeyService.hideUnikey
@@ -59,6 +76,8 @@ export class WalletController {
   // ----- settings -------
   getLocale = settingsService.getLocale
   setLocale = settingsService.setLocale
+  getAntiPhishingCode = settingsService.getAntiPhishingCode
+  setAntiPhishingCode = settingsService.setAntiPhishingCode
 
   // ----- approval -------
   getApproval = approvalService.getApproval
@@ -69,8 +88,8 @@ export class WalletController {
   hasPageCache = pageCacheService.has
   setPageCache = pageCacheService.set
   clearPageCache = pageCacheService.clear
-  getPageCache () {
-    if (this.isLocked()) return null
+  async getPageCache () {
+    if (await keyringService.isLocked()) return null
     return pageCacheService.get()
   }
 
@@ -106,7 +125,45 @@ export class WalletController {
   }
 
   // ----- keyring -------
-  // ----- todo -------
+  clearKeyrings = keyringService.clearKeyrings
+
+  async getPrivateKey (password: string, address: string, type: KeyringType) {
+    await keyringService.verifyPassword(password)
+
+    const keyring = await keyringService.getKeyringForAccount(address, type)
+
+    if (!keyring) return null
+
+    return await keyring.exportAccount(address)
+  }
+
+  generateMnemonic = keyringService.generateMnemonic
+
+  private _getMnemonic (): string {
+    const keyring = keyringService.getKeyringByType(KeyringType.BtcHD) as KeyringHD
+
+    return keyring.mnemonic
+  }
+
+  async getMnemonic (password: string) {
+    await keyringService.verifyPassword(password)
+
+    return this._getMnemonic()
+  }
+
+  hasMnemonic (): boolean {
+    return Boolean(this._getMnemonic())
+  }
+
+  async importPrivateKey (privateKey: string, type: KeyringType) {
+    const keyring = await keyringService.importPrivateKey(privateKey, type)
+    await this.setCurrentUnikeyFromKeyring(keyring)
+  }
+
+  async importMnemonic (mnemonic: string) {
+    const keyring = await keyringService.createNewVaultAndRestore(mnemonic)
+    await this.setCurrentUnikeyFromKeyring(keyring)
+  }
   // ----- keyring -------
 }
 
@@ -116,7 +173,6 @@ export const walletController = new WalletController()
 // and a Promise resolve the result of controller method invocation will be returned
 export function setupWalletController () {
   messageBridge.on('wallet-controller', async (data) => {
-    // eslint-disable-next-line no-console
     const method = data.data.method
     const params = data.data.params
 
@@ -127,4 +183,6 @@ export function setupWalletController () {
       return await (walletController as any)[method].apply(walletController, params)
     }
   })
+
+  ;(window as any).walletController = walletController
 }

@@ -1,8 +1,9 @@
 // forked from https://github.com/MetaMask/KeyringController/blob/main/index.js
 
 import { EventEmitter } from 'events'
+import autoBind from 'auto-bind'
 import { ObservableStore } from '@metamask/obs-store'
-import bip39 from 'bip39'
+import { generateMnemonic, validateMnemonic } from 'bip39'
 // @ts-ignore
 import encryptor from 'browser-passworder'
 import { ethErrors } from 'eth-rpc-errors'
@@ -34,7 +35,33 @@ export enum KeyringType {
   Trezor = 'Trezor Hardware'
 }
 
-console.log(111111111, ObservableStore)
+// this is just a simple implementation of ObservableStore as ObservableStore can not be build with vite naturally
+// class ObservableStore<T> {
+//   private readonly data: T
+//   private callbacks: ((value: T) => void)[] = []
+//
+//   constructor (initData: T) {
+//     this.data = initData
+//   }
+//
+//   getState (): T {
+//     return this.data
+//   }
+//
+//   updateState (partial: Partial<T>) {
+//     Object.assign(this.data, partial)
+//
+//     this.notify()
+//   }
+//
+//   subscribe (callback: (value: T) => void) {
+//     this.callbacks.push(callback)
+//   }
+//
+//   private notify () {
+//     this.callbacks.forEach(callback => callback(this.data))
+//   }
+// }
 
 interface MemStoreKeyring {
   type: string
@@ -78,18 +105,23 @@ interface KeyringOpts {
 }
 
 export class KeyringService extends EventEmitter {
-  //
-  // PUBLIC METHODS
-  //
   private store!: ObservableStore<StoreData>
   private memStore!: ObservableStore<MemStoreData>
-  private keyringTypes: KeyringClassType[] // the available Classes of keyrings
-  private keyrings: KeyringBase[] // the instances of keyringTypes
-  private encryptor: Encryptor
+  private keyringTypes!: KeyringClassType[] // the available Classes of keyrings
+  private keyrings!: KeyringBase[] // the instances of keyringTypes
+  private encryptor!: Encryptor
   private password: string|null = null
+  private mnemonic!: string // only used for setup vault
 
   constructor (opts: KeyringOpts = {}) {
     super()
+
+    this.init(opts).then(() => console.log('KeyringService initialized'))
+
+    autoBind(this)
+  }
+
+  private async init (opts: KeyringOpts = {}): Promise<void> {
     // @ts-ignore
     this.keyringTypes = opts.keyringTypes
       ? keyringTypes.concat(opts.keyringTypes)
@@ -97,28 +129,39 @@ export class KeyringService extends EventEmitter {
 
     this.encryptor = opts.encryptor || encryptor
     this.keyrings = []
-  }
 
-  async setup (password: string): Promise<void> {
     const storageKey = 'keyring'
     const store = await loadDiskStore(storageKey, {
       vault: '',
-    })
+    } as StoreData)
 
     this.store = new ObservableStore(store)
     this.store.subscribe(value => storage.set(storageKey, value))
 
     this.memStore = new ObservableStore({
-      isUnlocked: false,
+      isUnlocked: true,
       keyringTypes: this.keyringTypes.map(krt => krt.type),
       keyrings: [],
-    })
-
-    this.password = password
+    } as MemStoreData)
   }
 
-  isSetup (): boolean {
-    return Boolean(this.store.getState().vault)
+  async generateMnemonic () {
+    this.mnemonic = generateMnemonic()
+    return this.mnemonic
+  }
+
+  async setup (password: string) {
+    if (!password || password.length < 8) {
+      throw new Error('Password should be at least 8 characters')
+    }
+
+    this.password = password
+
+    await this.createNewVaultAndRestore(this.mnemonic)
+  }
+
+  async isSetup (): Promise<boolean> {
+    return Boolean(this.store?.getState().vault)
   }
 
   /**
@@ -150,7 +193,7 @@ export class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
   createNewVaultAndRestore (mnemonic: string): Promise<KeyringHD> {
-    if (!bip39.validateMnemonic(mnemonic)) {
+    if (!validateMnemonic(mnemonic)) {
       return Promise.reject(new Error('Mnemonic is invalid.'))
     }
 
@@ -177,8 +220,8 @@ export class KeyringService extends EventEmitter {
       .then(() => defaultKeyring)
   }
 
-  isLocked () {
-    return this.memStore.getState().isUnlocked
+  async isLocked () {
+    return !this.memStore.getState().isUnlocked
   }
 
   /**
@@ -480,6 +523,9 @@ export class KeyringService extends EventEmitter {
    * @returns {Promise<boolean>} Resolves to true once keyrings are persisted.
    */
   private persistAllKeyrings (): Promise<void> {
+    if (!this.password) {
+      throw new Error('There should be password to persist data')
+    }
     return Promise.all(
       this.keyrings.map((keyring) => {
         return keyring.serialize().then((serialized) => {

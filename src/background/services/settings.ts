@@ -1,15 +1,17 @@
+import { AutoBindService } from '~/background/services/base/auto-bind'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { LOCALES } from '~/constants'
+import { LocaleOptions, LOCALES } from '~/constants'
 
 interface SettingsStore {
-  locale: string
+  locale: LOCALES
   antiPhishingCode: string
 }
 
-export class SettingsService {
+export class SettingsService extends AutoBindService {
   store!: SettingsStore
 
   constructor () {
+    super()
     this.init().then(() => console.log('SettingsService initialized'))
   }
 
@@ -20,27 +22,32 @@ export class SettingsService {
     })
   }
 
-  private async getAcceptLanguage () {
-    const langs = (await browser.i18n.getAcceptLanguages()) || []
+  private async getAcceptLanguage (): Promise<LOCALES> {
+    const langs = (await browser.i18n.getAcceptLanguages()) as LOCALES[] || []
 
-    return langs.find(lang => Boolean((LOCALES as any)[lang])) || LOCALES.en
+    const locale = langs.find(lang => LocaleOptions.some(option => option.value === lang))
+
+    return locale || LOCALES.en
   }
 
-  async getLocale () {
+  async getLocale (): Promise<LOCALES> {
     return this.store.locale
   }
 
-  async setLocale (locale: string) {
+  async setLocale (locale: LOCALES): Promise<LOCALES> {
     this.store.locale = locale
+    return locale
   }
 
-  async getAntiPhishingCode () {
+  async getAntiPhishingCode (): Promise<string> {
     return this.store.antiPhishingCode
   }
 
-  async setAntiPhishingCode (code: string) {
+  async setAntiPhishingCode (code: string): Promise<string> {
     this.store.antiPhishingCode = code
+    return code
   }
 }
 
 export const settingsService = new SettingsService()
+

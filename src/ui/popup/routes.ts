@@ -9,6 +9,7 @@ import PageSelectWays from './pages/addAddress/selectWays.vue'
 import PageCreateMnemonic from './pages/addAddress/createMnemonic.vue'
 import PageChooseTheRightOrder from './pages/addAddress/chooseTheRightOrder.vue'
 import PageAddAddressSuccess from './pages/addAddress/addAddressSuccess.vue'
+import PageTest from './pages/test.vue'
 
 const routes = [{
   path: '/',
@@ -17,6 +18,9 @@ const routes = [{
   children: [{
     path: '/',
     component: PageWelcome,
+  }, {
+    path: '/test',
+    component: PageTest,
   }, {
     path: '/unlock',
     component: PageUnlock,
