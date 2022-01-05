@@ -22,16 +22,16 @@ interface SiteStore {
  */
 export class SiteService {
   private lrcCache = new LRU<string, SiteData>()
-  private store: SiteStore = {
-    lruDumped: [],
-  }
+  private store!: SiteStore
 
   constructor () {
     this.init().then(() => console.log('SiteService initialized'))
   }
 
   async init () {
-    this.store = await loadDiskStore('site')
+    this.store = await loadDiskStore('site', {
+      lruDumped: [],
+    })
 
     const cache = this.store.lruDumped.map(item => ({
       k: item.k,

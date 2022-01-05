@@ -1,3 +1,4 @@
+import { AutoBindService } from '~/background/services/base/auto-bind'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { ChainIdentifier, CHAINS } from '~/constants'
 
@@ -15,11 +16,12 @@ export interface ChainData {
   logo: string
 }
 
-export class ChainService {
+export class ChainService extends AutoBindService {
   private supportedChains: ChainData[] = []
   private store!: ChainStore
 
   constructor () {
+    super()
     this.init().then(() => console.log('ChainService initialized'))
   }
 
@@ -33,22 +35,22 @@ export class ChainService {
     this.supportedChains = supportedChains.map(chain => CHAINS[chain])
   }
 
-  getSupportedChains (): ChainData[] {
+  async getSupportedChains (): Promise<ChainData[]> {
     return this.supportedChains
   }
 
-  getEnabledChains (): ChainData[] {
+  async getEnabledChains (): Promise<ChainData[]> {
     return this.store.enabledChains.map(chainEnum => this.supportedChains.find(chain => chain.identifier === chainEnum)!)
   }
 
-  enableChain (id: ChainIdentifier): void {
+  async enableChain (id: ChainIdentifier): Promise<void> {
     if (!this.store.enabledChains.includes(id)) {
       // todo: this may not be able to invoke the auto save process.
       this.store.enabledChains.push(id)
     }
   }
 
-  disableChain (id: ChainIdentifier) {
+  async disableChain (id: ChainIdentifier): Promise<void> {
     this.store.enabledChains = this.store.enabledChains.filter(chain => chain !== id)
   }
 }

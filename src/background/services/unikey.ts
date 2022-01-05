@@ -1,3 +1,4 @@
+import { KeyringType } from '~/background/services/keyring'
 import { personalService } from '~/background/services/personal'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { ChainIdentifier } from '~/constants'
@@ -5,14 +6,6 @@ import { ChainIdentifier } from '~/constants'
 export enum UnikeyType {
   blockchain = 'blockchain',
   openPGP = 'openPGP'
-}
-
-export enum KeyringType {
-  keypair = 'keypair',
-
-  mnemonic = 'mnemonic',
-  hardware = 'hardware', // todo: this should be more specific
-  walletConnect = 'walletConnect',
 }
 
 export enum WalletConnectBrand {
@@ -49,25 +42,25 @@ export interface UnikeyChain extends UnikeyBase {
 export interface UniKeyOpenPGP extends UnikeyBase {
   keyType: UnikeyType.openPGP
 
-  keyringType: KeyringType.keypair
+  keyringType: KeyringType.OpenPGP
 }
 
 export interface UnikeyChainMnemonic extends UnikeyChain {
-  keyringType: KeyringType.mnemonic
+  keyringType: KeyringType.BtcHD | KeyringType.EthHD
 }
 
 export interface UniKeyChainKeyPair extends UnikeyChain {
-  keyringType: KeyringType.keypair
+  keyringType: KeyringType.BtcSimple | KeyringType.EthSimple
 }
 
 export interface UniKeyChainWalletConnect extends UnikeyChain {
-  keyringType: KeyringType.walletConnect
+  keyringType: KeyringType.WalletConnect
   brand: WalletConnectBrand
   brandName: string
 }
 
 export interface UniKeyChainHardware extends UnikeyChain {
-  keyringType: KeyringType.hardware
+  keyringType: KeyringType.Ledger | KeyringType.Trezor
   brand: HardwareBrand
   brandName: string
 }
