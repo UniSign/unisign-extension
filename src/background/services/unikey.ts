@@ -70,7 +70,6 @@ export type Unikey = UnikeyChainMnemonic | UniKeyChainKeyPair | UniKeyChainWalle
 
 interface UnikeyStore {
   unikeys: Unikey[]
-  _saver: number // used to invoke a safe action of diskStore
 }
 
 class UnikeyService extends AutoBindService {
@@ -84,7 +83,6 @@ class UnikeyService extends AutoBindService {
   async init () {
     this.store = await loadDiskStore('unikey', {
       unikeys: [],
-      _saver: 0,
     } as UnikeyStore)
   }
 
@@ -110,8 +108,6 @@ class UnikeyService extends AutoBindService {
 
     uniKey.hidden = true
 
-    this.store._saver++
-
     await personalService.resetCurrentUnikey()
   }
 
@@ -120,8 +116,6 @@ class UnikeyService extends AutoBindService {
     if (!uniKey) return
 
     uniKey.hidden = false
-
-    this.store._saver++
   }
 }
 

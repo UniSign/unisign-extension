@@ -45,7 +45,6 @@ export class ChainService extends AutoBindService {
 
   async enableChain (id: ChainIdentifier): Promise<void> {
     if (!this.store.enabledChains.includes(id)) {
-      // todo: this may not be able to invoke the auto save process.
       this.store.enabledChains.push(id)
     }
   }

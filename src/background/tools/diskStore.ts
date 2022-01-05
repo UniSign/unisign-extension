@@ -1,28 +1,8 @@
+import { reactive } from 'vue'
 import debounce from 'lodash/debounce'
 import { storage } from '~/background/tools/storage'
 
 const saveStorage = debounce(storage.set.bind(storage))
-
-function autoSaveWithProxy<T extends object> (name: string, obj: T): T {
-  return new Proxy(obj, {
-    set (target, key, value) {
-      (target as any)[key] = value
-
-      saveStorage(name, target)
-      return true
-    },
-
-    deleteProperty (target, key) {
-      if (key in target) {
-        delete (target as any)[key]
-
-        saveStorage(name, target)
-      }
-
-      return true
-    },
-  })
-}
 
 /**
  * Create a persistent storage layer using `chrome.storage.local`,
@@ -36,5 +16,16 @@ export async function loadDiskStore<T extends object> (
 ): Promise<T> {
   const storageCache = await storage.get(name) || await storage.set(name, defaultValue)
 
-  return autoSaveWithProxy<T>(name, storageCache)
+  const reactiveValue = reactive(storageCache)
+
+  watch(
+    () => reactiveValue,
+    (state) => {
+      // todo: array in proxied value will be saved as indexed object, which seems like a bug. JSON.stringify is just a workaround
+      saveStorage(name, JSON.parse(JSON.stringify(state)))
+    },
+    { deep: true },
+  )
+
+  return reactiveValue
 }
