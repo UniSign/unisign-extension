@@ -170,6 +170,28 @@
         Import
       </button>
     </fieldset>
+
+    <fieldset>
+      <legend>Approval</legend>
+
+      <button @click="onClickRequestApproval">
+        Request
+      </button>
+      <button @click="onClickGetApproval">
+        Get
+      </button>
+      <button @click="onClickResolveApproval">
+        Resolve
+      </button>
+      <button @click="onClickRejectApproval">
+        Reject
+      </button>
+      <br>
+      <b>approval</b>
+      <code>
+        {{ approval }}
+      </code>
+    </fieldset>
   </div>
 </template>
 
@@ -302,6 +324,31 @@ export default {
       await onUnikeysChanged()
     }
 
+    // Approval
+    const approval = ref(null)
+    async function onClickRequestApproval () {
+      const mockApproval = {
+        name: 'mockApproval',
+        time: new Date().toString(),
+      }
+
+      await wallet._mockRequestApproval!({
+        params: mockApproval,
+        origin: 'unisign.org',
+        approvalPage: 'connect',
+      })
+    }
+    // todo: there should be a more complex showcase
+    async function onClickGetApproval () {
+      approval.value = (await wallet.getApproval())?.params
+    }
+    async function onClickResolveApproval () {
+      await wallet.resolveApproval({ success: true })
+    }
+    async function onClickRejectApproval () {
+      await wallet.rejectApproval('rejected by user')
+    }
+
     return {
       // locale
       locale,
@@ -348,6 +395,13 @@ export default {
       importedPrivateKey,
       onClickDeriveAddress,
       onClickImportKey,
+
+      // Approval
+      approval,
+      onClickRequestApproval,
+      onClickGetApproval,
+      onClickResolveApproval,
+      onClickRejectApproval,
     }
   },
 }
