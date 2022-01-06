@@ -61,7 +61,7 @@ export class BtcSimpleKeyring extends EventEmitter {
   }
 
   getAccounts (): Promise<string[]> {
-    return Promise.resolve(this.wallets.map(w => w.publicKey))
+    return Promise.resolve(this.wallets.map(w => w.address))
   }
 
   signTransaction (address: string, tx: any, opts = {}) {

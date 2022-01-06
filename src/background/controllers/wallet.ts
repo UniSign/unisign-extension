@@ -185,7 +185,7 @@ export class WalletController {
       nickname: '',
       hidden: false,
       chainId: ChainIdentifier.BTC,
-    } as UnikeyChainMnemonic)
+    } as UnikeyChainMnemonic, true)
 
     // this should be at the last
     await this.setCurrentUnikeyFromKeyring(keyring, -1)
@@ -203,7 +203,18 @@ export class WalletController {
 
   async importPrivateKey (privateKey: string, type: KeyringType) {
     const keyring = await keyringService.importPrivateKey(privateKey, type)
-    await this.setCurrentUnikeyFromKeyring(keyring)
+    const [newAccount] = await keyring.getAccounts()
+
+    unikeyService.addUnikey({
+      key: newAccount,
+      keyType: UnikeyType.blockchain,
+      keyringType: keyring.type,
+      nickname: 'Private Key',
+      hidden: false,
+      chainId: ChainIdentifier.BTC,
+    } as UnikeyChainMnemonic, false)
+
+    await this.setCurrentUnikeyFromKeyring(keyring, -1)
   }
 
   // ----- keyring -------

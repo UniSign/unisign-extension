@@ -125,6 +125,12 @@
     </fieldset>
 
     <fieldset>
+      <legend>Personal</legend>
+
+      currentUnikey: {{ currentUnikey?.key }}
+    </fieldset>
+
+    <fieldset>
       <legend>Unikey</legend>
 
       <b>visibleUnikeys</b>
@@ -158,9 +164,11 @@
     </fieldset>
 
     <fieldset>
-      <legend>Personal</legend>
-
-      currentUnikey: {{ currentUnikey?.key }}
+      <legend>Keyring</legend>
+      <input v-model="importedPrivateKey" type="text">
+      <button @click="onClickImportKey">
+        Import
+      </button>
     </fieldset>
   </div>
 </template>
@@ -169,7 +177,7 @@
 import { ref } from 'vue'
 import { ChainData } from '~/background/services/chain'
 import { wallet } from '~/ui/controllers/wallet'
-import { ChainIdentifier, LocaleOptions, LOCALES } from '~/constants'
+import { ChainIdentifier, CHAINS, LocaleOptions, LOCALES } from '~/constants'
 import { sleep } from '~/utils'
 import { Unikey } from '~/background/services/unikey'
 
@@ -282,9 +290,15 @@ export default {
     onMounted(onUnikeysChanged)
 
     // keyring
+    const importedPrivateKey = ref('')
+    const chain = ref<ChainIdentifier>(ChainIdentifier.BTC)
     async function onClickDeriveAddress (identifier: ChainIdentifier) {
       await wallet.deriveNewAccountFromMnemonic(identifier)
 
+      await onUnikeysChanged()
+    }
+    async function onClickImportKey () {
+      await wallet.importPrivateKey(importedPrivateKey.value, CHAINS[chain.value].simpleKeyringType)
       await onUnikeysChanged()
     }
 
@@ -331,7 +345,9 @@ export default {
       onClickExportPrivateKey,
 
       // keyring
+      importedPrivateKey,
       onClickDeriveAddress,
+      onClickImportKey,
     }
   },
 }
