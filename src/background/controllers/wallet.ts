@@ -191,10 +191,10 @@ export class WalletController {
     await this.setCurrentUnikeyFromKeyring(keyring, -1)
   }
 
-  async getPrivateKey (password: string, address: string, type: KeyringType) {
+  async getPrivateKey (password: string, address: string, keyringType: KeyringType) {
     await keyringService.verifyPassword(password)
 
-    const keyring = await keyringService.getKeyringForAccount(address, type)
+    const keyring = await keyringService.getKeyringForAccount(address, keyringType)
 
     if (!keyring) return null
 

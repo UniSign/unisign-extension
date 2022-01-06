@@ -149,6 +149,9 @@
           <button @click="onClickSetCurrentUnikey(unikey)">
             👁
           </button>
+          <button @click="onClickExportPrivateKey(unikey)">
+            🗝
+          </button>
           {{ unikey.key.slice(0,20) }}...
         </li>
       </ul>
@@ -227,6 +230,9 @@ export default {
       await wallet.unlock(passwordForUnlock.value)
       isLocked.value = await wallet.isLocked()
     }
+    onMounted(async () => {
+      isLocked.value = await wallet.isLocked()
+    })
 
     // Chains
     const supportedChains = ref<ChainData[]>([])
@@ -268,6 +274,10 @@ export default {
       unikeys.value = await wallet.getUnikeys()
       visibleUnikeys.value = await wallet.getVisibleUnikeys()
       currentUnikey.value = await wallet.getCurrentUnikey()
+    }
+    async function onClickExportPrivateKey (unikey: Unikey) {
+      // eslint-disable-next-line no-alert
+      window.alert(await wallet.getPrivateKey(passwordForUnlock.value, unikey.key, unikey.keyringType))
     }
     onMounted(onUnikeysChanged)
 
@@ -318,6 +328,7 @@ export default {
       onClickShowUnikey,
       onClickHideUnikey,
       onClickSetCurrentUnikey,
+      onClickExportPrivateKey,
 
       // keyring
       onClickDeriveAddress,

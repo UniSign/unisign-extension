@@ -1,11 +1,5 @@
 import { mnemonicToSeed } from 'bip39'
-import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
-
-interface BtcWallet {
-  privateKey: string
-  publicKey: string
-  address: string
-}
+import { BtcSimpleKeyring, BtcWallet } from '~/background/services/keyring/btc-simple-keyring'
 
 interface BtcHdKeyringOpts {
   hdPath?: string
@@ -26,15 +20,15 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   type = type
 
   opts!: BtcHdKeyringOpts
-  mnemonic = ''
-  wallets: BtcWallet[] = []
+  mnemonic!: string
+  wallets!: BtcWallet[]
   root!: BtcWallet
 
   async deserialize(opts: any): Promise<void>
   async deserialize (opts: Partial<BtcHdKeyringOpts> = {}): Promise<void> {
     this.opts = Object.assign(opts, defaultOpts)
-
     this.mnemonic = this.opts.mnemonic
+    this.wallets = []
 
     await this.initFromMnemonic(this.mnemonic)
 
@@ -61,9 +55,9 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
 
     for (let i = oldLen; i < oldLen + numberOfAccounts; i++) {
       const wallet = {
-        privateKey: `bc123${i}`,
-        publicKey: `bc456${i}`,
-        address: `bc789${i}`,
+        privateKey: `bc123:private#${i}`,
+        publicKey: `bc123:public#${i}`,
+        address: `bc123:address#${i}`,
       }
 
       this.wallets.push(wallet)
