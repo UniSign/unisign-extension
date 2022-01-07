@@ -125,6 +125,12 @@
     </fieldset>
 
     <fieldset>
+      <legend>Personal</legend>
+
+      currentUnikey: {{ currentUnikey?.key }}
+    </fieldset>
+
+    <fieldset>
       <legend>Unikey</legend>
 
       <b>visibleUnikeys</b>
@@ -149,15 +155,42 @@
           <button @click="onClickSetCurrentUnikey(unikey)">
             👁
           </button>
+          <button @click="onClickExportPrivateKey(unikey)">
+            🗝
+          </button>
           {{ unikey.key.slice(0,20) }}...
         </li>
       </ul>
     </fieldset>
 
     <fieldset>
-      <legend>Personal</legend>
+      <legend>Keyring</legend>
+      <input v-model="importedPrivateKey" type="text">
+      <button @click="onClickImportKey">
+        Import
+      </button>
+    </fieldset>
 
-      currentUnikey: {{ currentUnikey?.key }}
+    <fieldset>
+      <legend>Approval</legend>
+
+      <button @click="onClickRequestApproval">
+        Request
+      </button>
+      <button @click="onClickGetApproval">
+        Get
+      </button>
+      <button @click="onClickResolveApproval">
+        Resolve
+      </button>
+      <button @click="onClickRejectApproval">
+        Reject
+      </button>
+      <br>
+      <b>approval</b>
+      <code>
+        {{ approval }}
+      </code>
     </fieldset>
   </div>
 </template>
@@ -166,7 +199,7 @@
 import { ref } from 'vue'
 import { ChainData } from '~/background/services/chain'
 import { wallet } from '~/ui/controllers/wallet'
-import { ChainIdentifier, LocaleOptions, LOCALES } from '~/constants'
+import { ChainIdentifier, CHAINS, LocaleOptions, LOCALES } from '~/constants'
 import { sleep } from '~/utils'
 import { Unikey } from '~/background/services/unikey'
 
@@ -227,6 +260,9 @@ export default {
       await wallet.unlock(passwordForUnlock.value)
       isLocked.value = await wallet.isLocked()
     }
+    onMounted(async () => {
+      isLocked.value = await wallet.isLocked()
+    })
 
     // Chains
     const supportedChains = ref<ChainData[]>([])
@@ -269,13 +305,48 @@ export default {
       visibleUnikeys.value = await wallet.getVisibleUnikeys()
       currentUnikey.value = await wallet.getCurrentUnikey()
     }
+    async function onClickExportPrivateKey (unikey: Unikey) {
+      // eslint-disable-next-line no-alert
+      window.alert(await wallet.getPrivateKey(passwordForUnlock.value, unikey.key, unikey.keyringType))
+    }
     onMounted(onUnikeysChanged)
 
     // keyring
+    const importedPrivateKey = ref('')
+    const chain = ref<ChainIdentifier>(ChainIdentifier.BTC)
     async function onClickDeriveAddress (identifier: ChainIdentifier) {
       await wallet.deriveNewAccountFromMnemonic(identifier)
 
       await onUnikeysChanged()
+    }
+    async function onClickImportKey () {
+      await wallet.importPrivateKey(importedPrivateKey.value, CHAINS[chain.value].simpleKeyringType)
+      await onUnikeysChanged()
+    }
+
+    // Approval
+    const approval = ref(null)
+    async function onClickRequestApproval () {
+      const mockApproval = {
+        name: 'mockApproval',
+        time: new Date().toString(),
+      }
+
+      await wallet._mockRequestApproval!({
+        params: mockApproval,
+        origin: 'unisign.org',
+        approvalPage: 'connect',
+      })
+    }
+    // todo: there should be a more complex showcase
+    async function onClickGetApproval () {
+      approval.value = (await wallet.getApproval())?.params
+    }
+    async function onClickResolveApproval () {
+      await wallet.resolveApproval({ success: true })
+    }
+    async function onClickRejectApproval () {
+      await wallet.rejectApproval('rejected by user')
     }
 
     return {
@@ -318,9 +389,19 @@ export default {
       onClickShowUnikey,
       onClickHideUnikey,
       onClickSetCurrentUnikey,
+      onClickExportPrivateKey,
 
       // keyring
+      importedPrivateKey,
       onClickDeriveAddress,
+      onClickImportKey,
+
+      // Approval
+      approval,
+      onClickRequestApproval,
+      onClickGetApproval,
+      onClickResolveApproval,
+      onClickRejectApproval,
     }
   },
 }

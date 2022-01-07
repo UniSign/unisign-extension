@@ -16,6 +16,7 @@ export interface ChainData {
   chainId?: string // based on eip-155, mainly used for Ethereum https://chainlist.org/
   logo: string
   HDKeyringType: KeyringType
+  simpleKeyringType: KeyringType
 }
 
 export class ChainService extends AutoBindService {

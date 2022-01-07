@@ -98,6 +98,8 @@ export class WalletController {
   getApproval = approvalService.getApproval
   resolveApproval = approvalService.resolveApproval
   rejectApproval = approvalService.rejectApproval
+  // todo: this is only for showcase the usage of approval, and should not be used in production
+  _mockRequestApproval = process.env.NODE_ENV === 'development' ? approvalService.requestApproval : undefined
 
   // ----- pageCache -------
   hasPageCache = pageCacheService.has
@@ -185,16 +187,16 @@ export class WalletController {
       nickname: '',
       hidden: false,
       chainId: ChainIdentifier.BTC,
-    } as UnikeyChainMnemonic)
+    } as UnikeyChainMnemonic, true)
 
     // this should be at the last
     await this.setCurrentUnikeyFromKeyring(keyring, -1)
   }
 
-  async getPrivateKey (password: string, address: string, type: KeyringType) {
+  async getPrivateKey (password: string, address: string, keyringType: KeyringType) {
     await keyringService.verifyPassword(password)
 
-    const keyring = await keyringService.getKeyringForAccount(address, type)
+    const keyring = await keyringService.getKeyringForAccount(address, keyringType)
 
     if (!keyring) return null
 
@@ -203,7 +205,18 @@ export class WalletController {
 
   async importPrivateKey (privateKey: string, type: KeyringType) {
     const keyring = await keyringService.importPrivateKey(privateKey, type)
-    await this.setCurrentUnikeyFromKeyring(keyring)
+    const [newAccount] = await keyring.getAccounts()
+
+    unikeyService.addUnikey({
+      key: newAccount,
+      keyType: UnikeyType.blockchain,
+      keyringType: keyring.type,
+      nickname: 'Private Key',
+      hidden: false,
+      chainId: ChainIdentifier.BTC,
+    } as UnikeyChainMnemonic, false)
+
+    await this.setCurrentUnikeyFromKeyring(keyring, -1)
   }
 
   // ----- keyring -------

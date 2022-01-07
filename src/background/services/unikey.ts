@@ -99,7 +99,7 @@ class UnikeyService extends AutoBindService {
    * @param newUnikey
    * @param {boolean} isHD if the new key is from HD wallet, it should be close to other keys from the same HD wallet.
    */
-  addUnikey (newUnikey: Unikey, isHD = true) {
+  addUnikey (newUnikey: Unikey, isHD: boolean) {
     if (isHD) {
       let lastHDAccountIndex = 0
       let length = 0

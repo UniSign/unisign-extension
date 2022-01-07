@@ -5,11 +5,11 @@ interface BtcSimpleKeyringOpts {
 }
 
 // todo: use real object here
-interface BtcWallet {
+export interface BtcWallet {
   privateKey: string
   publicKey: string
+  address: string
 }
-
 export const type = 'BTC Simple Key Pair'
 
 export class BtcSimpleKeyring extends EventEmitter {
@@ -29,6 +29,7 @@ export class BtcSimpleKeyring extends EventEmitter {
       return {
         privateKey,
         publicKey: `publicKey ${privateKey}`,
+        address: `address of ${privateKey}`,
       }
     }) || []
   }
@@ -48,12 +49,19 @@ export class BtcSimpleKeyring extends EventEmitter {
    * @param address
    * @param opts
    */
-  exportAccount (address: string, opts = {}): Promise<string> {
-    return Promise.resolve('')
+  exportAccount (address: string, opts = {}): Promise<string|undefined> {
+    const wallet = this.wallets.find(w => w.address === address)
+
+    if (wallet) {
+      return Promise.resolve(wallet.privateKey)
+    }
+    else {
+      return Promise.resolve(undefined)
+    }
   }
 
   getAccounts (): Promise<string[]> {
-    return Promise.resolve(this.wallets.map(w => w.publicKey))
+    return Promise.resolve(this.wallets.map(w => w.address))
   }
 
   signTransaction (address: string, tx: any, opts = {}) {
