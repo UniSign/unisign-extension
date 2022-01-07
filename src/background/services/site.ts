@@ -45,7 +45,7 @@ export class SiteService {
   /**
    * sync storage back to persistent storage
    */
-  sync () {
+  private sync () {
     this.store.lruDumped = this.lrcCache.dump()
   }
 

@@ -1,7 +1,9 @@
 import { ChainData } from '~/background/services/chain'
+import { KeyringType } from '~/background/services/keyring/types'
 
 export const UNISIGN_ORIGIN = 'https://unisign.org'
 
+// todo: rename to distinguish from chainId
 export enum ChainIdentifier {
   BTC = 'BTC',
   DOGE = 'DOGE',
@@ -17,6 +19,8 @@ export const CHAINS: Record<ChainIdentifier, ChainData> = {
     chainId: undefined,
     logo: '',
     tokenLogo: '',
+    HDKeyringType: KeyringType.BtcHD,
+    simpleKeyringType: KeyringType.BtcSimple,
   },
   [ChainIdentifier.DOGE]: {
     name: 'Doge',
@@ -26,6 +30,8 @@ export const CHAINS: Record<ChainIdentifier, ChainData> = {
     chainId: undefined,
     logo: '',
     tokenLogo: '',
+    HDKeyringType: KeyringType.BtcHD, // todo: change to dogeHD
+    simpleKeyringType: KeyringType.BtcHD,
   },
   [ChainIdentifier.CKB]: {
     name: 'Nervos',
@@ -35,6 +41,8 @@ export const CHAINS: Record<ChainIdentifier, ChainData> = {
     chainId: undefined,
     logo: '',
     tokenLogo: '',
+    HDKeyringType: KeyringType.BtcHD, // todo: change to ckbHD
+    simpleKeyringType: KeyringType.BtcHD,
   },
 }
 

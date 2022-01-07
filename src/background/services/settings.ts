@@ -50,4 +50,3 @@ export class SettingsService extends AutoBindService {
 }
 
 export const settingsService = new SettingsService()
-

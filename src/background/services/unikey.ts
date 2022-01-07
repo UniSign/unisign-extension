@@ -70,7 +70,6 @@ export type Unikey = UnikeyChainMnemonic | UniKeyChainKeyPair | UniKeyChainWalle
 
 interface UnikeyStore {
   unikeys: Unikey[]
-  _saver: number // used to invoke a safe action of diskStore
 }
 
 class UnikeyService extends AutoBindService {
@@ -84,7 +83,6 @@ class UnikeyService extends AutoBindService {
   async init () {
     this.store = await loadDiskStore('unikey', {
       unikeys: [],
-      _saver: 0,
     } as UnikeyStore)
   }
 
@@ -94,6 +92,37 @@ class UnikeyService extends AutoBindService {
 
   setUnikeys (unikeys: Unikey[]) {
     this.store.unikeys = unikeys
+  }
+
+  /**
+   * Add unikey to a proper position
+   * @param newUnikey
+   * @param {boolean} isHD if the new key is from HD wallet, it should be close to other keys from the same HD wallet.
+   */
+  addUnikey (newUnikey: Unikey, isHD: boolean) {
+    if (isHD) {
+      let lastHDAccountIndex = 0
+      let length = 0
+
+      this.store.unikeys.forEach((unikey, index) => {
+        if (unikey.keyringType === newUnikey.keyringType) {
+          lastHDAccountIndex = index
+          length++
+        }
+      })
+
+      newUnikey.nickname = `Mnemonic ${length}`
+
+      this.store.unikeys.splice(lastHDAccountIndex, 0, newUnikey)
+    }
+    else {
+      this.store.unikeys.push(newUnikey)
+    }
+  }
+
+  updateUnikey (newKey: Unikey) {
+    const targetUnikey = this.store.unikeys.find(unikey => unikey.key === newKey.key)
+    Object.assign(targetUnikey, newKey)
   }
 
   async getUnikeys () {
@@ -110,8 +139,6 @@ class UnikeyService extends AutoBindService {
 
     uniKey.hidden = true
 
-    this.store._saver++
-
     await personalService.resetCurrentUnikey()
   }
 
@@ -120,8 +147,6 @@ class UnikeyService extends AutoBindService {
     if (!uniKey) return
 
     uniKey.hidden = false
-
-    this.store._saver++
   }
 }
 

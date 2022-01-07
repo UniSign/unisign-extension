@@ -1,5 +1,6 @@
 import { EthereumProviderError, ethErrors } from 'eth-rpc-errors'
 import browser from 'webextension-polyfill'
+import { AutoBindService } from '~/background/services/base/auto-bind'
 import { CreateWindowProps, windows } from '~/background/tools/windows'
 import { IS_CHROME, IS_LINUX } from '~/env'
 
@@ -25,11 +26,12 @@ interface Approval {
  * There can be only one opened popup window at the same time.
  * Once the window lose focus, it will be closed automatically
  */
-export class ApprovalService {
+export class ApprovalService extends AutoBindService {
   approval: Approval | null = null
   approvalWindowId = 0
 
   constructor () {
+    super()
     this.init()
   }
 
