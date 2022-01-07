@@ -1,4 +1,5 @@
 import { AutoBindService } from '~/background/services/base/auto-bind'
+import { KeyringType } from '~/background/services/keyring/types'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { ChainIdentifier, CHAINS } from '~/constants'
 
@@ -14,6 +15,8 @@ export interface ChainData {
   coinType: number // based on slip-44 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
   chainId?: string // based on eip-155, mainly used for Ethereum https://chainlist.org/
   logo: string
+  HDKeyringType: KeyringType
+  simpleKeyringType: KeyringType
 }
 
 export class ChainService extends AutoBindService {
@@ -45,7 +48,6 @@ export class ChainService extends AutoBindService {
 
   async enableChain (id: ChainIdentifier): Promise<void> {
     if (!this.store.enabledChains.includes(id)) {
-      // todo: this may not be able to invoke the auto save process.
       this.store.enabledChains.push(id)
     }
   }

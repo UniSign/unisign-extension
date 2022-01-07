@@ -1,4 +1,5 @@
-import { KeyringType } from '~/background/services/keyring'
+import { AutoBindService } from '~/background/services/base/auto-bind'
+import { KeyringType } from '~/background/services/keyring/types'
 import { personalService } from '~/background/services/personal'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { ChainIdentifier } from '~/constants'
@@ -69,50 +70,83 @@ export type Unikey = UnikeyChainMnemonic | UniKeyChainKeyPair | UniKeyChainWalle
 
 interface UnikeyStore {
   unikeys: Unikey[]
-  _saver: number // used to invoke a safe action of diskStore
 }
 
-class UnikeyService {
+class UnikeyService extends AutoBindService {
   store!: UnikeyStore
 
   constructor () {
+    super()
     this.init().then(() => console.log('UnikeyService initialized'))
   }
 
   async init () {
     this.store = await loadDiskStore('unikey', {
-      currentUnikey: null,
       unikeys: [],
-      _saver: 0,
-    })
+    } as UnikeyStore)
   }
 
   findUnikeyByKey (key: string) {
     return this.store.unikeys.find(unikey => unikey.key === key)
   }
 
-  getAllVisibleUnikeys () {
+  setUnikeys (unikeys: Unikey[]) {
+    this.store.unikeys = unikeys
+  }
+
+  /**
+   * Add unikey to a proper position
+   * @param newUnikey
+   * @param {boolean} isHD if the new key is from HD wallet, it should be close to other keys from the same HD wallet.
+   */
+  addUnikey (newUnikey: Unikey, isHD: boolean) {
+    if (isHD) {
+      let lastHDAccountIndex = 0
+      let length = 0
+
+      this.store.unikeys.forEach((unikey, index) => {
+        if (unikey.keyringType === newUnikey.keyringType) {
+          lastHDAccountIndex = index
+          length++
+        }
+      })
+
+      newUnikey.nickname = `Mnemonic ${length}`
+
+      this.store.unikeys.splice(lastHDAccountIndex, 0, newUnikey)
+    }
+    else {
+      this.store.unikeys.push(newUnikey)
+    }
+  }
+
+  updateUnikey (newKey: Unikey) {
+    const targetUnikey = this.store.unikeys.find(unikey => unikey.key === newKey.key)
+    Object.assign(targetUnikey, newKey)
+  }
+
+  async getUnikeys () {
+    return this.store.unikeys
+  }
+
+  async getVisibleUnikeys () {
     return this.store.unikeys.filter(unikey => !unikey.hidden)
   }
 
-  hideUnikey (key: string) {
+  async hideUnikey (key: string) {
     const uniKey = this.store.unikeys.find(unikey => unikey.key === key)
     if (!uniKey) return
 
     uniKey.hidden = true
 
-    this.store._saver++
-
-    personalService.resetCurrentUnikey()
+    await personalService.resetCurrentUnikey()
   }
 
-  showUnikey (key: string) {
+  async showUnikey (key: string) {
     const uniKey = this.store.unikeys.find(unikey => unikey.key === key)
     if (!uniKey) return
 
     uniKey.hidden = false
-
-    this.store._saver++
   }
 }
 

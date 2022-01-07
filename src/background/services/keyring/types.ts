@@ -2,9 +2,23 @@ export interface SerializedKeyringData {
   // this can be anything
 }
 
+// export type Keyring = KeyringHD | KeyringBase
+export enum KeyringType {
+  BtcSimple = 'BTC Simple Key Pair', // BtcSimpleKeyring.type
+  BtcHD = 'BTC HD Key Tree', // BtcHdKeyring.type
+  EthSimple = 'ETH Simple Key Pair', // EthSimpleKeyring.type
+  EthHD = 'ETH HD Key Tree', // EthHdKeyring.type
+
+  // not in use
+  WalletConnect = 'WalletConnect',
+  OpenPGP = 'openPGP',
+  Ledger = 'Ledger Hardware',
+  Trezor = 'Trezor Hardware'
+}
+
 // todo: this should be modified to meet our needs
 export interface KeyringBase<T extends SerializedKeyringData = SerializedKeyringData> {
-  type: string
+  type: KeyringType
 
   serialize (): Promise<T>
 
@@ -50,5 +64,3 @@ export interface KeyringHdOpts {
 export interface KeyringHD extends KeyringBase<KeyringHdOpts> {
   mnemonic: string
 }
-
-// export type Keyring = KeyringHD | KeyringBase
