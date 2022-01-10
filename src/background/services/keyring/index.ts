@@ -26,34 +26,6 @@ import { storage } from '~/background/tools/storage'
 
 const keyringTypes = [BtcSimpleKeyring, BtcHdKeyring, EthSimpleKeyring, EthHdKeyring]
 
-// this is just a simple implementation of ObservableStore as ObservableStore can not be build with vite naturally
-// class ObservableStore<T> {
-//   private readonly data: T
-//   private callbacks: ((value: T) => void)[] = []
-//
-//   constructor (initData: T) {
-//     this.data = initData
-//   }
-//
-//   getState (): T {
-//     return this.data
-//   }
-//
-//   updateState (partial: Partial<T>) {
-//     Object.assign(this.data, partial)
-//
-//     this.notify()
-//   }
-//
-//   subscribe (callback: (value: T) => void) {
-//     this.callbacks.push(callback)
-//   }
-//
-//   private notify () {
-//     this.callbacks.forEach(callback => callback(this.data))
-//   }
-// }
-
 interface MemStoreKeyring {
   type: string
   accounts: string[]
@@ -370,11 +342,12 @@ export class KeyringService extends EventEmitter {
    * Returns a Promise that may resolve with the private key string.
    *
    * @param {string} address - The address of the account to export.
+   * @param type
    * @returns {Promise<string>} The private key of the account.
    */
-  exportAccount (address: string) {
+  exportAccount (address: string, type?: KeyringType) {
     try {
-      return this.getKeyringForAccount(address).then(keyring => keyring.exportAccount(address))
+      return this.getKeyringForAccount(address, type).then(keyring => keyring.exportAccount(address))
     }
     catch (e) {
       return Promise.reject(e)
@@ -827,35 +800,6 @@ export class KeyringService extends EventEmitter {
     return this.getKeyringForAccount(address).then((keyring) => {
       return keyring.signTypedData(address, msgParams.data, opts)
     })
-  }
-
-  /**
-   * Gets the app key address for the given Ethereum address and origin.
-   *
-   * @param {string} address - The Ethereum address for the app key.
-   * @param {string} origin - The origin for the app key.
-   * @returns {string} The app key address.
-   */
-  async getAppKeyAddress (address: string, origin: string) {
-    const keyring = await this.getKeyringForAccount(address)
-    return keyring.getAppKeyAddress(address, origin)
-  }
-
-  /**
-   * Exports an app key private key for the given Ethereum address and origin.
-   *
-   * @param {string} address The Ethereum address for the app key.
-   * @param {string} origin - The origin for the app key.
-   * @returns {string} The app key private key.
-   */
-  async exportAppKeyForAddress (address: string, origin: string) {
-    const keyring = await this.getKeyringForAccount(address)
-    if (!('exportAccount' in keyring)) {
-      throw new Error(
-        `The keyring for address ${address} does not support exporting.`,
-      )
-    }
-    return keyring.exportAccount(address, { withAppKeyOrigin: origin })
   }
 }
 

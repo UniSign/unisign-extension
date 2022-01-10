@@ -110,7 +110,7 @@ export class WalletController {
     return pageCacheService.get()
   }
 
-  // sites
+  // ----- sites -------
   getSite = siteService.getSite
   pinSite = siteService.pinSite
   unpinSite = siteService.unpinSite
@@ -196,11 +196,7 @@ export class WalletController {
   async getPrivateKey (password: string, address: string, keyringType: KeyringType) {
     await keyringService.verifyPassword(password)
 
-    const keyring = await keyringService.getKeyringForAccount(address, keyringType)
-
-    if (!keyring) return null
-
-    return await keyring.exportAccount(address)
+    return keyringService.exportAccount(address, keyringType)
   }
 
   async importPrivateKey (privateKey: string, type: KeyringType) {
@@ -231,7 +227,6 @@ export function setupWalletController () {
     const method = data.data.method
     const params = data.data.params
 
-    // eslint-disable-next-line no-console
     console.log('background received `wallet-controller`', method, params)
 
     if (method) {

@@ -60,3 +60,4 @@ export const LocaleOptions = [{
 }]
 
 export const UIPopupName = 'ui_popup'
+export const UITabName = 'ui_tab'

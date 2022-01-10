@@ -1,7 +1,7 @@
 const onDomReady = (callback: ($: typeof document.querySelector) => void) => {
   const $ = document.querySelector.bind(document)
 
-  if (document.readyState === 'complete') {
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
     callback($)
   }
   else {

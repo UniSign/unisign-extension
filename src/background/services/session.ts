@@ -43,19 +43,25 @@ export class SessionService {
     })
   }
 
-  get (tabId: number) {
+  get (tabId: number): Session|undefined {
     return this.map.get(tabId)
   }
 
-  create (id: number, data?: SessionData) {
+  create (tabId: number, data?: SessionData): Session {
     const session = new Session(data)
-    this.map.set(id, session)
+    this.map.set(tabId, session)
 
     return session
   }
 
-  getOrCreate (tabId: number) {
-    this.get(tabId) || this.create(tabId)
+  update (session: Session, data: Pick<SessionData, 'origin' | 'icon' | 'name'>) {
+    session.origin = data.origin
+    session.icon = data.icon
+    session.name = data.name
+  }
+
+  getOrCreate (tabId: number): Session {
+    return this.get(tabId) || this.create(tabId)
   }
 
   delete (tabId: number) {
