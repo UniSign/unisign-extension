@@ -1,0 +1,1 @@
+This is a fork of [webext-bridge](https://github.com/antfu/webext-bridge), fixing the problem [#7](https://github.com/zikaari/crx-bridge/issues/7)
