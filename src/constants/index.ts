@@ -3,18 +3,17 @@ import { KeyringType } from '~/background/services/keyring/types'
 
 export const UNISIGN_ORIGIN = 'https://unisign.org'
 
-// todo: rename to distinguish from chainId
-export enum ChainIdentifier {
+export enum KeyIdentifier {
   BTC = 'BTC',
   DOGE = 'DOGE',
   CKB = 'CKB',
 }
 
-export const CHAINS: Record<ChainIdentifier, ChainData> = {
-  [ChainIdentifier.BTC]: {
+export const CHAINS: Record<KeyIdentifier, ChainData> = {
+  [KeyIdentifier.BTC]: {
     name: 'Bitcoin',
-    identifier: ChainIdentifier.BTC,
-    tokenSymbol: ChainIdentifier.BTC,
+    identifier: KeyIdentifier.BTC,
+    tokenSymbol: KeyIdentifier.BTC,
     coinType: 0,
     chainId: undefined,
     logo: '',
@@ -22,10 +21,10 @@ export const CHAINS: Record<ChainIdentifier, ChainData> = {
     HDKeyringType: KeyringType.BtcHD,
     simpleKeyringType: KeyringType.BtcSimple,
   },
-  [ChainIdentifier.DOGE]: {
+  [KeyIdentifier.DOGE]: {
     name: 'Doge',
-    identifier: ChainIdentifier.DOGE,
-    tokenSymbol: ChainIdentifier.DOGE,
+    identifier: KeyIdentifier.DOGE,
+    tokenSymbol: KeyIdentifier.DOGE,
     coinType: 3,
     chainId: undefined,
     logo: '',
@@ -33,10 +32,10 @@ export const CHAINS: Record<ChainIdentifier, ChainData> = {
     HDKeyringType: KeyringType.BtcHD, // todo: change to dogeHD
     simpleKeyringType: KeyringType.BtcHD,
   },
-  [ChainIdentifier.CKB]: {
+  [KeyIdentifier.CKB]: {
     name: 'Nervos',
-    identifier: ChainIdentifier.CKB,
-    tokenSymbol: ChainIdentifier.CKB,
+    identifier: KeyIdentifier.CKB,
+    tokenSymbol: KeyIdentifier.CKB,
     coinType: 309,
     chainId: undefined,
     logo: '',

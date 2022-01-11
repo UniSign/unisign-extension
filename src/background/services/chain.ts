@@ -1,15 +1,15 @@
 import { AutoBindService } from '~/background/services/base/auto-bind'
 import { KeyringType } from '~/background/services/keyring/types'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { ChainIdentifier, CHAINS } from '~/constants'
+import { KeyIdentifier, CHAINS } from '~/constants'
 
 interface ChainStore {
-  enabledChains: ChainIdentifier[]
+  enabledChains: KeyIdentifier[]
 }
 
 export interface ChainData {
   name: string // Bitcoin BSC
-  identifier: ChainIdentifier // BTC BSC
+  identifier: KeyIdentifier // BTC BSC
   tokenSymbol: string // BTC BNB
   tokenLogo: string
   coinType: number // based on slip-44 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
@@ -29,7 +29,7 @@ export class ChainService extends AutoBindService {
   }
 
   async init () {
-    const supportedChains = Object.values(ChainIdentifier)
+    const supportedChains = Object.values(KeyIdentifier)
 
     this.store = await loadDiskStore<ChainStore>('chains', {
       enabledChains: supportedChains,
@@ -46,13 +46,13 @@ export class ChainService extends AutoBindService {
     return this.store.enabledChains.map(chainEnum => this.supportedChains.find(chain => chain.identifier === chainEnum)!)
   }
 
-  async enableChain (id: ChainIdentifier): Promise<void> {
+  async enableChain (id: KeyIdentifier): Promise<void> {
     if (!this.store.enabledChains.includes(id)) {
       this.store.enabledChains.push(id)
     }
   }
 
-  async disableChain (id: ChainIdentifier): Promise<void> {
+  async disableChain (id: KeyIdentifier): Promise<void> {
     this.store.enabledChains = this.store.enabledChains.filter(chain => chain !== id)
   }
 }

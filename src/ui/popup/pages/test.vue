@@ -150,6 +150,9 @@
             ✅
           </button>
           <button @click="onClickHideUnikey(unikey)">
+            ❎
+          </button>
+          <button @click="onClickRemoveUnikey(unikey)">
             ❌
           </button>
           <button @click="onClickSetCurrentUnikey(unikey)">
@@ -199,7 +202,7 @@
 import { ref } from 'vue'
 import { ChainData } from '~/background/services/chain'
 import { wallet } from '~/ui/controllers/wallet'
-import { ChainIdentifier, CHAINS, LocaleOptions, LOCALES } from '~/constants'
+import { KeyIdentifier, CHAINS, LocaleOptions, LOCALES } from '~/constants'
 import { sleep } from '~/utils'
 import { Unikey } from '~/background/services/unikey'
 
@@ -252,6 +255,7 @@ export default {
     // lock
     const isLocked = ref(false)
     const passwordForUnlock = ref('11111111')
+    const hasMnemonic = ref(false)
     async function onClickLock () {
       await wallet.lock()
       isLocked.value = await wallet.isLocked()
@@ -259,6 +263,7 @@ export default {
     async function onClickUnlock () {
       await wallet.unlock(passwordForUnlock.value)
       isLocked.value = await wallet.isLocked()
+      hasMnemonic.value = await wallet.hasMnemonic()
     }
     onMounted(async () => {
       isLocked.value = await wallet.isLocked()
@@ -267,11 +272,11 @@ export default {
     // Chains
     const supportedChains = ref<ChainData[]>([])
     const enabledChains = ref<ChainData[]>([])
-    async function onClickEnableChain (identifier: ChainIdentifier) {
+    async function onClickEnableChain (identifier: KeyIdentifier) {
       await wallet.enableChain(identifier)
       enabledChains.value = await wallet.getEnabledChains()
     }
-    async function onClickDisableChain (identifier: ChainIdentifier) {
+    async function onClickDisableChain (identifier: KeyIdentifier) {
       await wallet.disabledChain(identifier)
       enabledChains.value = await wallet.getEnabledChains()
     }
@@ -280,7 +285,7 @@ export default {
       enabledChains.value = await wallet.getEnabledChains()
     })
 
-    // unikey
+    // unikey/addresses
     const unikeys = ref<Unikey[]>([])
     const visibleUnikeys = ref<Unikey[]>([])
     const currentUnikey = ref<Unikey| null>(null)
@@ -295,6 +300,10 @@ export default {
       await wallet.hideUnikey(unikey.key)
       visibleUnikeys.value = await wallet.getVisibleUnikeys()
       currentUnikey.value = await wallet.getCurrentUnikey()
+    }
+    async function onClickRemoveUnikey (unikey: Unikey) {
+      await wallet.removeUnikey(passwordForUnlock.value, unikey)
+      await onUnikeysChanged()
     }
     async function onClickSetCurrentUnikey (unikey: Unikey) {
       await wallet.setCurrentUnikey(unikey.key)
@@ -313,8 +322,8 @@ export default {
 
     // keyring
     const importedPrivateKey = ref('')
-    const chain = ref<ChainIdentifier>(ChainIdentifier.BTC)
-    async function onClickDeriveAddress (identifier: ChainIdentifier) {
+    const chain = ref<KeyIdentifier>(KeyIdentifier.BTC)
+    async function onClickDeriveAddress (identifier: KeyIdentifier) {
       await wallet.deriveNewAccountFromMnemonic(identifier)
 
       await onUnikeysChanged()
@@ -322,6 +331,9 @@ export default {
     async function onClickImportKey () {
       await wallet.importPrivateKey(importedPrivateKey.value, CHAINS[chain.value].simpleKeyringType)
       await onUnikeysChanged()
+    }
+    async function onShowMnemonic () {
+      const mnemonic = await wallet.getMnemonic('')
     }
 
     // Approval
@@ -388,6 +400,7 @@ export default {
       onClickGetUnikeys,
       onClickShowUnikey,
       onClickHideUnikey,
+      onClickRemoveUnikey,
       onClickSetCurrentUnikey,
       onClickExportPrivateKey,
 

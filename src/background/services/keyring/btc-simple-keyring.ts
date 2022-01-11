@@ -60,6 +60,13 @@ export class BtcSimpleKeyring extends EventEmitter {
     }
   }
 
+  removeAccount (address: string) {
+    if (!this.wallets.find(w => w.address === address)) {
+      throw new Error(`Address ${address} not found in this keyring`)
+    }
+    this.wallets = this.wallets.filter(w => w.address !== address)
+  }
+
   getAccounts (): Promise<string[]> {
     return Promise.resolve(this.wallets.map(w => w.address))
   }

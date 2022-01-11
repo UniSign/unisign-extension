@@ -20,7 +20,7 @@ import {
   KeyringType,
   SerializedKeyringData,
 } from '~/background/services/keyring/types'
-import { Unikey, UniKeyChainKeyPair, UnikeyChainMnemonic, UnikeyType } from '~/background/services/unikey'
+import { Unikey, UniKeyChainSimple, UnikeyChainHD, UnikeyType } from '~/background/services/unikey'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { storage } from '~/background/tools/storage'
 
@@ -119,8 +119,6 @@ export class KeyringService extends EventEmitter {
     }
 
     this.password = password
-
-    await this.createNewVaultAndRestore(this.mnemonic)
   }
 
   async isSetup (): Promise<boolean> {
@@ -415,7 +413,7 @@ export class KeyringService extends EventEmitter {
             key: account,
             keyType: UnikeyType.blockchain,
             keyringType: keyring.type,
-          } as UnikeyChainMnemonic | UniKeyChainKeyPair
+          } as UnikeyChainHD | UniKeyChainSimple
         })),
       ),
     ).then(keyringArrays => keyringArrays.flat())
