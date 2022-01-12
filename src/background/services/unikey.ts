@@ -28,7 +28,7 @@ export interface UnikeyBase {
   keyType: UnikeyType
   keyringType: KeyringType
 
-  keyId?: KeyIdentifier
+  keySymbol?: KeyIdentifier
 
   brand?: WalletConnectBrand | HardwareBrand
   brandName?: string
@@ -37,7 +37,7 @@ export interface UnikeyBase {
 export interface UnikeyChain extends UnikeyBase {
   keyType: UnikeyType.blockchain
 
-  keyId: KeyIdentifier
+  keySymbol: KeyIdentifier
 }
 
 export interface UniKeyOpenPGP extends UnikeyBase {

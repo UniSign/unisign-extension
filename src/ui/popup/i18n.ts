@@ -41,7 +41,7 @@ function tt (key: string, params?: any) {
   return i18n.global.t(key, params)
 }
 
-export async function setLocale (locale: string) {
+export async function setLocale (locale: LOCALES) {
   if (!i18n.global.availableLocales.includes(locale)) {
     const messages = await import(`../../locales/${locale}.json`)
 

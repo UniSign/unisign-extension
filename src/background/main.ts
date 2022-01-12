@@ -1,6 +1,6 @@
 import './polyfill'
-import { setupProviderController } from '~/background/controllers/provider'
 import { setupWalletController, walletController } from '~/background/controllers/wallet'
+import { setupProviderController } from '~/background/controllers/provider'
 import { sessionService } from '~/background/services/session'
 import { UIPopupName, UITabName } from '~/constants'
 

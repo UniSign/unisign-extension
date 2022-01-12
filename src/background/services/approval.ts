@@ -4,10 +4,15 @@ import { AutoBindService } from '~/background/services/base/auto-bind'
 import { CreateWindowProps, windows } from '~/background/tools/windows'
 import { IS_CHROME, IS_LINUX } from '~/env'
 
+export enum ApprovalPage {
+  unlock = 'unlock',
+  connect = 'connect',
+}
+
 interface ApprovalData {
   params?: any
   origin?: string
-  approvalPage: string
+  approvalPage: ApprovalPage
   requestDefer?: Promise<any>
 }
 

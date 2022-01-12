@@ -117,7 +117,7 @@ export class WalletController {
   unpinSite = siteService.unpinSite
   getSites = siteService.getSites
   getSitesSorted = siteService.getSitesSorted
-  getSitesByChain = siteService.getSitesByChainId
+  getSitesByUnikeySymbol = siteService.getSitesByUnikeySymbol
   async getCurrentSite () {
     const { id: tabId } = await windows.getCurrentTab()
     if (!tabId) return
@@ -187,7 +187,7 @@ export class WalletController {
       keyringType: keyring.type,
       nickname: '',
       hidden: false,
-      keyId: KeyIdentifier.BTC,
+      keySymbol: KeyIdentifier.BTC,
     } as UnikeyChainHD, true)
 
     // this should be at the last
@@ -210,7 +210,7 @@ export class WalletController {
       keyringType: keyring.type,
       nickname: 'Private Key',
       hidden: false,
-      keyId: KeyIdentifier.BTC,
+      keySymbol: KeyIdentifier.BTC,
     } as UnikeyChainHD, false)
 
     await this.setCurrentUnikeyFromKeyring(keyring, -1)
