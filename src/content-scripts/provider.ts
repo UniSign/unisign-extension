@@ -41,10 +41,10 @@ export class UniSignProvider extends EventEmitter {
       const name = document.title || ($('head > meta[name="title"]') as HTMLMetaElement)?.content || origin
 
       messageBridge.send('provider-to-background', {
-        method: 'new_tab',
-        params: {
+        method: 'tabCheckin',
+        params: [{
           icon, name, origin,
-        },
+        }],
       }, 'background')
     })
   }

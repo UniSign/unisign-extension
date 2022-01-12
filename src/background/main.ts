@@ -1,6 +1,8 @@
 import './polyfill'
+import { setupProviderController } from '~/background/controllers/provider'
 import { setupWalletController, walletController } from '~/background/controllers/wallet'
-import { UIPopupName } from '~/constants'
+import { sessionService } from '~/background/services/session'
+import { UIPopupName, UITabName } from '~/constants'
 
 // only on dev mode
 if (import.meta.hot) {
@@ -10,7 +12,6 @@ if (import.meta.hot) {
   import('./contentScriptHMR')
 }
 browser.runtime.onInstalled.addListener((): void => {
-  // eslint-disable-next-line no-console
   console.log('Extension installed')
 })
 
@@ -24,6 +25,15 @@ browser.runtime.onConnect.addListener((port) => {
       walletController.setIsPopupOpened(false)
     })
   }
+
+  if (port.name === UITabName) {
+    const sessionId = port?.sender?.tab?.id
+
+    if (sessionId) {
+      sessionService.getOrCreate(sessionId)
+    }
+  }
 })
 
 setupWalletController()
+setupProviderController()

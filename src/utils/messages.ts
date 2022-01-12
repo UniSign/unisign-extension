@@ -1,4 +1,5 @@
-import { onMessage, sendMessage, allowWindowMessaging, setNamespace } from 'webext-bridge'
+// todo: this is a fork of webexit-bridge, fixing a bug relative to webextension-polyfill included by webext-bridge
+import { onMessage, sendMessage, allowWindowMessaging, setNamespace, Endpoint } from './webext-bridge'
 
 // there is bug with crx-bridge@3.0 and webext-bridge according to the issue below
 // https://github.com/zikaari/crx-bridge/issues/11
@@ -16,4 +17,4 @@ export const messageBridge = {
   setNamespace: () => setNamespace('unisign-extension-provider'),
 }
 
-export * from 'webext-bridge'
+export * from './webext-bridge'
