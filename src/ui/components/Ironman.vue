@@ -48,19 +48,26 @@
       <span>Ironman</span>
     </div>
     <div v-show="isShowDetail" class="ironman-detail">
-      Anti-Phishing Code
+      {{ antiPhishingCode }}
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   setup (props, context) {
     const isShowDetail = ref(false)
+    const antiPhishingCode = ref('')
+    onMounted(async () => {
+      antiPhishingCode.value = await wallet.getAntiPhishingCode()
+    })
+
     return {
       isShowDetail,
+      antiPhishingCode,
     }
   },
 }

@@ -49,6 +49,7 @@
 
 <script>
 import { ref } from 'vue'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageLocked',
@@ -56,22 +57,30 @@ export default {
     const passwordRef = ref('')
     const password = ref('')
     const validataText = ref('')
-    const triggerValidate = () => {
-      if (password.value) {
-        validataText.value = 'Incorrect password'
-        passwordRef.value.validate()
-      }
-      else {
-        validataText.value = 'Please enter password'
-        passwordRef.value.validate()
-        return false
-      }
+    const isLocked = ref(false)
+    // const triggerValidate = async () => {
+    //   if (!password.value) {
+    //     validataText.value = 'Please enter password'
+    //     passwordRef.value.validate()
+    //     return
+    //   }
+    //   await wallet.unlock(password.value)
+    //   isLocked.value = await wallet.isLocked()
+    //   console.log(isLocked.value, '123')
+    // }
+
+    async function triggerValidate () {
+      await wallet.reset()
+      await sleep(1000) // wait for background fully reloaded
+      window.location.reload()
     }
+
     return {
       passwordRef,
       password,
-      triggerValidate,
       validataText,
+      isLocked,
+      triggerValidate,
     }
   },
 }

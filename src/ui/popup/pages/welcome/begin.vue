@@ -386,15 +386,12 @@
         </div>
       </div>
       <img class="w-[134px] h-[36px]" :src="`/assets/page-begin/nav-${isScroll?'logo-scroll':'logo'}.png`">
-      <router-link
-        class="icon-wrapper cursor-pointer"
-        to="/locked"
-      >
+      <div class="icon-wrapper cursor-pointer" @click="onClickLock">
         <Iconfont name="lock" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
           Lock
         </div>
-      </router-link>
+      </div>
     </div>
     <div class="central-bg-1"></div>
     <div class="central-bg-2"></div>
@@ -520,17 +517,17 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageBegin',
   setup (props, context) {
     const router = useRouter()
     const isBegin = ref(true)
-    const topLineBoxRef = ref(null)
+
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
-    const isShowQRCodeDialog = ref(false)
-    const isShowSwitchKeyDialog = ref(false)
+    const topLineBoxRef = ref(null)
     onMounted(() => {
       window.onscroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -550,26 +547,44 @@ export default {
     onBeforeUnmount(() => {
       window.onscroll = null
     })
-    isBegin.value = false
+
+    // lock
+    const isLocked = ref(false)
+    async function onClickLock () {
+      await wallet.lock()
+      isLocked.value = await wallet.isLocked()
+      isLocked.value && router.push('/locked')
+    }
+
     const onClickSubmit = () => {
       router.push('/addAddress')
     }
+
+    const isShowQRCodeDialog = ref(false)
     const handleQRCancel = () => {
       isShowQRCodeDialog.value = false
     }
+
+    const isShowSwitchKeyDialog = ref(false)
     const handleSwitchCancel = () => {
       isShowSwitchKeyDialog.value = false
     }
     return {
-      onClickSubmit,
       isBegin,
-      topLineBoxRef,
+
       iconFontColor,
       isScroll,
-      handleQRCancel,
+      topLineBoxRef,
+
+      onClickLock,
+
+      onClickSubmit,
+
       isShowQRCodeDialog,
-      handleSwitchCancel,
+      handleQRCancel,
+
       isShowSwitchKeyDialog,
+      handleSwitchCancel,
     }
   },
 }
