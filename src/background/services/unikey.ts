@@ -2,7 +2,7 @@ import { AutoBindService } from '~/background/services/base/auto-bind'
 import { KeyringType } from '~/background/services/keyring/types'
 import { personalService } from '~/background/services/personal'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { ChainIdentifier } from '~/constants'
+import { KeyIdentifier } from '~/constants'
 
 export enum UnikeyType {
   blockchain = 'blockchain',
@@ -28,7 +28,7 @@ export interface UnikeyBase {
   keyType: UnikeyType
   keyringType: KeyringType
 
-  chainId?: ChainIdentifier
+  keyId?: KeyIdentifier
 
   brand?: WalletConnectBrand | HardwareBrand
   brandName?: string
@@ -37,7 +37,7 @@ export interface UnikeyBase {
 export interface UnikeyChain extends UnikeyBase {
   keyType: UnikeyType.blockchain
 
-  chainId: ChainIdentifier
+  keyId: KeyIdentifier
 }
 
 export interface UniKeyOpenPGP extends UnikeyBase {
@@ -46,11 +46,11 @@ export interface UniKeyOpenPGP extends UnikeyBase {
   keyringType: KeyringType.OpenPGP
 }
 
-export interface UnikeyChainMnemonic extends UnikeyChain {
+export interface UnikeyChainHD extends UnikeyChain {
   keyringType: KeyringType.BtcHD | KeyringType.EthHD
 }
 
-export interface UniKeyChainKeyPair extends UnikeyChain {
+export interface UniKeyChainSimple extends UnikeyChain {
   keyringType: KeyringType.BtcSimple | KeyringType.EthSimple
 }
 
@@ -66,7 +66,7 @@ export interface UniKeyChainHardware extends UnikeyChain {
   brandName: string
 }
 
-export type Unikey = UnikeyChainMnemonic | UniKeyChainKeyPair | UniKeyChainWalletConnect | UniKeyChainHardware
+export type Unikey = UnikeyChainHD | UniKeyChainSimple | UniKeyChainWalletConnect | UniKeyChainHardware
 
 interface UnikeyStore {
   unikeys: Unikey[]
@@ -88,10 +88,6 @@ class UnikeyService extends AutoBindService {
 
   findUnikeyByKey (key: string) {
     return this.store.unikeys.find(unikey => unikey.key === key)
-  }
-
-  setUnikeys (unikeys: Unikey[]) {
-    this.store.unikeys = unikeys
   }
 
   /**
@@ -120,17 +116,15 @@ class UnikeyService extends AutoBindService {
     }
   }
 
+  deleteUnikey (key: string) {
+    const index = this.store.unikeys.findIndex(unikey => unikey.key === key)
+
+    this.store.unikeys.splice(index, 1)
+  }
+
   updateUnikey (newKey: Unikey) {
     const targetUnikey = this.store.unikeys.find(unikey => unikey.key === newKey.key)
     Object.assign(targetUnikey, newKey)
-  }
-
-  async getUnikeys () {
-    return this.store.unikeys
-  }
-
-  async getVisibleUnikeys () {
-    return this.store.unikeys.filter(unikey => !unikey.hidden)
   }
 
   async hideUnikey (key: string) {
@@ -147,6 +141,18 @@ class UnikeyService extends AutoBindService {
     if (!uniKey) return
 
     uniKey.hidden = false
+  }
+
+  setUnikeys (unikeys: Unikey[]) {
+    this.store.unikeys = unikeys
+  }
+
+  async getUnikeys () {
+    return this.store.unikeys
+  }
+
+  async getVisibleUnikeys () {
+    return this.store.unikeys.filter(unikey => !unikey.hidden)
   }
 }
 

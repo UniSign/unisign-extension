@@ -7,10 +7,10 @@ import { personalService } from '~/background/services/personal'
 import { sessionService } from '~/background/services/session'
 import { settingsService } from '~/background/services/settings'
 import { SiteData, siteService } from '~/background/services/site'
-import { UnikeyChainMnemonic, unikeyService, UnikeyType } from '~/background/services/unikey'
+import { Unikey, UnikeyChainHD, unikeyService, UnikeyType } from '~/background/services/unikey'
 import { storage } from '~/background/tools/storage'
 import { windows } from '~/background/tools/windows'
-import { ChainIdentifier, CHAINS } from '~/constants'
+import { KeyIdentifier, CHAINS } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
 // todo: the payload of all events needs to be carefully considered
@@ -25,11 +25,6 @@ export class WalletController {
   // ----- basic -------
   async setupWallet (password: string) {
     await keyringService.setup(password)
-
-    const unikeys = await keyringService.getUnikeys()
-
-    await personalService.setCurrentUnikey(unikeys[0].key)
-    await unikeyService.setUnikeys(unikeys)
   }
 
   isSetup = keyringService.isSetup
@@ -81,6 +76,12 @@ export class WalletController {
   getVisibleUnikeys = unikeyService.getVisibleUnikeys
   showUnikey = unikeyService.showUnikey
   hideUnikey = unikeyService.hideUnikey
+  async removeUnikey (password: string, unikey: Unikey) {
+    await this.verifyPassword(password)
+
+    unikeyService.deleteUnikey(unikey.key)
+    await keyringService.removeAccount(unikey.key)
+  }
 
   // ----- chains -------
   getSupportedChains = chainService.getSupportedChains
@@ -110,7 +111,7 @@ export class WalletController {
     return pageCacheService.get()
   }
 
-  // sites
+  // ----- sites -------
   getSite = siteService.getSite
   pinSite = siteService.pinSite
   unpinSite = siteService.unpinSite
@@ -157,7 +158,7 @@ export class WalletController {
     return this._getMnemonic()
   }
 
-  hasMnemonic (): boolean {
+  async hasMnemonic (): Promise<boolean> {
     return Boolean(this._getMnemonic())
   }
 
@@ -174,7 +175,7 @@ export class WalletController {
     await unikeyService.setUnikeys(unikeys)
   }
 
-  async deriveNewAccountFromMnemonic (identifier: ChainIdentifier) {
+  async deriveNewAccountFromMnemonic (identifier: KeyIdentifier) {
     const type = CHAINS[identifier].HDKeyringType
     const keyring = keyringService.getKeyringByType(type)
 
@@ -186,8 +187,8 @@ export class WalletController {
       keyringType: keyring.type,
       nickname: '',
       hidden: false,
-      chainId: ChainIdentifier.BTC,
-    } as UnikeyChainMnemonic, true)
+      keyId: KeyIdentifier.BTC,
+    } as UnikeyChainHD, true)
 
     // this should be at the last
     await this.setCurrentUnikeyFromKeyring(keyring, -1)
@@ -196,11 +197,7 @@ export class WalletController {
   async getPrivateKey (password: string, address: string, keyringType: KeyringType) {
     await keyringService.verifyPassword(password)
 
-    const keyring = await keyringService.getKeyringForAccount(address, keyringType)
-
-    if (!keyring) return null
-
-    return await keyring.exportAccount(address)
+    return keyringService.exportAccount(address, keyringType)
   }
 
   async importPrivateKey (privateKey: string, type: KeyringType) {
@@ -213,8 +210,8 @@ export class WalletController {
       keyringType: keyring.type,
       nickname: 'Private Key',
       hidden: false,
-      chainId: ChainIdentifier.BTC,
-    } as UnikeyChainMnemonic, false)
+      keyId: KeyIdentifier.BTC,
+    } as UnikeyChainHD, false)
 
     await this.setCurrentUnikeyFromKeyring(keyring, -1)
   }
@@ -231,7 +228,6 @@ export function setupWalletController () {
     const method = data.data.method
     const params = data.data.params
 
-    // eslint-disable-next-line no-console
     console.log('background received `wallet-controller`', method, params)
 
     if (method) {

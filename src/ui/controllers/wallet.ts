@@ -12,4 +12,4 @@ export const wallet = new Proxy({}, {
       }, 'background')
     }
   },
-}) as any as WalletController
+}) as WalletController
