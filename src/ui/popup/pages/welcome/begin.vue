@@ -73,27 +73,6 @@
     width: 310px;
     height: 267px;
     background: #E9EDF3;
-    .begin-part {
-      h2 {
-        margin-top: 64px;
-        text-align: center;
-        font-size: $title-font-size;
-        font-weight: 600;
-        line-height: 29px;
-      }
-      p {
-        margin-top: 16px;
-        text-align: center;
-        font-size: $detail-font-size;
-        line-height: 16px;
-        color: #8D919C;
-      }
-      .uni-btn {
-        margin:52px auto 0;
-        width: 230px;
-        display: block;
-      }
-    }
     .address-part {
       h2 {
         margin-top: 64px;
@@ -379,7 +358,7 @@
   <div class="page-begin">
     <div class="top-bg"></div>
     <div ref="topLineBoxRef" class="top-line-box">
-      <div class="icon-wrapper cursor-pointer">
+      <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
         <Iconfont name="settings" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
           Settings
@@ -396,14 +375,7 @@
     <div class="central-bg-1"></div>
     <div class="central-bg-2"></div>
     <div class="central-content">
-      <div v-if="isBegin" class="begin-part">
-        <h2>Let’s begin</h2>
-        <p>Create or import a key to start.</p>
-        <UniBtn class="uni-btn" @click="onClickSubmit">
-          Add Keys
-        </UniBtn>
-      </div>
-      <div v-else class="address-part">
+      <div class="address-part">
         <h2>Bitcoin Address</h2>
         <p>0x2c238D3A7cd18E698DB5A4f7d5AdbeCc22B68a0e</p>
         <div>
@@ -433,7 +405,7 @@
       </div>
     </div>
     <img class="key-icon" src="/assets/page-begin/key-icon.png">
-    <div v-if="!isBegin" class="connect-box">
+    <div class="connect-box">
       <div class="status-item">
         <Iconfont name="current" size="14"></Iconfont>
         <span>Current connect</span>
@@ -451,7 +423,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!isBegin" class="await-connect-box">
+    <div class="await-connect-box">
       <div class="status-item">
         <Iconfont name="connected" size="14" color="#6F7684"></Iconfont>
         <span>Connected Apps</span>
@@ -475,10 +447,7 @@
         </div>
       </div>
     </div>
-    <p v-if="isBegin">
-      How to use?
-    </p>
-    <Ironman :style="{'position':isBegin?'absolute':'relative'}"></Ironman>
+    <Ironman></Ironman>
     <UniDialog class="qr-code-box" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
       <div class="qr-code">
       </div>
@@ -523,7 +492,6 @@ export default {
   name: 'PageBegin',
   setup (props, context) {
     const router = useRouter()
-    const isBegin = ref(true)
 
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
@@ -556,8 +524,8 @@ export default {
       isLocked.value && router.push('/locked')
     }
 
-    const onClickSubmit = () => {
-      router.push('/addAddress')
+    const onClickSettings = () => {
+      router.push('/settings')
     }
 
     const isShowQRCodeDialog = ref(false)
@@ -570,15 +538,12 @@ export default {
       isShowSwitchKeyDialog.value = false
     }
     return {
-      isBegin,
-
       iconFontColor,
       isScroll,
       topLineBoxRef,
 
       onClickLock,
-
-      onClickSubmit,
+      onClickSettings,
 
       isShowQRCodeDialog,
       handleQRCancel,

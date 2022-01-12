@@ -49,7 +49,7 @@
         <span>Derive From Mnemonic</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div v-else class="key-item-box mb-[24px]" @click="$router.push(`/createMnemonic/${$route.params.key}`)">
+      <div v-else class="key-item-box mb-[24px]" @click="$router.push('/createMnemonic')">
         <div>
           <Iconfont name="create" size="17" color="#6D8AF3"></Iconfont>
         </div>
@@ -63,27 +63,27 @@
         <span>Import by priority key</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div v-if="!isMnemonicWords" class="key-item-box" style="border-radius: 0px;" @click="$router.push(`/importMnemonic/${$route.params.key}`)">
+      <div v-if="!isMnemonicWords" class="key-item-box" style="border-radius: 0px;" @click="$router.push('/importMnemonic')">
         <div>
           <Iconfont name="mnemonic" size="17" color="#B2EED7"></Iconfont>
         </div>
         <span>Import by Mnemonic</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div class="key-item-box" style="border-radius: 0px 0px 12px 12px;" @click="$router.push(`/importKeystoreFile/${$route.params.key}`)">
+      <!-- <div class="key-item-box" style="border-radius: 0px 0px 12px 12px;" @click="$router.push(`/importKeystoreFile/${$route.params.key}`)">
         <div>
           <Iconfont name="keystore" size="17" color="#FFCC59"></Iconfont>
         </div>
         <span>Import Keystore</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
-      </div>
-      <div class="key-item-box mt-[24px]">
+      </div> -->
+      <!-- <div class="key-item-box mt-[24px]">
         <div>
           <Iconfont name="hardwallet" size="17" color="#9689FF"></Iconfont>
         </div>
         <span>Connect hard wallet</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
-      </div>
+      </div> -->
     </div>
     <Ironman></Ironman>
   </div>

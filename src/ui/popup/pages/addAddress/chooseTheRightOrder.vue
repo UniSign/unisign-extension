@@ -86,9 +86,10 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isNullOrEmpty } from '~/utils/index.ts'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageCreateMnemonic',
@@ -96,51 +97,30 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const canShowMsg = ref(false)
-    const mnemonicArr = reactive(new Array(12).fill(''))
-    const mnemonicChooseArr = reactive([
-      'defense',
-      'light',
-      'accident',
-      'opinion',
-      'benefit',
-      'match',
-      'trim',
-      'slogan',
-      'festival',
-      'during',
-      'cheap',
-      'mix',
-    ])
-    const mnemonicCorrectArr = reactive([
-      'defense',
-      'light',
-      'accident',
-      'opinion',
-      'benefit',
-      'match',
-      'trim',
-      'slogan',
-      'festival',
-      'during',
-      'mix',
-      'cheap',
-    ])
+    const mnemonicArr = ref(new Array(12).fill(''))
+    const mnemonicChooseArr = ref([])
+    const mnemonicCorrectArr = ref([])
+    onMounted(async () => {
+      mnemonicChooseArr.value = route.query.mnemonic.split(' ').sort(() => 0.5 - Math.random())
+      mnemonicCorrectArr.value = route.query.mnemonic.split(' ')
+    })
     const chooseMnemonic = (index) => {
-      if (isNullOrEmpty(mnemonicChooseArr[index])) return
-      const emptyIndex = mnemonicArr.findIndex(item => isNullOrEmpty(item))
-      if (mnemonicChooseArr[index] !== mnemonicCorrectArr[emptyIndex]) {
+      if (isNullOrEmpty(mnemonicChooseArr.value[index])) return
+      const emptyIndex = mnemonicArr.value.findIndex(item => isNullOrEmpty(item))
+      if (mnemonicChooseArr.value[index] !== mnemonicCorrectArr.value[emptyIndex]) {
         canShowMsg.value = true
         return
       }
-      mnemonicArr.splice(emptyIndex, 1, mnemonicChooseArr[index])
-      mnemonicChooseArr.splice(index, 1, '')
+      mnemonicArr.value.splice(emptyIndex, 1, mnemonicChooseArr.value[index])
+      mnemonicChooseArr.value.splice(index, 1, '')
     }
     const canClickBtn = computed(() => {
-      return mnemonicArr.every(item => !isNullOrEmpty(item))
+      return mnemonicArr.value.every(item => !isNullOrEmpty(item))
     })
-    const onClickSubmit = () => {
+    const onClickSubmit = async () => {
       if (!canClickBtn.value) return
-      router.push(`/addAddressSuccess/${route.params.key}`)
+      await wallet.importMnemonic(route.query.mnemonic)
+      router.push('/addAddressSuccess')
     }
     return {
       isNullOrEmpty,

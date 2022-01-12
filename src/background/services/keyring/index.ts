@@ -102,7 +102,7 @@ export class KeyringService extends EventEmitter {
     this.store.subscribe(value => storage.set(storageKey, value))
 
     this.memStore = new ObservableStore({
-      isUnlocked: false,
+      isUnlocked: true,
       keyringTypes: this.keyringTypes.map(krt => krt.type),
       keyrings: [],
     } as MemStoreData)

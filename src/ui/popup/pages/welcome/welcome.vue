@@ -40,8 +40,8 @@
     <h2>Bring all crypto users into<span>Web3.0</span></h2>
 
     <div class="input-box">
-      <UniInput ref="passwordRef" v-model="password" validate-text="The passwords do not match" placeholder="Set a password"></UniInput>
-      <UniInput ref="rePasswordRef" v-model="rePassword" class="mt-[32px] mb-[32px]" placeholder="Repeat"></UniInput>
+      <UniInput ref="passwordRef" v-model="password" placeholder="Set a password"></UniInput>
+      <UniInput ref="rePasswordRef" v-model="rePassword" :validate-text="validataText" class="mt-[32px] mb-[32px]" placeholder="Repeat"></UniInput>
       <UniBtn :disabled="!!(!password || !rePassword)" @click="onClickSetup"></UniBtn>
       <router-link to="/test">
         test
@@ -64,14 +64,18 @@ export default {
     const rePassword = ref('')
     const passwordRef = ref(null)
     const rePasswordRef = ref(null)
+    const validataText = ref('')
     const onClickSetup = async () => {
       if (!password.value || !rePassword.value) return
       if (rePassword.value !== password.value) {
+        validataText.value = 'The passwords do not match'
         rePasswordRef.value.validate()
         return
       }
       await wallet.setupWallet(password.value).catch((e) => {
-        console.log(e, 'e')
+        validataText.value = e
+        rePasswordRef.value.validate()
+        throw new Error(e)
       })
       router.push('/phishingCode')
     }

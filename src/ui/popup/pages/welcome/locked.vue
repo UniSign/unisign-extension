@@ -49,11 +49,15 @@
 
 <script>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
+import { sleep } from '~/utils'
 
 export default {
   name: 'PageLocked',
   setup () {
+    const router = useRouter()
+
     const passwordRef = ref('')
     const password = ref('')
     const validataText = ref('')
@@ -64,9 +68,15 @@ export default {
     //     passwordRef.value.validate()
     //     return
     //   }
-    //   await wallet.unlock(password.value)
+    //   await wallet.unlock(password.value).catch((e) => {
+    //     validataText.value = e
+    //     passwordRef.value.validate()
+    //     throw new Error(e)
+    //   })
     //   isLocked.value = await wallet.isLocked()
-    //   console.log(isLocked.value, '123')
+    //   if (!isLocked.value) {
+    //     router.go(-1)
+    //   }
     // }
 
     async function triggerValidate () {

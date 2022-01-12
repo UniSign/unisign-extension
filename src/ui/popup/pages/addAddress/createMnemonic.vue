@@ -70,32 +70,28 @@
         </div>
       </div>
     </div>
-    <UniBtn class="uni-btn" @click="$router.push(`/chooseTheRightOrder/${$route.params.key}`)"></UniBtn>
+    <UniBtn class="uni-btn" @click="$router.push(`/chooseTheRightOrder?mnemonic=${mnemonic}`)"></UniBtn>
     <Ironman></Ironman>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageCreateMnemonic',
   setup () {
-    const mnemonicArr = ref([
-      'defense',
-      'light',
-      'accident',
-      'opinion',
-      'benefit',
-      'match',
-      'trim',
-      'slogan',
-      'festival',
-      'during',
-      'cheap',
-      'mix',
-    ])
+    const mnemonic = ref('')
+    const mnemonicArr = ref([])
+
+    onMounted(async () => {
+      mnemonic.value = await wallet.generateMnemonic()
+      mnemonicArr.value = mnemonic.value.split(' ')
+    })
+
     return {
+      mnemonic,
       mnemonicArr,
     }
   },

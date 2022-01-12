@@ -94,7 +94,7 @@ export default {
         return
       }
       await wallet.setAntiPhishingCode(antiPhishingCode.value)
-      router.push('/begin')
+      router.push('/addAddress')
     }
     onMounted(async () => {
       antiPhishingCode.value = await wallet.getAntiPhishingCode()
