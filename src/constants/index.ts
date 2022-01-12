@@ -8,6 +8,7 @@ export enum KeyIdentifier {
   BTC = 'BTC',
   DOGE = 'DOGE',
   CKB = 'CKB',
+  // OpenPGP = 'OpenPGP',
 }
 
 export const CHAINS: Record<KeyIdentifier, ChainData> = {
