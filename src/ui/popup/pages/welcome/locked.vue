@@ -49,29 +49,48 @@
 
 <script>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { wallet } from '~/ui/controllers/wallet'
+import { sleep } from '~/utils'
 
 export default {
   name: 'PageLocked',
   setup () {
+    const router = useRouter()
+
     const passwordRef = ref('')
     const password = ref('')
     const validataText = ref('')
-    const triggerValidate = () => {
-      if (password.value) {
-        validataText.value = 'Incorrect password'
-        passwordRef.value.validate()
-      }
-      else {
-        validataText.value = 'Please enter password'
-        passwordRef.value.validate()
-        return false
-      }
+    const isLocked = ref(false)
+    // const triggerValidate = async () => {
+    //   if (!password.value) {
+    //     validataText.value = 'Please enter password'
+    //     passwordRef.value.validate()
+    //     return
+    //   }
+    //   await wallet.unlock(password.value).catch((e) => {
+    //     validataText.value = e
+    //     passwordRef.value.validate()
+    //     throw new Error(e)
+    //   })
+    //   isLocked.value = await wallet.isLocked()
+    //   if (!isLocked.value) {
+    //     router.go(-1)
+    //   }
+    // }
+
+    async function triggerValidate () {
+      await wallet.reset()
+      await sleep(1000) // wait for background fully reloaded
+      window.location.reload()
     }
+
     return {
       passwordRef,
       password,
-      triggerValidate,
       validataText,
+      isLocked,
+      triggerValidate,
     }
   },
 }

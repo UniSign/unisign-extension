@@ -113,9 +113,7 @@ export default {
       context.emit('update:modelValue', e.target.value)
     }
     const validate = () => {
-      if (validateText.value) {
-        canShowValidateText.value = true
-      }
+      canShowValidateText.value = true
     }
     function triggerValidate (e) {
       context.emit('triggerValidate', e.target.value)

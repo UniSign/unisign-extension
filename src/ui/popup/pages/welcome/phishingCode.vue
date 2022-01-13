@@ -19,26 +19,40 @@
     text-align: center;
     color: #6F7684;
   }
-  input {
-    width: 180px;
-    height: 50px;
-    padding: 10px 12px;
-    margin:0 auto 143px;
-    display: block;
-    border-radius: 8px;
-    font-size: $title-font-size;
-    font-weight: bold;
-    line-height: 50px;
-    text-align: center;
-    font-family: monospace;
-    background: rgba(0, 0, 0, 0.08);
-    &:focus {
-        outline:none;
-        border: 1px solid $input-boder-focus-color;
+  >div {
+    margin-bottom: 143px;
+    position: relative;
+    input {
+      width: 180px;
+      height: 50px;
+      padding: 10px 12px;
+      margin:0 auto;
+      display: block;
+      border-radius: 8px;
+      font-size: $title-font-size;
+      font-weight: bold;
+      line-height: 50px;
+      text-align: center;
+      font-family: monospace;
+      background: rgba(0, 0, 0, 0.08);
+      &:focus {
+          outline:none;
+          border: 1px solid $input-boder-focus-color;
+      }
+      &._error {
+          outline:none;
+          border: 1px solid $input-boder-error-color;
+      }
     }
-    &._error {
-        outline:none;
-        border: 1px solid $input-boder-error-color;
+    p {
+      position: absolute;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      line-height: 14px;
+      white-space:nowrap;
+      color: $input-boder-error-color;
     }
   }
 }
@@ -51,41 +65,43 @@
     <h2>Anti-Phishing Code</h2>
     <i class="iconfont icon-explore"></i>
     <h3>The Anti-Phishing Code is a security feature. It will be included in all windows about UniSign. This Code helping you to prevent phishing attemtps.</h3>
-    <input v-model="modelValue" :class="{'_error':isError}" type="text">
-    <UniBtn :disabled="!modelValue" @click="onClickSubmit"></UniBtn>
+    <div>
+      <input v-model="antiPhishingCode" :class="{'_error':isError}" type="text">
+      <p v-show="isError">
+        Supports up to 10 characters
+      </p>
+    </div>
+    <UniBtn :disabled="!antiPhishingCode" @click="onClickSubmit"></UniBtn>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { wallet } from '~/ui/controllers/wallet'
+
 export default {
   name: 'PagePhishingCode',
   setup (props, context) {
-    const modelValue = ref('')
-    const isError = ref(false)
     const router = useRouter()
-    const onClickSubmit = () => {
-      if (!modelValue.value) return
-      if (modelValue.value.length > 10) {
+
+    const antiPhishingCode = ref('')
+    const isError = ref(false)
+    const onClickSubmit = async () => {
+      if (!antiPhishingCode.value) return
+      if (antiPhishingCode.value.length > 10) {
         isError.value = true
         return
       }
-      router.push('/begin')
+      await wallet.setAntiPhishingCode(antiPhishingCode.value)
+      router.push('/addAddress')
     }
-    const getRanNum = () => {
-      const result = []
-      for (let i = 0; i < 4; i++) {
-        const ranNum = Math.ceil(Math.random() * 25)
-        result.push(String.fromCharCode(65 + ranNum))
-      }
-      return result.join('')
-    }
-    onBeforeMount(async () => {
-      modelValue.value = getRanNum()
+    onMounted(async () => {
+      antiPhishingCode.value = await wallet.getAntiPhishingCode()
     })
+
     return {
-      modelValue,
+      antiPhishingCode,
       isError,
       onClickSubmit,
     }

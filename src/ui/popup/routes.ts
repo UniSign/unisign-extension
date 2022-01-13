@@ -52,19 +52,19 @@ const routes = [{
     path: '/selectWays/:key',
     component: PageSelectWays,
   }, {
-    path: '/createMnemonic/:key',
+    path: '/createMnemonic',
     component: PageCreateMnemonic,
   }, {
-    path: '/chooseTheRightOrder/:key',
+    path: '/chooseTheRightOrder',
     component: PageChooseTheRightOrder,
   }, {
-    path: '/addAddressSuccess/:key',
+    path: '/addAddressSuccess',
     component: PageAddAddressSuccess,
   }, {
     path: '/importPrivateKey/:key',
     component: PageImportPrivateKey,
   }, {
-    path: '/importMnemonic/:key',
+    path: '/importMnemonic',
     component: PageImportMnemonic,
   }, {
     path: '/importKeystoreFile/:key',

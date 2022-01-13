@@ -16,7 +16,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     tokenSymbol: KeyIdentifier.BTC,
     coinType: 0,
     chainId: undefined,
-    logo: '',
+    logo: 'key-btc',
     tokenLogo: '',
     HDKeyringType: KeyringType.BtcHD,
     simpleKeyringType: KeyringType.BtcSimple,
@@ -27,7 +27,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     tokenSymbol: KeyIdentifier.DOGE,
     coinType: 3,
     chainId: undefined,
-    logo: '',
+    logo: 'key-doge',
     tokenLogo: '',
     HDKeyringType: KeyringType.BtcHD, // todo: change to dogeHD
     simpleKeyringType: KeyringType.BtcHD,
@@ -38,7 +38,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     tokenSymbol: KeyIdentifier.CKB,
     coinType: 309,
     chainId: undefined,
-    logo: '',
+    logo: 'key-ckb',
     tokenLogo: '',
     HDKeyringType: KeyringType.BtcHD, // todo: change to ckbHD
     simpleKeyringType: KeyringType.BtcHD,

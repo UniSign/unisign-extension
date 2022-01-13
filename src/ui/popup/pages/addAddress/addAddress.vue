@@ -41,9 +41,9 @@
   <div class="page-add-address">
     <UniTab></UniTab>
     <div class="key-box">
-      <div v-for="(item,index) in keyArr" :key="index" class="key-item-box" @click="$router.push(`/selectWays/${item.key}`)">
-        <img :src="getImageUrl(item.key)">
-        <span>{{ item.value }}</span>
+      <div v-for="(item,index) in keyTypes" :key="index" class="key-item-box" @click="$router.push(`/selectWays/${item.identifier}`)">
+        <img :src="getImageUrl(item.logo)">
+        <span>{{ item.name }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
     </div>
@@ -52,23 +52,17 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { CHAINS } from '~/constants'
 
 export default {
   name: 'PageAddAddress',
   setup () {
-    const keyArr = ref([
-      { key: 'btc', value: 'Bitcoin' },
-      { key: 'bch', value: 'Bitcoin Cash' },
-      { key: 'ltc', value: 'Litecoin' },
-      { key: 'doge', value: 'Doge' },
-      { key: 'ckb', value: 'Nervos CKB' },
-    ])
+    const keyTypes = Object.values(CHAINS)
     const getImageUrl = (key) => {
-      return `/assets/page-addAddress/key-${key}.png`
+      return `/assets/page-addAddress/${key}.png`
     }
     return {
-      keyArr,
+      keyTypes,
       getImageUrl,
     }
   },
