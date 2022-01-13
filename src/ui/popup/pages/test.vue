@@ -52,6 +52,20 @@
     <fieldset>
       <legend>Setup</legend>
 
+      <button @click="onClickReset">
+        reset
+      </button>
+      isSetup: {{ isSetup }}
+      <br>
+
+      <button @click="onClickSetup">
+        set password
+      </button>
+      <label>
+        <input v-model="passwordForSetup">
+        password
+      </label>
+
       <div>
         <button @click="onClickGenerateMnemonic">
           generate mnemonic
@@ -62,20 +76,6 @@
           import mnemonic
         </button>
       </div>
-
-      <button @click="onClickReset">
-        reset
-      </button>
-      isSetup: {{ isSetup }}
-      <br>
-
-      <button @click="onClickSetup">
-        setup
-      </button>
-      <label>
-        <input v-model="passwordForSetup">
-        password
-      </label>
     </fieldset>
 
     <fieldset>
@@ -238,10 +238,11 @@ export default {
     }
     async function onClickImportMnemonic () {
       await wallet.importMnemonic(mnemonic.value)
+      await onUnikeysChanged()
+      isSetup.value = await wallet.isSetup()
     }
     async function onClickSetup () {
       await wallet.setupWallet(passwordForSetup.value)
-      isSetup.value = await wallet.isSetup()
     }
     async function onClickReset () {
       await wallet.reset()

@@ -171,8 +171,9 @@ export class WalletController {
 
     const unikeys = await keyringService.getUnikeys()
 
-    await personalService.setCurrentUnikey(unikeys[0].key)
     await unikeyService.setUnikeys(unikeys)
+    // ↓ this line should be the last, otherwise there won't be any keys in unikeyService
+    await personalService.setCurrentUnikey(unikeys[0].key)
   }
 
   async deriveNewAccountFromMnemonic (identifier: KeyIdentifier) {
