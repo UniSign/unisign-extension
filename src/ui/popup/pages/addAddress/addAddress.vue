@@ -57,8 +57,7 @@ import { CHAINS } from '~/constants'
 export default {
   name: 'PageAddAddress',
   setup () {
-    let keyTypes = []
-    keyTypes = Object.values(CHAINS)
+    const keyTypes = Object.values(CHAINS)
     const getImageUrl = (key) => {
       return `/assets/page-addAddress/${key}.png`
     }

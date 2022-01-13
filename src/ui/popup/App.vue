@@ -11,11 +11,9 @@ export default {
   name: 'App',
   setup () {
     const router = useRouter()
-    let isSetup = false
-    let isLocked = false
     onMounted(async () => {
-      isSetup = await wallet.isSetup()
-      isLocked = await wallet.isLocked()
+      const isSetup = await wallet.isSetup()
+      const isLocked = await wallet.isLocked()
       if (isSetup) {
         if (isLocked) {
           router.push('/locked')
