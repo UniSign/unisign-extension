@@ -19,9 +19,9 @@ export class PersonalService extends AutoBindService {
   }
 
   async init () {
-    this.store = await loadDiskStore('personal', {
+    this.store = await loadDiskStore<PersonalStore>('personal', {
       currentUnikey: null,
-    } as PersonalStore)
+    })
   }
 
   getCurrentUnikey () {

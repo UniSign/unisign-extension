@@ -29,7 +29,7 @@ export class SiteService {
   }
 
   async init () {
-    this.store = await loadDiskStore('site', {
+    this.store = await loadDiskStore<SiteStore>('site', {
       lruDumped: [],
     })
 

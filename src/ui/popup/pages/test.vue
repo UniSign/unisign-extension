@@ -101,23 +101,23 @@
 
       <b>enabledChains:</b>
       <ul>
-        <li v-for="chain in enabledChains" :key="chain.identifier">
-          {{ chain.name }} {{ chain.identifier }}
+        <li v-for="chain in enabledChains" :key="chain.unikeySymbol">
+          {{ chain.name }} {{ chain.unikeySymbol }}
         </li>
       </ul>
 
       <hr>
       <b>supportedChains:</b>
       <ul>
-        <li v-for="chain in supportedChains" :key="chain.identifier">
-          {{ chain.name }} {{ chain.identifier }}
-          <button @click="onClickEnableChain(chain.identifier)">
+        <li v-for="chain in supportedChains" :key="chain.unikeySymbol">
+          {{ chain.name }} {{ chain.unikeySymbol }}
+          <button @click="onClickEnableChain(chain.unikeySymbol)">
             ✅
           </button>
-          <button @click="onClickDisableChain(chain.identifier)">
+          <button @click="onClickDisableChain(chain.unikeySymbol)">
             ❌
           </button>
-          <button @click="onClickDeriveAddress(chain.identifier)">
+          <button @click="onClickDeriveAddress(chain.unikeySymbol)">
             Derive
           </button>
         </li>

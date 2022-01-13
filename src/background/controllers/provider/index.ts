@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { ethErrors } from 'eth-rpc-errors'
 import { ApprovalPage, approvalService } from '~/background/services/approval'
 import { keyringService } from '~/background/services/keyring'
+import { permissionService } from '~/background/services/permission'
 import { personalService } from '~/background/services/personal'
 import { Session, SessionData, sessionService } from '~/background/services/session'
 import { siteService } from '~/background/services/site'
@@ -18,9 +19,10 @@ interface ProviderRequest<T1 = any, T2 = any, T3 = any> {
   needApproval: boolean
 }
 
+// the KeyObject as per API
 export interface KeyObjectType {
   type: UnikeyType
-  // currently we only have blockchain meta
+  // currently, we only have blockchain meta
   meta: {
     coinType: string
     chainId: string
@@ -33,8 +35,17 @@ export interface KeyObject extends KeyObjectType {
   key: string
 }
 
+export type PermittedKeyObject = KeyObject & {
+  permission: string[]
+}
+
+export interface PermittedKeysResponse {
+  invoker: string
+  keys: PermittedKeyObject[]
+}
+
 export class ProviderController {
-  private async getCurrentUnikey (): Promise<Unikey|null> {
+  private async _getCurrentUnikey (): Promise<Unikey|null> {
     let unikey = personalService.getCurrentUnikey()
 
     if (!unikey) {
@@ -52,29 +63,83 @@ export class ProviderController {
     sessionService.update(session, params[0])
   }
 
-  async getCurrentKey ({ session: { origin } }: ProviderRequest): Promise<Unikey|null> {
+  async getCurrentKey ({ session: { origin } }: ProviderRequest): Promise<KeyObjectType|null> {
     if (!siteService.hasBeenConnected(origin)) {
       return null
     }
 
-    // todo: the response should be rethink
-    return await this.getCurrentUnikey()
-  }
+    const currentUnikey = await this._getCurrentUnikey()
 
-  @Reflect.metadata('SAFE', true)
-  async getCurrentKeyType (): Promise<KeyObjectType | null> {
-    const currentUniKey = await this.getCurrentUnikey()
-
-    if (currentUniKey) {
-      const chain = CHAINS[currentUniKey.keySymbol]
+    if (currentUnikey) {
+      const chain = CHAINS[currentUnikey.keySymbol]
 
       return {
-        type: currentUniKey.keyType,
+        type: currentUnikey.keyType,
         meta: {
           coinType: chain.coinType,
           chainId: chain.chainId || '',
           chainName: chain.name,
-          symbol: chain.identifier,
+          symbol: chain.unikeySymbol,
+        },
+      }
+    }
+    else {
+      return null
+    }
+  }
+
+  requestPermissionOfCurrentKey () {
+  }
+
+  async getPermittedKeys ({ session: { origin } }: ProviderRequest): Promise<PermittedKeysResponse> {
+    const passport = await permissionService.getPassport(origin)
+
+    if (passport) {
+      return {
+        invoker: origin,
+        // @ts-ignore
+        keys: passport.authorities.map((authority) => {
+          const unikey = unikeyService.findUnikeyByKey(authority.key)
+
+          if (unikey) {
+            const chain = CHAINS[unikey.keySymbol]
+            return {
+              type: unikey.keyType,
+              key: unikey.key,
+              meta: {
+                coinType: chain.coinType,
+                chainId: chain.chainId,
+                chainName: chain.name,
+                symbol: chain.tokenSymbol,
+              },
+              permission: authority.permissions,
+            } as PermittedKeyObject
+          }
+          return null
+        }).filter(unikey => !!unikey),
+      }
+    }
+
+    return {
+      invoker: origin,
+      keys: [],
+    }
+  }
+
+  @Reflect.metadata('SAFE', true)
+  async getCurrentKeyType (): Promise<KeyObjectType | null> {
+    const currentUnikey = await this._getCurrentUnikey()
+
+    if (currentUnikey) {
+      const chain = CHAINS[currentUnikey.keySymbol]
+
+      return {
+        type: currentUnikey.keyType,
+        meta: {
+          coinType: chain.coinType,
+          chainId: chain.chainId || '',
+          chainName: chain.name,
+          symbol: chain.tokenSymbol,
         },
       }
     }

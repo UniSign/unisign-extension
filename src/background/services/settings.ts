@@ -16,7 +16,7 @@ export class SettingsService extends AutoBindService {
   }
 
   async init () {
-    this.store = await loadDiskStore('settings', {
+    this.store = await loadDiskStore<SettingsStore>('settings', {
       locale: await this.getAcceptLanguage(),
       antiPhishingCode: [1, 1, 1, 1].map(() => String.fromCharCode(65 + Math.random() * 26)).join(''), // generate random 4 bytes uppercase string
     })

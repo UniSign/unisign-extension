@@ -9,7 +9,7 @@ interface ChainStore {
 
 export interface ChainData {
   name: string // Bitcoin BSC
-  identifier: KeyIdentifier // BTC BSC
+  unikeySymbol: KeyIdentifier // BTC BSC
   tokenSymbol: string // BTC BNB
   tokenLogo: string
   coinType: string // based on slip-44 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
@@ -43,7 +43,7 @@ export class ChainService extends AutoBindService {
   }
 
   async getEnabledChains (): Promise<ChainData[]> {
-    return this.store.enabledChains.map(chainEnum => this.supportedChains.find(chain => chain.identifier === chainEnum)!)
+    return this.store.enabledChains.map(chainEnum => this.supportedChains.find(chain => chain.unikeySymbol === chainEnum)!)
   }
 
   async enableChain (id: KeyIdentifier): Promise<void> {
