@@ -12,7 +12,7 @@ export interface ChainData {
   identifier: KeyIdentifier // BTC BSC
   tokenSymbol: string // BTC BNB
   tokenLogo: string
-  coinType: number // based on slip-44 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+  coinType: string // based on slip-44 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
   chainId?: string // based on eip-155, mainly used for Ethereum https://chainlist.org/
   logo: string
   HDKeyringType: KeyringType

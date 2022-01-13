@@ -1,13 +1,13 @@
 import LRU from 'lru-cache'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { UNISIGN_ORIGIN } from '~/constants'
+import { KeyIdentifier, UNISIGN_ORIGIN } from '~/constants'
 
 export interface SiteData {
   origin: string
   name: string
   icon: string
 
-  chain_id: string // '0x123'
+  unikeySymbol: KeyIdentifier
 
   isPinned: boolean
   hasSigned: boolean
@@ -59,10 +59,11 @@ export class SiteService {
     return this.lrcCache.has(origin)
   }
 
-  addSite (site: SiteData) {
+  addSite (site: Pick<SiteData, 'name'|'icon'|'origin'|'unikeySymbol'>) {
     this.lrcCache.set(origin, {
       ...site,
       isPinned: false,
+      hasSigned: false,
     })
 
     this.sync()
@@ -138,8 +139,8 @@ export class SiteService {
     return this.lrcCache.values().sort((a, b) => weight(a) - weight(b))
   }
 
-  getSitesByChainId (chain: string) {
-    return this.lrcCache.values().filter(site => site.chain_id === chain)
+  getSitesByUnikeySymbol (unikeySymbol: string) {
+    return this.lrcCache.values().filter(site => site.unikeySymbol === unikeySymbol)
   }
 }
 

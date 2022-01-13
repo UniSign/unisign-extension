@@ -3,10 +3,12 @@ import { KeyringType } from '~/background/services/keyring/types'
 
 export const UNISIGN_ORIGIN = 'https://unisign.org'
 
+// todo: rename to KeySymbol or something like that
 export enum KeyIdentifier {
   BTC = 'BTC',
   DOGE = 'DOGE',
   CKB = 'CKB',
+  // OpenPGP = 'OpenPGP',
 }
 
 export const CHAINS: Record<KeyIdentifier, ChainData> = {
@@ -14,7 +16,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     name: 'Bitcoin',
     identifier: KeyIdentifier.BTC,
     tokenSymbol: KeyIdentifier.BTC,
-    coinType: 0,
+    coinType: '0',
     chainId: undefined,
     logo: 'key-btc',
     tokenLogo: '',
@@ -25,7 +27,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     name: 'Doge',
     identifier: KeyIdentifier.DOGE,
     tokenSymbol: KeyIdentifier.DOGE,
-    coinType: 3,
+    coinType: '3',
     chainId: undefined,
     logo: 'key-doge',
     tokenLogo: '',
@@ -36,7 +38,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     name: 'Nervos',
     identifier: KeyIdentifier.CKB,
     tokenSymbol: KeyIdentifier.CKB,
-    coinType: 309,
+    coinType: '309',
     chainId: undefined,
     logo: 'key-ckb',
     tokenLogo: '',

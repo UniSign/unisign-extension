@@ -21,6 +21,9 @@ export enum HardwareBrand {
 }
 
 export interface UnikeyBase {
+  // used to identify the type of unikey(CHAINS) across unisign-extension
+  keySymbol: KeyIdentifier
+
   key: string
   nickname: string
   hidden: boolean
@@ -28,21 +31,17 @@ export interface UnikeyBase {
   keyType: UnikeyType
   keyringType: KeyringType
 
-  keyId?: KeyIdentifier
-
   brand?: WalletConnectBrand | HardwareBrand
   brandName?: string
 }
 
 export interface UnikeyChain extends UnikeyBase {
   keyType: UnikeyType.blockchain
-
-  keyId: KeyIdentifier
 }
 
 export interface UniKeyOpenPGP extends UnikeyBase {
+  // keySymbol: KeyIdentifier.OpenPGP
   keyType: UnikeyType.openPGP
-
   keyringType: KeyringType.OpenPGP
 }
 
