@@ -1,28 +1,34 @@
+<style>
+.unisign-panel {
+  background-color: red;
+}
+</style>
 <template>
-  <div class="fixed right-0 bottom-0 m-5 z-100 flex font-sans select-none leading-1em" @click="lock">
+  <div class="unisign-panel" @click="lock">
     UniSign {{ isLocked }}
+
+    <button @click="onClickConnect">
+      connect
+    </button>
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
-import { wallet } from '~/ui/controllers/wallet'
-import 'virtual:windi.css'
 
 export default {
   setup () {
     const isLocked = ref(false)
-
     return {
       isLocked,
 
-      async lock () {
-        if (isLocked.value) {
-          isLocked.value = await wallet.unlock()
-        }
-        else {
-          isLocked.value = await wallet.lock()
-        }
+      async onClickConnect () {
+        const res = await window.unisign.request({
+          method: 'getCurrentKeyType',
+        })
+
+        // eslint-disable-next-line no-alert
+        window.alert(res)
       },
     }
   },

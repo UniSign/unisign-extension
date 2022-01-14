@@ -1,3 +1,4 @@
+import browser from 'webextension-polyfill'
 import { messageBridge, Endpoint } from '~/utils/messages'
 import { siteService } from '~/background/services/site'
 

@@ -1,4 +1,5 @@
 import './polyfill'
+import browser from 'webextension-polyfill'
 import { setupWalletController, walletController } from '~/background/controllers/wallet'
 import { setupProviderController } from '~/background/controllers/provider'
 import { UIPopupName } from '~/constants'

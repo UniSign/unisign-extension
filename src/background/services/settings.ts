@@ -1,3 +1,4 @@
+import browser from 'webextension-polyfill'
 import { AutoBindService } from '~/background/services/base/auto-bind'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { LocaleOptions, LOCALES } from '~/constants'
