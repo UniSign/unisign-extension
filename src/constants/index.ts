@@ -11,6 +11,8 @@ export enum KeyIdentifier {
   // OpenPGP = 'OpenPGP',
 }
 
+export const HDKeyrings = [KeyringType.BtcHD, KeyringType.EthHD]
+
 export const CHAINS: Record<KeyIdentifier, ChainData> = {
   [KeyIdentifier.BTC]: {
     name: 'Bitcoin',

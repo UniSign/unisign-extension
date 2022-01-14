@@ -3,6 +3,7 @@
   position: relative;
   background-color: #DCE5F0;
   min-height: 630px;
+  padding-bottom: 38px;
   .top-bg {
     width: 100%;
     height: 201px;
@@ -202,7 +203,7 @@
     }
   }
   .await-connect-box {
-    margin: 16px auto 18px;
+    margin: 16px auto 0px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.3);
     .status-item {
@@ -236,30 +237,38 @@
     color: #2A67C5;
     cursor: pointer;
   }
-  .qr-code-box {
-    padding: 24px;
+  .qr-code-box{
     .qr-code {
-      margin: 25px auto 15px;
+      margin: 42px auto 8px;
       display: block;
       width: 206px;
       height: 206px;
     }
     .qr-code-detail {
+      margin: 0 auto 64px;
       padding: 8px 14px;
+      position: relative;
       border: 1px solid rgba(191, 191, 191, 0.09);
       border-radius: 8px;
+      width: 220px;
       font-size: $detail-font-size;
       font-weight: bold;
       text-align: center;
       line-height: 16px;
       word-wrap: break-word;
       word-break: break-all;
+      cursor: pointer;
       background: #F9F7F6;
+      &:hover {
+        .popover {
+          display: block;
+        }
+      }
     }
   }
   .switch-key-box {
-    padding-bottom: 61px;
     .switch-key-content {
+      padding-bottom: 61px;
       .derived-box,.imported-box {
         padding: 0 10px;
         margin-bottom: 8px;
@@ -356,6 +365,7 @@
 
 <template>
   <div class="page-begin">
+    <UniMsg :visible="canShowMsg" content="Copied" @close="canShowMsg= false"></UniMsg>
     <div class="top-bg"></div>
     <div ref="topLineBoxRef" class="top-line-box">
       <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
@@ -377,9 +387,9 @@
     <div class="central-content">
       <div class="address-part">
         <h2>Bitcoin Address</h2>
-        <p>0x2c238D3A7cd18E698DB5A4f7d5AdbeCc22B68a0e</p>
+        <p>{{ currentUnikey?.key }}</p>
         <div>
-          <div class="icon-wrapper mr-[16px] cursor-pointer">
+          <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
             <Iconfont name="copy" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
               Copy Address
@@ -449,27 +459,29 @@
     </div>
     <Ironman></Ironman>
     <UniDialog class="qr-code-box" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
-      <div class="qr-code">
-      </div>
-      <div class="qr-code-detail">
-        0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD
+      <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
+      <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
+        {{ currentUnikey?.key }}
+        <div class="popover popover-top">
+          Copy Address
+        </div>
       </div>
     </UniDialog>
     <UniDialog class="switch-key-box" :visible="isShowSwitchKeyDialog" title="Switch Key" @cancel="handleSwitchCancel">
       <div class="switch-key-content">
         <div class="derived-box">
           <h2>Derived from Mnemonic</h2>
-          <div>
+          <div v-for="unikey in derivedUniKeys" :key="unikey.key">
             <img class="w-[26px] h-[26px]" src="/assets/page-addAddress/key-bch.png">
-            <span>0xydsh…38dfsdf</span>
+            <span>{{ substrKey(unikey.key) }}</span>
             <Iconfont class="icon-font" name="checked" size="12" color="#FFBC5D"></Iconfont>
           </div>
         </div>
         <div class="imported-box">
           <h2>Imported</h2>
-          <div>
+          <div v-for="unikey in importedUniKeys" :key="unikey.key">
             <img class="w-[26px] h-[26px]" src="/assets/page-addAddress/key-bch.png">
-            <span>0xydsh…38dfsdf</span>
+            <span>{{ substrKey(unikey.key) }}</span>
             <Iconfont class="icon-font" name="unchecked" size="12" color="#E1E1E1"></Iconfont>
           </div>
         </div>
@@ -486,17 +498,27 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import ClipboardJS from 'clipboard'
+import QrcodeVue from 'qrcode.vue'
 import { wallet } from '~/ui/controllers/wallet'
+import { HDKeyrings } from '~/constants'
+// import { Unikey } from '~/background/services/unikey'
 
 export default {
   name: 'PageBegin',
+  components: {
+    QrcodeVue,
+  },
   setup (props, context) {
     const router = useRouter()
 
+    const canShowMsg = ref(false)
+
+    // animation
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
     const topLineBoxRef = ref(null)
-    onMounted(() => {
+    onMounted(async () => {
       window.onscroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         const transferScrollTop = scrollTop / 30
@@ -516,6 +538,26 @@ export default {
       window.onscroll = null
     })
 
+    // const currentUnikey = ref<Unikey| null>(null)
+    // const visibleUnikeys = ref<Unikey[]>([])
+    const currentUnikey = ref(null)
+    const visibleUnikeys = ref([])
+    const derivedUniKeys = ref([])
+    const importedUniKeys = ref([])
+    onMounted(async () => {
+      currentUnikey.value = await wallet.getCurrentUnikey()
+      visibleUnikeys.value = await wallet.getVisibleUnikeys()
+      derivedUniKeys.value = visibleUnikeys.value.filter(key => HDKeyrings.includes(key.keyringType))
+      importedUniKeys.value = visibleUnikeys.value.filter(key => !HDKeyrings.includes(key.keyringType))
+      console.log(currentUnikey.value, 'currentUnikey.value')
+      console.log(visibleUnikeys.value, 'visibleUnikeys.value')
+      console.log(derivedUniKeys.value, 'derivedUniKeys.value')
+    })
+    const substrKey = (str) => {
+      const len = str.length || 0
+      return `${str.substr(0, 6)}...${str.substr(len - 7)}`
+    }
+
     // lock
     const isLocked = ref(false)
     async function onClickLock () {
@@ -524,8 +566,21 @@ export default {
       isLocked.value && router.push('/locked')
     }
 
+    // settings
     const onClickSettings = () => {
       router.push('/settings')
+    }
+
+    // copy
+    const handleCopyAddress = () => {
+      const clipboard = new ClipboardJS('.copy-address')
+      clipboard.on('success', (e) => {
+        canShowMsg.value = true
+        clipboard.destroy()
+      })
+      clipboard.on('error', (e) => {
+        clipboard.destroy()
+      })
     }
 
     const isShowQRCodeDialog = ref(false)
@@ -538,6 +593,8 @@ export default {
       isShowSwitchKeyDialog.value = false
     }
     return {
+      canShowMsg,
+
       iconFontColor,
       isScroll,
       topLineBoxRef,
@@ -545,11 +602,20 @@ export default {
       onClickLock,
       onClickSettings,
 
+      handleCopyAddress,
+
       isShowQRCodeDialog,
       handleQRCancel,
 
       isShowSwitchKeyDialog,
       handleSwitchCancel,
+
+      // unikey
+      currentUnikey,
+      visibleUnikeys,
+      derivedUniKeys,
+      importedUniKeys,
+      substrKey,
     }
   },
 }

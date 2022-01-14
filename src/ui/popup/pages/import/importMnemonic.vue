@@ -26,14 +26,14 @@
   <div class="page-import-mnemonic">
     <UniTab title="Import Mnemonic"></UniTab>
     <div class="central-content">
-      <h2>Import {{ $route.params.key }} Mnemonic</h2>
+      <h2>Import Mnemonic</h2>
       <UniTextArea
         ref="mnemonicRef"
         v-model="mnemonic"
         class="block mt-[32px] mx-auto"
         height="130px"
         validate-text="Incorrect mnemonic"
-        :placeholder="`Enter ${$route.params.key} mnemonic, separated by space`"
+        :placeholder="`Enter mnemonic, separated by space`"
       ></UniTextArea>
       <UniBtn :disabled="!mnemonic" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>
@@ -42,23 +42,27 @@
 </template>
 
 <script>
+import '~/background/polyfill'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { validateMnemonic } from 'bip39'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageImportMnemonic',
   setup () {
     const router = useRouter()
     const route = useRoute()
+
     const mnemonic = ref('')
     const mnemonicRef = ref(null)
-    const onClickSubmit = () => {
+    const onClickSubmit = async () => {
       if (!mnemonic.value) return
-      if (mnemonic.value.length < 5) {
+      if (!validateMnemonic(mnemonic.value)) {
         mnemonicRef.value.validate()
-        return
       }
-      router.push(`/addAddressSuccess/${route.params.key}`)
+      await wallet.importMnemonic(mnemonic.value)
+      router.push('/addAddressSuccess')
     }
     return {
       onClickSubmit,

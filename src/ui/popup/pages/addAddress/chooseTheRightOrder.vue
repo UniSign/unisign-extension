@@ -101,6 +101,7 @@ export default {
     const mnemonicChooseArr = ref([])
     const mnemonicCorrectArr = ref([])
     onMounted(async () => {
+      console.log(route.query.mnemonic, 'route.query.mnemonic')
       mnemonicChooseArr.value = route.query.mnemonic.split(' ').sort(() => 0.5 - Math.random())
       mnemonicCorrectArr.value = route.query.mnemonic.split(' ')
     })

@@ -29,7 +29,7 @@
   <div class="page-import-private-key">
     <UniTab title="Import Private Key"></UniTab>
     <div class="central-content">
-      <h2>Import {{ $route.params.key }}</h2>
+      <h2>Import {{ keyName }}</h2>
       <h2>
         Private Key
       </h2>
@@ -38,7 +38,7 @@
         v-model="privateKey"
         class="block mt-[32px] mx-auto"
         validate-text="Incorrect private key"
-        :placeholder="`${$route.params.key} private key`"
+        :placeholder="`${keyName} private key`"
       ></UniTextArea>
       <UniBtn :disabled="!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>
@@ -49,26 +49,32 @@
 <script>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { CHAINS } from '~/constants'
 
 export default {
   name: 'PageImportPrivateKey',
   setup () {
     const router = useRouter()
     const route = useRoute()
+
     const privateKey = ref('')
     const privateKeyRef = ref(null)
-    const onClickSubmit = () => {
+    const keyName = CHAINS[route.params.key].name
+    const onClickSubmit = async () => {
       if (!privateKey.value) return
+      // todo:To be verified
       if (privateKey.value.length < 5) {
         privateKeyRef.value.validate()
         return
       }
-      router.push(`/addAddressSuccess/${route.params.key}`)
+      await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key].simpleKeyringType)
+      router.push('/addAddressSuccess')
     }
     return {
       onClickSubmit,
       privateKey,
       privateKeyRef,
+      keyName,
     }
   },
 }
