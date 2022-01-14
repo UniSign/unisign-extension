@@ -266,52 +266,6 @@
       }
     }
   }
-  .switch-key-box {
-    .switch-key-content {
-      padding-bottom: 61px;
-      .derived-box,.imported-box {
-        padding: 0 10px;
-        margin-bottom: 8px;
-        h2 {
-          margin: 16px 0 8px 16px;
-          font-size: $detail-font-size;
-          line-height: 16px;
-          color: #8D919C;
-        }
-        >div {
-          padding: 11px 16px 11px 8px;
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          &:hover {
-            background-color: #EEEEEE;
-          }
-          img {
-            margin-right: 12px;
-          }
-          span {
-            font-size: $detail-font-size;
-            font-weight: bold;
-            color: #242C3F;
-            line-height: 16px;
-          }
-          .icon-font {
-            margin-left: auto;
-          }
-        }
-      }
-    }
-    .switch-key-btn-box{
-      position: absolute;
-      bottom: 0;
-      padding: 12px;
-      width: 100%;
-      box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.06);
-      .switch-key-btn {
-        height: 37px;
-      }
-    }
-  }
 }
 
 .popover {
@@ -467,31 +421,7 @@
         </div>
       </div>
     </UniDialog>
-    <UniDialog class="switch-key-box" :visible="isShowSwitchKeyDialog" title="Switch Key" @cancel="handleSwitchCancel">
-      <div class="switch-key-content">
-        <div class="derived-box">
-          <h2>Derived from Mnemonic</h2>
-          <div v-for="unikey in derivedUniKeys" :key="unikey.key" @click="defaultCurrentUnikey.key = unikey.key">
-            <img class="w-[26px] h-[26px]" :src="getImageUrl(unikey.keySymbol)">
-            <span>{{ substrKey(unikey.key) }}</span>
-            <Iconfont class="icon-font" :name="unikey.key == defaultCurrentUnikey.key?'checked':'unchecked'" size="12" :color="unikey.key == defaultCurrentUnikey.key?'#FFBC5D':'#E1E1E1'"></Iconfont>
-          </div>
-        </div>
-        <div v-if="importedUniKeys.length" class="imported-box">
-          <h2>Imported</h2>
-          <div v-for="unikey in importedUniKeys" :key="unikey.key" @click="defaultCurrentUnikey.key = unikey.key">
-            <img class="w-[26px] h-[26px]" :src="getImageUrl(unikey.keySymbol)">
-            <span>{{ substrKey(unikey.key) }}</span>
-            <Iconfont class="icon-font" :name="unikey.key == defaultCurrentUnikey.key?'checked':'unchecked'" size="12" :color="unikey.key == defaultCurrentUnikey.key?'#FFBC5D':'#E1E1E1'"></Iconfont>
-          </div>
-        </div>
-      </div>
-      <div class="switch-key-btn-box">
-        <UniBtn class="switch-key-btn" @click="onClickSetCurrentUnikey(defaultCurrentUnikey)">
-          Add Key
-        </UniBtn>
-      </div>
-    </UniDialog>
+    <switchKeyDialog v-if="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></switchKeyDialog>
   </div>
 </template>
 
@@ -500,6 +430,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
+import switchKeyDialog from './switchKeyDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
 
@@ -507,6 +438,7 @@ export default {
   name: 'PageBegin',
   components: {
     QrcodeVue,
+    switchKeyDialog,
   },
   setup (props, context) {
     const router = useRouter()
@@ -568,39 +500,15 @@ export default {
     }
 
     const isShowSwitchKeyDialog = ref(false)
-    const handleSwitchCancel = () => {
-      isShowSwitchKeyDialog.value = false
-    }
 
-    // const currentUnikey = ref<Unikey| null>(null)
-    // const visibleUnikeys = ref<Unikey[]>([])
     const currentUnikey = ref(null)
-    const defaultCurrentUnikey = ref(null)
-    const visibleUnikeys = ref([])
-    const derivedUniKeys = ref([])
-    const importedUniKeys = ref([])
+    async function getCurrentUnikey () {
+      console.log('1111111111')
+      currentUnikey.value = await wallet.getCurrentUnikey()
+    }
     onMounted(async () => {
-      currentUnikey.value = await wallet.getCurrentUnikey()
-      defaultCurrentUnikey.value = currentUnikey.value
-      visibleUnikeys.value = await wallet.getVisibleUnikeys()
-      derivedUniKeys.value = visibleUnikeys.value.filter(key => HDKeyrings.includes(key.keyringType))
-      importedUniKeys.value = visibleUnikeys.value.filter(key => !HDKeyrings.includes(key.keyringType))
-      console.log(currentUnikey.value, 'currentUnikey.value')
-      console.log(visibleUnikeys.value, 'visibleUnikeys.value')
-      console.log(derivedUniKeys.value, 'derivedUniKeys.value')
+      await getCurrentUnikey()
     })
-    async function onClickSetCurrentUnikey (unikey) {
-      await wallet.setCurrentUnikey(unikey.key)
-      currentUnikey.value = await wallet.getCurrentUnikey()
-      handleSwitchCancel()
-    }
-    const substrKey = (str) => {
-      const len = str.length || 0
-      return `${str.substr(0, 6)}...${str.substr(len - 7)}`
-    }
-    const getImageUrl = (key) => {
-      return `/assets/page-addAddress/key-${key?.toLowerCase()}.png`
-    }
 
     return {
       canShowMsg,
@@ -618,17 +526,8 @@ export default {
       handleQRCancel,
 
       isShowSwitchKeyDialog,
-      handleSwitchCancel,
-
-      // unikey
+      getCurrentUnikey,
       currentUnikey,
-      defaultCurrentUnikey,
-      visibleUnikeys,
-      derivedUniKeys,
-      importedUniKeys,
-      substrKey,
-      getImageUrl,
-      onClickSetCurrentUnikey,
     }
   },
 }
