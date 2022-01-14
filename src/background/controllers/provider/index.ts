@@ -205,7 +205,7 @@ export const providerController = new ProviderController()
 export function setupProviderController () {
   messageBridge.on('provider-to-background', async (data) => {
     const tabId = data.sender.tabId
-    const session = sessionService.get(tabId)!
+    const session = sessionService.getOrCreate(tabId)
 
     await providerController.route({
       data: data.data,

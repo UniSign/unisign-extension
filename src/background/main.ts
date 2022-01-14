@@ -1,8 +1,7 @@
 import './polyfill'
 import { setupWalletController, walletController } from '~/background/controllers/wallet'
 import { setupProviderController } from '~/background/controllers/provider'
-import { sessionService } from '~/background/services/session'
-import { UIPopupName, UITabName } from '~/constants'
+import { UIPopupName } from '~/constants'
 
 // only on dev mode
 if (import.meta.hot) {
@@ -24,14 +23,6 @@ browser.runtime.onConnect.addListener((port) => {
     port.onDisconnect.addListener(() => {
       walletController.setIsPopupOpened(false)
     })
-  }
-
-  if (port.name === UITabName) {
-    const sessionId = port?.sender?.tab?.id
-
-    if (sessionId) {
-      sessionService.getOrCreate(sessionId)
-    }
   }
 })
 

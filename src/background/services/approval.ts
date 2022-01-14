@@ -60,7 +60,7 @@ export class ApprovalService extends AutoBindService {
   }
 
   async requestApproval (data: ApprovalData, windowProps?: CreateWindowProps) {
-    // currently we only support one approval at a time
+    // currently, we only support one approval at a time
     if (this.approval) {
       throw ethErrors.provider.userRejectedRequest('There is already a approval, please wait for it resolves')
     }

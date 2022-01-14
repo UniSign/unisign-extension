@@ -49,15 +49,20 @@ export class SessionService {
 
   create (tabId: number, data?: SessionData): Session {
     const session = new Session(data)
+    session.id = tabId
     this.map.set(tabId, session)
 
     return session
   }
 
-  update (session: Session, data: Pick<SessionData, 'origin' | 'icon' | 'name'>) {
-    session.origin = data.origin
-    session.icon = data.icon
-    session.name = data.name
+  update (sessionId: number, data: Pick<SessionData, 'origin' | 'icon' | 'name'>) {
+    const session = this.map.get(sessionId)
+
+    if (session) {
+      session.origin = data.origin
+      session.icon = data.icon
+      session.name = data.name
+    }
   }
 
   getOrCreate (tabId: number): Session {

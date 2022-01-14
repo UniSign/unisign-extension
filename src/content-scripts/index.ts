@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { createApp } from 'vue'
 import App from '../ui/inpage/App.vue'
-import { UITabName } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 import './provider'
 
@@ -33,8 +32,4 @@ messageBridge.allowWindowMessaging()
   ;(document.head || document.documentElement).appendChild(script)
   // remove the injecting tag when loaded
   script.onload = () => script.parentNode?.removeChild(script)
-
-  // todo: this can be replaced by webext sendMessage
-  // notify background that there is a new tab
-  browser.runtime.connect(undefined, { name: UITabName })
 })()
