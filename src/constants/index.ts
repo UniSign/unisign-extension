@@ -14,7 +14,7 @@ export enum KeyIdentifier {
 export const CHAINS: Record<KeyIdentifier, ChainData> = {
   [KeyIdentifier.BTC]: {
     name: 'Bitcoin',
-    identifier: KeyIdentifier.BTC,
+    unikeySymbol: KeyIdentifier.BTC,
     tokenSymbol: KeyIdentifier.BTC,
     coinType: '0',
     chainId: undefined,
@@ -25,7 +25,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
   },
   [KeyIdentifier.DOGE]: {
     name: 'Doge',
-    identifier: KeyIdentifier.DOGE,
+    unikeySymbol: KeyIdentifier.DOGE,
     tokenSymbol: KeyIdentifier.DOGE,
     coinType: '3',
     chainId: undefined,
@@ -36,7 +36,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
   },
   [KeyIdentifier.CKB]: {
     name: 'Nervos',
-    identifier: KeyIdentifier.CKB,
+    unikeySymbol: KeyIdentifier.CKB,
     tokenSymbol: KeyIdentifier.CKB,
     coinType: '309',
     chainId: undefined,

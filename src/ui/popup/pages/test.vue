@@ -52,6 +52,20 @@
     <fieldset>
       <legend>Setup</legend>
 
+      <button @click="onClickReset">
+        reset
+      </button>
+      isSetup: {{ isSetup }}
+      <br>
+
+      <button @click="onClickSetup">
+        set password
+      </button>
+      <label>
+        <input v-model="passwordForSetup">
+        password
+      </label>
+
       <div>
         <button @click="onClickGenerateMnemonic">
           generate mnemonic
@@ -62,20 +76,6 @@
           import mnemonic
         </button>
       </div>
-
-      <button @click="onClickReset">
-        reset
-      </button>
-      isSetup: {{ isSetup }}
-      <br>
-
-      <button @click="onClickSetup">
-        setup
-      </button>
-      <label>
-        <input v-model="passwordForSetup">
-        password
-      </label>
     </fieldset>
 
     <fieldset>
@@ -101,23 +101,23 @@
 
       <b>enabledChains:</b>
       <ul>
-        <li v-for="chain in enabledChains" :key="chain.identifier">
-          {{ chain.name }} {{ chain.identifier }}
+        <li v-for="chain in enabledChains" :key="chain.unikeySymbol">
+          {{ chain.name }} {{ chain.unikeySymbol }}
         </li>
       </ul>
 
       <hr>
       <b>supportedChains:</b>
       <ul>
-        <li v-for="chain in supportedChains" :key="chain.identifier">
-          {{ chain.name }} {{ chain.identifier }}
-          <button @click="onClickEnableChain(chain.identifier)">
+        <li v-for="chain in supportedChains" :key="chain.unikeySymbol">
+          {{ chain.name }} {{ chain.unikeySymbol }}
+          <button @click="onClickEnableChain(chain.unikeySymbol)">
             ✅
           </button>
-          <button @click="onClickDisableChain(chain.identifier)">
+          <button @click="onClickDisableChain(chain.unikeySymbol)">
             ❌
           </button>
-          <button @click="onClickDeriveAddress(chain.identifier)">
+          <button @click="onClickDeriveAddress(chain.unikeySymbol)">
             Derive
           </button>
         </li>
@@ -238,10 +238,11 @@ export default {
     }
     async function onClickImportMnemonic () {
       await wallet.importMnemonic(mnemonic.value)
+      await onUnikeysChanged()
+      isSetup.value = await wallet.isSetup()
     }
     async function onClickSetup () {
       await wallet.setupWallet(passwordForSetup.value)
-      isSetup.value = await wallet.isSetup()
     }
     async function onClickReset () {
       await wallet.reset()

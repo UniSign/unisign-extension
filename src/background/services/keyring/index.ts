@@ -20,7 +20,7 @@ import {
   KeyringType,
   SerializedKeyringData,
 } from '~/background/services/keyring/types'
-import { Unikey, UniKeyChainSimple, UnikeyChainHD, UnikeyType } from '~/background/services/unikey'
+import { Unikey, UniKeyChainSimple, UnikeyChainHD } from '~/background/services/unikey'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { storage } from '~/background/tools/storage'
 
@@ -94,9 +94,9 @@ export class KeyringService extends EventEmitter {
     this.keyrings = []
 
     const storageKey = 'keyring'
-    const store = await loadDiskStore(storageKey, {
+    const store = await loadDiskStore<StoreData>(storageKey, {
       vault: '',
-    } as StoreData)
+    })
 
     this.store = new ObservableStore(store)
     this.store.subscribe(value => storage.set(storageKey, value))
@@ -411,7 +411,6 @@ export class KeyringService extends EventEmitter {
         .then(accounts => accounts.map((account) => {
           return {
             key: account,
-            keyType: UnikeyType.blockchain,
             keyringType: keyring.type,
           } as UnikeyChainHD | UniKeyChainSimple
         })),

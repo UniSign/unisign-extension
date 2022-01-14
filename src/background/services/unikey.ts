@@ -2,7 +2,7 @@ import { AutoBindService } from '~/background/services/base/auto-bind'
 import { KeyringType } from '~/background/services/keyring/types'
 import { personalService } from '~/background/services/personal'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { KeyIdentifier } from '~/constants'
+import { CHAINS, KeyIdentifier } from '~/constants'
 
 export enum UnikeyType {
   blockchain = 'blockchain',
@@ -80,9 +80,9 @@ class UnikeyService extends AutoBindService {
   }
 
   async init () {
-    this.store = await loadDiskStore('unikey', {
+    this.store = await loadDiskStore<UnikeyStore>('unikey', {
       unikeys: [],
-    } as UnikeyStore)
+    })
   }
 
   findUnikeyByKey (key: string) {
@@ -142,8 +142,26 @@ class UnikeyService extends AutoBindService {
     uniKey.hidden = false
   }
 
+  polyfillUnikeys (unikeys: Unikey[]): Unikey[] {
+    return unikeys.map((unikey, index) => {
+      const chain = Object.values(CHAINS).find(chain => [chain.HDKeyringType, chain.simpleKeyringType].includes(unikey.keyringType))
+
+      if (chain) {
+        return {
+          ...unikey,
+          keySymbol: chain.unikeySymbol,
+          nickname: `Mnemonic ${index}`,
+          hidden: false,
+          keyType: UnikeyType.blockchain,
+        }
+      }
+
+      return unikey
+    })
+  }
+
   setUnikeys (unikeys: Unikey[]) {
-    this.store.unikeys = unikeys
+    this.store.unikeys = this.polyfillUnikeys(unikeys)
   }
 
   async getUnikeys () {

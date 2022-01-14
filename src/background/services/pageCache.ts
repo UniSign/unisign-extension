@@ -18,7 +18,7 @@ export class PageCacheService {
   }
 
   async init () {
-    this.store = await loadDiskStore('pageCache')
+    this.store = await loadDiskStore<PageCacheStore>('pageCache')
   }
 
   has () {
