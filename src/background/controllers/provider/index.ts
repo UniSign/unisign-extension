@@ -1,5 +1,5 @@
-import 'reflect-metadata'
 import { ethErrors } from 'eth-rpc-errors'
+import 'reflect-metadata'
 import { ApprovalPage, approvalService } from '~/background/services/approval'
 import { keyringService } from '~/background/services/keyring'
 import { permissionService } from '~/background/services/permission'
@@ -59,8 +59,16 @@ export class ProviderController {
     return unikey
   }
 
+  @Reflect.metadata('SAFE', true)
   tabCheckin ({ session, data: { params } }: ProviderRequest<SessionData>) {
-    sessionService.update(session, params[0])
+    sessionService.update(session.id, params[0])
+  }
+
+  @Reflect.metadata('SAFE', true)
+  async getProviderState () {
+    return {
+      isUnlocked: !(await keyringService.isLocked()),
+    }
   }
 
   async getCurrentKey ({ session: { origin } }: ProviderRequest): Promise<KeyObjectType|null> {
@@ -80,6 +88,28 @@ export class ProviderController {
           chainId: chain.chainId || '',
           chainName: chain.name,
           symbol: chain.unikeySymbol,
+        },
+      }
+    }
+    else {
+      return null
+    }
+  }
+
+  @Reflect.metadata('SAFE', true)
+  async getCurrentKeyType (): Promise<KeyObjectType | null> {
+    const currentUnikey = await this._getCurrentUnikey()
+
+    if (currentUnikey) {
+      const chain = CHAINS[currentUnikey.keySymbol]
+
+      return {
+        type: currentUnikey.keyType,
+        meta: {
+          coinType: chain.coinType,
+          chainId: chain.chainId || '',
+          chainName: chain.name,
+          symbol: chain.tokenSymbol,
         },
       }
     }
@@ -126,33 +156,12 @@ export class ProviderController {
     }
   }
 
-  @Reflect.metadata('SAFE', true)
-  async getCurrentKeyType (): Promise<KeyObjectType | null> {
-    const currentUnikey = await this._getCurrentUnikey()
-
-    if (currentUnikey) {
-      const chain = CHAINS[currentUnikey.keySymbol]
-
-      return {
-        type: currentUnikey.keyType,
-        meta: {
-          coinType: chain.coinType,
-          chainId: chain.chainId || '',
-          chainName: chain.name,
-          symbol: chain.tokenSymbol,
-        },
-      }
-    }
-    else {
-      return null
-    }
-  }
-
-  async route (req: ProviderRequest) {
+  async route (req: ProviderRequest): Promise<any> {
     const { data: { method }, session } = req
     // @ts-ignore
     const func = this[method] as valueOf<ProviderController>
 
+    // check method exist
     if (!func) {
       throw ethErrors.rpc.methodNotFound({
         message: `method [${method}] doesn't has corresponding handler`,
@@ -160,7 +169,16 @@ export class ProviderController {
       })
     }
 
+    // todo: connect before getCurrentKeyType
     if (!Reflect.getMetadata('SAFE', this, method)) {
+      // check wallet is setup
+      const isSetup = await keyringService.isSetup()
+      if (!isSetup) {
+        throw ethErrors.provider.userRejectedRequest({
+          message: 'wallet is not set up',
+        })
+      }
+
       // check if locked
       const isLocked = await keyringService.isLocked()
       if (isLocked) {
@@ -195,7 +213,13 @@ export class ProviderController {
 
     if (func) {
       // @ts-ignore
-      func.call(this, req)
+      return func.call(this, req)
+    }
+    else {
+      throw ethErrors.rpc.methodNotFound({
+        message: `method [${method}] is not supported`,
+        data: req.data,
+      })
     }
   }
 }
@@ -207,7 +231,7 @@ export function setupProviderController () {
     const tabId = data.sender.tabId
     const session = sessionService.getOrCreate(tabId)
 
-    await providerController.route({
+    return await providerController.route({
       data: data.data,
       session,
       needApproval: false,

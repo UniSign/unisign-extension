@@ -1,4 +1,6 @@
+import './inject-inpage-app'
 import { EventEmitter } from 'events'
+import { ethErrors } from 'eth-rpc-errors'
 import { onDomReady } from './utils'
 import { messageBridge } from '~/utils/messages'
 
@@ -11,7 +13,7 @@ export class UniSignProvider extends EventEmitter {
   // private _isInitialized = false
   private _isUnlocked = false
 
-  isConnected () {
+  async isConnected () {
     return this._isConnected
   }
 
@@ -25,7 +27,7 @@ export class UniSignProvider extends EventEmitter {
     this.init()
   }
 
-  private init () {
+  private async init () {
     document.addEventListener('visibilitychange', () => {
       this._requestPromiseCheckVisibility()
     })
@@ -36,17 +38,24 @@ export class UniSignProvider extends EventEmitter {
 
     onDomReady(($) => {
       const origin = window?.location.origin
-      const icon = ($('head link[rel~="icon"]') as HTMLLinkElement)?.href || ($('head meta[itemprop="image"]') as HTMLMetaElement).content
+      const icon = ($('head link[rel~="icon"]') as HTMLLinkElement)?.href || ($('head meta[itemprop="image"]') as HTMLMetaElement)?.content
 
       const name = document.title || ($('head > meta[name="title"]') as HTMLMetaElement)?.content || origin
 
-      messageBridge.send('provider-to-background', {
+      this.request({
         method: 'tabCheckin',
         params: [{
           icon, name, origin,
         }],
-      }, 'background')
+      })
     })
+
+    const { isUnlocked } = await this.request({
+      method: 'getProviderState',
+    })
+
+    this._isUnlocked = isUnlocked
+    this._isConnected = true
   }
 
   private _requestPromiseCheckVisibility () {
@@ -59,8 +68,10 @@ export class UniSignProvider extends EventEmitter {
   }
 
   request (data: any) {
-    // eslint-disable-next-line no-console
-    console.log(data)
+    if (!data) {
+      throw ethErrors.rpc.invalidRequest()
+    }
+    return messageBridge.send('provider-to-background', data, 'background')
   }
 }
 
