@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .settings-box {
-    padding: 12px 16px;
+    padding: 70px 16px 12px;
     .settings-item-box {
       width: 100%;
       height: 66px;
@@ -36,32 +36,35 @@
   <div class="page-language-settings">
     <UniTab title="language"></UniTab>
     <div class="settings-box">
-      <div v-for="(item,index) in settingsArr" :key="index" class="settings-item-box" @click="onChooseItem(index)">
-        <span>{{ item.value }}</span>
-        <Iconfont class="icon-font" :name="item.status?'checked':'unchecked'" size="12" :color="item.status?'#FFBC5D':'#E1E1E1'"></Iconfont>
+      <div v-for="lang in LocaleOptions" :key="lang.value" class="settings-item-box" @click="onChangeLocale(lang.value)">
+        <span>{{ lang.text }}</span>
+        <Iconfont class="icon-font" :name="lang.value==locale?'checked':'unchecked'" size="12" :color="lang.value==locale?'#FFBC5D':'#E1E1E1'"></Iconfont>
       </div>
     </div>
     <Ironman></Ironman>
   </div>
 </template>
 
-<script>
-import { reactive } from 'vue'
+<script lang="ts">
+import { wallet } from '~/ui/controllers/wallet'
+import { LocaleOptions, LOCALES } from '~/constants'
 
 export default {
   name: 'PageSettings',
   setup () {
-    const settingsArr = reactive([
-      { key: 'English', value: 'English', status: true },
-      { key: '简体中文', value: '简体中文', status: false },
-    ])
-    const onChooseItem = (index) => {
-      settingsArr.map(item => item.status = false)
-      settingsArr[index].status = true
+    const locale = ref('')
+    async function onChangeLocale (value:LOCALES) {
+      locale.value = await wallet.setLocale(value)
     }
+    onMounted(async () => {
+      locale.value = await wallet.getLocale()
+    })
+
     return {
-      settingsArr,
-      onChooseItem,
+      locale,
+      LOCALES,
+      LocaleOptions,
+      onChangeLocale,
     }
   },
 }

@@ -1,5 +1,8 @@
 <style lang="scss" scoped>
     .tab-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 58px;
       box-shadow: 0px 1px 0px 0px rgba(141, 145, 156, 0.12);

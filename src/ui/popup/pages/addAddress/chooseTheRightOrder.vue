@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .central-content {
-    padding: 32px 22px 24px 22px;
+    padding: 90px 22px 24px 22px;
     >h2 {
       margin-bottom: 24px;
       text-align: center;

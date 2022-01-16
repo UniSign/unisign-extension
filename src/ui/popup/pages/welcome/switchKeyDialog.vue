@@ -1,6 +1,12 @@
 <style lang="scss" scoped>
 .switch-key-box {
   .switch-key-content {
+    overflow: hidden;
+    overflow-y: scroll;
+    max-height: 321px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     padding-bottom: 61px;
     .derived-box,.imported-box {
       padding: 0 10px;
@@ -13,6 +19,7 @@
       }
       >div {
         padding: 11px 16px 11px 8px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         cursor: pointer;
@@ -39,7 +46,8 @@
     bottom: 0;
     padding: 12px;
     width: 100%;
-    box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06);
+    background-color: #ffffff;
     .switch-key-btn {
       height: 37px;
     }
@@ -54,7 +62,7 @@
         <h2>Derived from Mnemonic</h2>
         <div v-for="unikey in derivedUniKeys" :key="unikey.key" @click="onClickSetCurrentUnikey(unikey)">
           <img class="w-[26px] h-[26px]" :src="getImageUrl(unikey.keySymbol)">
-          <span>{{ substrKey(unikey.key) }}</span>
+          <span>{{ substringKey(unikey.key) }}</span>
           <Iconfont class="icon-font" :name="unikey.key == currentUnikey.key?'checked':'unchecked'" size="12" :color="unikey.key == currentUnikey.key?'#FFBC5D':'#E1E1E1'"></Iconfont>
         </div>
       </div>
@@ -62,7 +70,7 @@
         <h2>Imported</h2>
         <div v-for="unikey in importedUniKeys" :key="unikey.key" @click="onClickSetCurrentUnikey(unikey)">
           <img class="w-[26px] h-[26px]" :src="getImageUrl(unikey.keySymbol)">
-          <span>{{ substrKey(unikey.key) }}</span>
+          <span>{{ substringKey(unikey.key) }}</span>
           <Iconfont class="icon-font" :name="unikey.key == currentUnikey.key?'checked':'unchecked'" size="12" :color="unikey.key == currentUnikey.key?'#FFBC5D':'#E1E1E1'"></Iconfont>
         </div>
       </div>
@@ -80,6 +88,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
+import { getImageUrl,substringKey } from '~/utils'
 
 export default {
   name: 'SwitchKeyDialog',
@@ -112,13 +121,6 @@ export default {
       context.emit('hasSwitch')
       context.emit('cancel')
     }
-    const substrKey = (str) => {
-      const len = str.length || 0
-      return `${str.substr(0, 6)}...${str.substr(len - 7)}`
-    }
-    const getImageUrl = (key) => {
-      return `/assets/page-addAddress/key-${key?.toLowerCase()}.png`
-    }
 
     return {
       handleSwitchCancel,
@@ -126,7 +128,7 @@ export default {
       visibleUnikeys,
       derivedUniKeys,
       importedUniKeys,
-      substrKey,
+      substringKey,
       getImageUrl,
       onClickSetCurrentUnikey,
     }

@@ -4,6 +4,7 @@
   width: 100%;
   height: 100%;
   .central-content {
+    padding-top: 58px;
     h2 {
       margin-top: 32px;
       font-size: $title-font-size;
@@ -50,6 +51,7 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { CHAINS } from '~/constants'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageImportPrivateKey',

@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .key-box {
-    padding: 24px 16px;
+    padding: 82px 16px;
     .key-item-box {
       width: 100%;
       height: 66px;
@@ -42,7 +42,7 @@
   <div class="page-add-address">
     <UniTab></UniTab>
     <div class="key-box">
-      <div v-if="isMnemonicWords" class="key-item-box mb-[24px]">
+      <div v-if="hasMnemonic" class="key-item-box mb-[24px]">
         <div>
           <Iconfont name="create" size="17" color="#6D8AF3"></Iconfont>
         </div>
@@ -63,7 +63,7 @@
         <span>Import by priority key</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div v-if="!isMnemonicWords" class="key-item-box" style="border-radius: 0px;" @click="$router.push('/importMnemonic')">
+      <div v-if="!hasMnemonic" class="key-item-box" style="border-radius: 0px;" @click="$router.push('/importMnemonic')">
         <div>
           <Iconfont name="mnemonic" size="17" color="#B2EED7"></Iconfont>
         </div>
@@ -89,15 +89,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
+// import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageAddAddress',
   setup () {
-    const isMnemonicWords = ref(false)
+    const hasMnemonic = ref(true)
+    // Error
+    // onMounted(async () => {
+    //   hasMnemonic.value = await wallet.hasMnemonic()
+    //   console.log(hasMnemonic.value ,'hasMnemonic.value ');
+    // })
+
     return {
-      isMnemonicWords,
+      hasMnemonic,
     }
   },
 }

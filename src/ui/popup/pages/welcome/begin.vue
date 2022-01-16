@@ -340,7 +340,7 @@
     <div class="central-bg-2"></div>
     <div class="central-content">
       <div class="address-part">
-        <h2>Bitcoin Address</h2>
+        <h2>{{ currentUnikeyName }} Address</h2>
         <p>{{ currentUnikey?.key }}</p>
         <div>
           <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
@@ -368,7 +368,7 @@
         </div>
       </div>
     </div>
-    <img class="key-icon" src="/assets/page-begin/key-icon.png">
+    <img class="key-icon" :src="getImageUrl(currentUnikey?.keySymbol)">
     <div class="connect-box">
       <div class="status-item">
         <Iconfont name="current" size="14"></Iconfont>
@@ -433,6 +433,8 @@ import QrcodeVue from 'qrcode.vue'
 import switchKeyDialog from './switchKeyDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
+import { CHAINS } from '~/constants'
+import { getImageUrl } from '~/utils'
 
 export default {
   name: 'PageBegin',
@@ -499,12 +501,13 @@ export default {
       isShowQRCodeDialog.value = false
     }
 
+    // unikey
     const isShowSwitchKeyDialog = ref(false)
-
     const currentUnikey = ref(null)
+    const currentUnikeyName = ref(null)
     async function getCurrentUnikey () {
-      console.log('1111111111')
       currentUnikey.value = await wallet.getCurrentUnikey()
+      currentUnikeyName.value = CHAINS[currentUnikey.value.keySymbol].name
     }
     onMounted(async () => {
       await getCurrentUnikey()
@@ -528,6 +531,8 @@ export default {
       isShowSwitchKeyDialog,
       getCurrentUnikey,
       currentUnikey,
+      currentUnikeyName,
+      getImageUrl,
     }
   },
 }

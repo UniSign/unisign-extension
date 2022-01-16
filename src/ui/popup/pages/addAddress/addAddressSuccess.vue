@@ -4,6 +4,7 @@
   width: 100%;
   height: 100%;
   .central-content {
+    padding-top: 58px;
     h2 {
       font-size: 32px;
       font-weight: bold;

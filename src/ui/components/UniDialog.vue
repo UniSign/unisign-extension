@@ -5,19 +5,19 @@
   bottom: 0;
   left: 0;
   right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(0, 0, 0, 0.24);
   .dialog-wrapper{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    position: relative;
     width: 318px;
     min-height: 275px;
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.12);
     box-shadow: 0px 19px 22px 0px rgba(141, 145, 156, 0.3);
-    overflow: hidden;
     background: #FFFFFF;
+    overflow: hidden;
     .title{
       padding: 16px 16px 16px 24px;
       display: flex;
@@ -42,6 +42,9 @@
         align-items: center;
         cursor: pointer;
       }
+    }
+    .content {
+      position: relative;
     }
   }
 }
