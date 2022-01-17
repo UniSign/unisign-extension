@@ -145,6 +145,7 @@ export class WalletController {
   // ----- keyring -------
   clearKeyrings = keyringService.clearKeyrings
   generateMnemonic = keyringService.generateMnemonic
+  hasMnemonic = keyringService.hasMnemonic
 
   private _getMnemonic (): string {
     const keyring = keyringService.getKeyringByType(KeyringType.BtcHD) as KeyringHD
@@ -156,10 +157,6 @@ export class WalletController {
     await keyringService.verifyPassword(password)
 
     return this._getMnemonic()
-  }
-
-  async hasMnemonic (): Promise<boolean> {
-    return Boolean(this._getMnemonic())
   }
 
   /**

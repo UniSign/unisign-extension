@@ -26,7 +26,7 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
 
   async deserialize(opts: any): Promise<void>
   async deserialize (opts: Partial<BtcHdKeyringOpts> = {}): Promise<void> {
-    this.opts = Object.assign(opts, defaultOpts)
+    this.opts = Object.assign({}, defaultOpts, opts)
     this.mnemonic = this.opts.mnemonic
     this.wallets = []
 
