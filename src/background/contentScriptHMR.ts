@@ -1,3 +1,4 @@
+import browser from 'webextension-polyfill'
 import { isFirefox, isForbiddenUrl } from '~/env'
 
 // Firefox fetch files from cache instead of reloading changes from disk,
