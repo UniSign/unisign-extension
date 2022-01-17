@@ -432,8 +432,7 @@ import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
 import switchKeyDialog from './switchKeyDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
-import { HDKeyrings } from '~/constants'
-import { CHAINS } from '~/constants'
+import { HDKeyrings, CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
 
 export default {
