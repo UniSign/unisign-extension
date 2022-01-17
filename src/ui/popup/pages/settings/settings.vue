@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .settings-box {
-    padding: 12px 16px;
+    padding: 70px 16px 0;
     .settings-item-box {
       width: 100%;
       height: 66px;
@@ -52,10 +52,10 @@ export default {
   name: 'PageSettings',
   setup () {
     const settingsArr = ref([
-      { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'keys' },
+      { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'keyManagement' },
       { key: 'language', value: 'Language', color: '#4190FF', router: 'languageSettings' },
-      { key: 'security', value: 'Security & Backup', color: '#66D5AA', router: 'security' },
-      { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'advanced' },
+      { key: 'security', value: 'Security & Backup', color: '#66D5AA', router: 'securityAndBackup' },
+      { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'advancedReset' },
       { key: 'about', value: 'About UniSign', color: '#9094AE', router: 'about' },
     ])
     return {

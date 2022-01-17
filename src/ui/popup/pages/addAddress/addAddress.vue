@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .key-box {
-    padding: 12px 16px;
+    padding: 70px 16px;
     .key-item-box {
       width: 100%;
       height: 66px;
@@ -41,8 +41,8 @@
   <div class="page-add-address">
     <UniTab></UniTab>
     <div class="key-box">
-      <div v-for="(item,index) in keyTypes" :key="index" class="key-item-box" @click="$router.push(`/selectWays/${item.identifier}`)">
-        <img :src="getImageUrl(item.logo)">
+      <div v-for="(item,index) in keyTypes" :key="index" class="key-item-box" @click="$router.push(`/selectWays/${item.unikeySymbol}`)">
+        <img :src="getImageUrl(item.unikeySymbol)">
         <span>{{ item.name }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
@@ -53,14 +53,13 @@
 
 <script>
 import { CHAINS } from '~/constants'
+import { getImageUrl } from '~/utils'
 
 export default {
   name: 'PageAddAddress',
   setup () {
     const keyTypes = Object.values(CHAINS)
-    const getImageUrl = (key) => {
-      return `/assets/page-addAddress/${key}.png`
-    }
+    
     return {
       keyTypes,
       getImageUrl,

@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .central-content {
-    padding: 0 24px;
+    padding: 58px 24px 0;
     h2 {
       margin-top: 32px;
       font-size: $title-font-size;

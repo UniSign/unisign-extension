@@ -3,6 +3,7 @@
   position: relative;
   background-color: #DCE5F0;
   min-height: 630px;
+  padding-bottom: 38px;
   .top-bg {
     width: 100%;
     height: 201px;
@@ -202,7 +203,7 @@
     }
   }
   .await-connect-box {
-    margin: 16px auto 18px;
+    margin: 16px auto 0px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.3);
     .status-item {
@@ -236,70 +237,32 @@
     color: #2A67C5;
     cursor: pointer;
   }
-  .qr-code-box {
-    padding: 24px;
+  .qr-code-box{
     .qr-code {
-      margin: 25px auto 15px;
+      margin: 42px auto 8px;
       display: block;
       width: 206px;
       height: 206px;
     }
     .qr-code-detail {
+      margin: 0 auto 64px;
       padding: 8px 14px;
+      position: relative;
       border: 1px solid rgba(191, 191, 191, 0.09);
       border-radius: 8px;
+      width: 220px;
       font-size: $detail-font-size;
       font-weight: bold;
       text-align: center;
       line-height: 16px;
       word-wrap: break-word;
       word-break: break-all;
+      cursor: pointer;
       background: #F9F7F6;
-    }
-  }
-  .switch-key-box {
-    padding-bottom: 61px;
-    .switch-key-content {
-      .derived-box,.imported-box {
-        padding: 0 10px;
-        margin-bottom: 8px;
-        h2 {
-          margin: 16px 0 8px 16px;
-          font-size: $detail-font-size;
-          line-height: 16px;
-          color: #8D919C;
+      &:hover {
+        .popover {
+          display: block;
         }
-        >div {
-          padding: 11px 16px 11px 8px;
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          &:hover {
-            background-color: #EEEEEE;
-          }
-          img {
-            margin-right: 12px;
-          }
-          span {
-            font-size: $detail-font-size;
-            font-weight: bold;
-            color: #242C3F;
-            line-height: 16px;
-          }
-          .icon-font {
-            margin-left: auto;
-          }
-        }
-      }
-    }
-    .switch-key-btn-box{
-      position: absolute;
-      bottom: 0;
-      padding: 12px;
-      width: 100%;
-      box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.06);
-      .switch-key-btn {
-        height: 37px;
       }
     }
   }
@@ -356,6 +319,7 @@
 
 <template>
   <div class="page-begin">
+    <UniMsg :visible="canShowMsg" content="Copied" @close="canShowMsg= false"></UniMsg>
     <div class="top-bg"></div>
     <div ref="topLineBoxRef" class="top-line-box">
       <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
@@ -376,10 +340,10 @@
     <div class="central-bg-2"></div>
     <div class="central-content">
       <div class="address-part">
-        <h2>Bitcoin Address</h2>
-        <p>0x2c238D3A7cd18E698DB5A4f7d5AdbeCc22B68a0e</p>
+        <h2>{{ currentUnikeyName }} Address</h2>
+        <p>{{ currentUnikey?.key }}</p>
         <div>
-          <div class="icon-wrapper mr-[16px] cursor-pointer">
+          <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
             <Iconfont name="copy" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
               Copy Address
@@ -404,7 +368,7 @@
         </div>
       </div>
     </div>
-    <img class="key-icon" src="/assets/page-begin/key-icon.png">
+    <img class="key-icon" :src="getImageUrl(currentUnikey?.keySymbol)">
     <div class="connect-box">
       <div class="status-item">
         <Iconfont name="current" size="14"></Iconfont>
@@ -449,54 +413,45 @@
     </div>
     <Ironman></Ironman>
     <UniDialog class="qr-code-box" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
-      <div class="qr-code">
-      </div>
-      <div class="qr-code-detail">
-        0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD
-      </div>
-    </UniDialog>
-    <UniDialog class="switch-key-box" :visible="isShowSwitchKeyDialog" title="Switch Key" @cancel="handleSwitchCancel">
-      <div class="switch-key-content">
-        <div class="derived-box">
-          <h2>Derived from Mnemonic</h2>
-          <div>
-            <img class="w-[26px] h-[26px]" src="/assets/page-addAddress/key-bch.png">
-            <span>0xydsh…38dfsdf</span>
-            <Iconfont class="icon-font" name="checked" size="12" color="#FFBC5D"></Iconfont>
-          </div>
-        </div>
-        <div class="imported-box">
-          <h2>Imported</h2>
-          <div>
-            <img class="w-[26px] h-[26px]" src="/assets/page-addAddress/key-bch.png">
-            <span>0xydsh…38dfsdf</span>
-            <Iconfont class="icon-font" name="unchecked" size="12" color="#E1E1E1"></Iconfont>
-          </div>
+      <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
+      <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
+        {{ currentUnikey?.key }}
+        <div class="popover popover-top">
+          Copy Address
         </div>
       </div>
-      <div class="switch-key-btn-box">
-        <UniBtn class="switch-key-btn" @click="isShowSwitchKeyDialog = false">
-          Add Key
-        </UniBtn>
-      </div>
     </UniDialog>
+    <switchKeyDialog v-if="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></switchKeyDialog>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import ClipboardJS from 'clipboard'
+import QrcodeVue from 'qrcode.vue'
+import switchKeyDialog from './switchKeyDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
+import { HDKeyrings } from '~/constants'
+import { CHAINS } from '~/constants'
+import { getImageUrl } from '~/utils'
 
 export default {
   name: 'PageBegin',
+  components: {
+    QrcodeVue,
+    switchKeyDialog,
+  },
   setup (props, context) {
     const router = useRouter()
 
+    const canShowMsg = ref(false)
+
+    // animation
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
     const topLineBoxRef = ref(null)
-    onMounted(() => {
+    onMounted(async () => {
       window.onscroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         const transferScrollTop = scrollTop / 30
@@ -524,8 +479,21 @@ export default {
       isLocked.value && router.push('/locked')
     }
 
+    // settings
     const onClickSettings = () => {
       router.push('/settings')
+    }
+
+    // copy
+    const handleCopyAddress = () => {
+      const clipboard = new ClipboardJS('.copy-address')
+      clipboard.on('success', (e) => {
+        canShowMsg.value = true
+        clipboard.destroy()
+      })
+      clipboard.on('error', (e) => {
+        clipboard.destroy()
+      })
     }
 
     const isShowQRCodeDialog = ref(false)
@@ -533,11 +501,21 @@ export default {
       isShowQRCodeDialog.value = false
     }
 
+    // unikey
     const isShowSwitchKeyDialog = ref(false)
-    const handleSwitchCancel = () => {
-      isShowSwitchKeyDialog.value = false
+    const currentUnikey = ref(null)
+    const currentUnikeyName = ref(null)
+    async function getCurrentUnikey () {
+      currentUnikey.value = await wallet.getCurrentUnikey()
+      currentUnikeyName.value = CHAINS[currentUnikey.value.keySymbol].name
     }
+    onMounted(async () => {
+      await getCurrentUnikey()
+    })
+
     return {
+      canShowMsg,
+
       iconFontColor,
       isScroll,
       topLineBoxRef,
@@ -545,11 +523,16 @@ export default {
       onClickLock,
       onClickSettings,
 
+      handleCopyAddress,
+
       isShowQRCodeDialog,
       handleQRCancel,
 
       isShowSwitchKeyDialog,
-      handleSwitchCancel,
+      getCurrentUnikey,
+      currentUnikey,
+      currentUnikeyName,
+      getImageUrl,
     }
   },
 }

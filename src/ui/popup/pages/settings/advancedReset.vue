@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .settings-box {
-    padding: 12px 16px;
+    padding: 70px 16px;
     .settings-item-box {
       width: 100%;
       height: 66px;

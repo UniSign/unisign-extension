@@ -11,6 +11,8 @@ export enum KeyIdentifier {
   // OpenPGP = 'OpenPGP',
 }
 
+export const HDKeyrings = [KeyringType.BtcHD, KeyringType.EthHD]
+
 export const CHAINS: Record<KeyIdentifier, ChainData> = {
   [KeyIdentifier.BTC]: {
     name: 'Bitcoin',
@@ -18,7 +20,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     tokenSymbol: KeyIdentifier.BTC,
     coinType: '0',
     chainId: undefined,
-    logo: 'key-btc',
+    logo: '',
     tokenLogo: '',
     HDKeyringType: KeyringType.BtcHD,
     simpleKeyringType: KeyringType.BtcSimple,
@@ -29,7 +31,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     tokenSymbol: KeyIdentifier.DOGE,
     coinType: '3',
     chainId: undefined,
-    logo: 'key-doge',
+    logo: '',
     tokenLogo: '',
     HDKeyringType: KeyringType.BtcHD, // todo: change to dogeHD
     simpleKeyringType: KeyringType.BtcHD,
@@ -40,7 +42,7 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     tokenSymbol: KeyIdentifier.CKB,
     coinType: '309',
     chainId: undefined,
-    logo: 'key-ckb',
+    logo: '',
     tokenLogo: '',
     HDKeyringType: KeyringType.BtcHD, // todo: change to ckbHD
     simpleKeyringType: KeyringType.BtcHD,

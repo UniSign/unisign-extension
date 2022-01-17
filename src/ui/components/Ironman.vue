@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
   .ironman-wrapper {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -8,7 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06);
     background: #FFFFFF;
     .ironman-box {
       display: flex;

@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   .settings-box {
-    padding: 12px 16px;
+    padding: 70px 16px 0;
     .settings-item-box {
       width: 100%;
       height: 66px;
@@ -65,7 +65,7 @@
       <div class="settings-item-box" @click="isShowPhishingCodeDialog = true">
         <span>Anti-Phishing Code</span>
         <div class="arrow-right">
-          <span>sea</span>
+          <span>{{ antiPhishingCode }}</span>
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
@@ -86,15 +86,15 @@
     <UniDialog class="phishingCodeDialog" :visible="isShowPhishingCodeDialog" title="Anti-Phishing Code" @cancel="isShowPhishingCodeDialog = false">
       <div class="slot-container">
         <UniInput
-          ref="seaRef"
-          v-model="sea"
+          ref="phishingCodeRef"
+          v-model="phishingCode"
           width="100%"
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"
           validate-text="Supports up to 10 characters"
-          placeholder="sea"
+          :placeholder="antiPhishingCode"
         ></UniInput>
-        <UniBtn class="uni-btn" :disabled="!sea" @click="handlePhishingCodeCancel">
+        <UniBtn class="uni-btn" :disabled="!phishingCode" @click="handlePhishingCodeCancel">
           Save
         </UniBtn>
       </div>
@@ -114,39 +114,59 @@
 
 <script>
 import { ref } from 'vue'
+import { wallet } from '~/ui/controllers/wallet'
+
 
 export default {
   name: 'PageSecurityAndBackup',
   setup () {
-    const sea = ref('')
-    const seaRef = ref(null)
     const canShowMsg = ref(false)
     const msgContent = ref('')
+
+    // antiPhishingCode
+    const antiPhishingCode = ref('')
+    const phishingCode = ref('')
+    const phishingCodeRef = ref(null)
     const isShowPhishingCodeDialog = ref(false)
-    const isShowTipsDialog = ref(false)
-    const handlePhishingCodeCancel = () => {
-      if (!sea.value) return
-      if (sea.value.length > 10) {
-        seaRef.value.validate()
-        return false
+    const onPhishingCodeChanged = async() => {
+      antiPhishingCode.value = await wallet.getAntiPhishingCode()
+    }
+    const handlePhishingCodeCancel = async() => {
+      if (!phishingCode.value) return
+      if (phishingCode.value.length > 10) {
+        phishingCodeRef.value.validate()
+        return
       }
+      await wallet.setAntiPhishingCode(phishingCode.value)
+      onPhishingCodeChanged()
       isShowPhishingCodeDialog.value = false
       msgContent.value = 'Saved'
       canShowMsg.value = true
     }
+    onMounted(() => {
+      onPhishingCodeChanged()
+    })
+
+    const isShowTipsDialog = ref(false)
     const handleTipsCancel = () => {
       isShowTipsDialog.value = false
       msgContent.value = 'Canceled'
       canShowMsg.value = true
     }
+
     return {
-      sea,
-      seaRef,
+      // Msg
       canShowMsg,
       msgContent,
+
+      // antiPhishingCode
+      antiPhishingCode,
+      phishingCode,
+      phishingCodeRef,
       isShowPhishingCodeDialog,
-      isShowTipsDialog,
       handlePhishingCodeCancel,
+
+      isShowTipsDialog,
       handleTipsCancel,
     }
   },
