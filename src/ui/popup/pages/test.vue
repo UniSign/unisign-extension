@@ -358,7 +358,7 @@ export default {
       await wallet._mockRequestApproval!({
         params: mockApproval,
         origin: 'unisign.org',
-        approvalPage: ApprovalPage.connect,
+        approvalPage: ApprovalPage.requestPermission,
       })
     }
     // todo: there should be a more complex showcase

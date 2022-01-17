@@ -3,6 +3,7 @@ import { chainService } from '~/background/services/chain'
 import { keyringService } from '~/background/services/keyring'
 import { KeyringBase, KeyringHD, KeyringType } from '~/background/services/keyring/types'
 import { pageCacheService } from '~/background/services/pageCache'
+import { permissionService } from '~/background/services/permission'
 import { personalService } from '~/background/services/personal'
 import { sessionService } from '~/background/services/session'
 import { settingsService } from '~/background/services/settings'
@@ -88,6 +89,9 @@ export class WalletController {
   getEnabledChains = chainService.getEnabledChains
   enableChain = chainService.enableChain
   disabledChain = chainService.disableChain
+
+  // ----- permission -------
+  clearAllPassports = permissionService.clearAllPassports
 
   // ----- settings -------
   getLocale = settingsService.getLocale
