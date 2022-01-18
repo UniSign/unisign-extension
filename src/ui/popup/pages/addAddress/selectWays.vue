@@ -42,7 +42,7 @@
   <div class="page-add-address">
     <UniTab></UniTab>
     <div class="key-box">
-      <div v-if="hasMnemonic" class="key-item-box mb-[24px]">
+      <div v-if="hasMnemonic" class="key-item-box mb-[24px]" @click="onClickDeriveAddress">
         <div>
           <Iconfont name="create" size="17" color="#6D8AF3"></Iconfont>
         </div>
@@ -91,20 +91,29 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-// import { wallet } from '~/ui/controllers/wallet'
+import { useRoute, useRouter } from 'vue-router'
+import { KeyIdentifier } from '~/constants'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageAddAddress',
   setup () {
     const hasMnemonic = ref(true)
-    // Error
-    // onMounted(async () => {
-    //   hasMnemonic.value = await wallet.hasMnemonic()
-    //   console.log(hasMnemonic.value ,'hasMnemonic.value ');
-    // })
+    onMounted(async () => {
+      hasMnemonic.value = await wallet.hasMnemonic()
+    })
+
+    const router = useRouter()
+    const route = useRoute()
+    const onClickDeriveAddress = async () => {
+      await wallet.deriveNewAccountFromMnemonic(route.params.key as KeyIdentifier)
+      router.push('/addAddressSuccess')
+    }
 
     return {
       hasMnemonic,
+
+      onClickDeriveAddress,
     }
   },
 }

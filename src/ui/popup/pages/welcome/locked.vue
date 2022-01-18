@@ -74,7 +74,7 @@ export default {
       })
       isLocked.value = await wallet.isLocked()
       if (!isLocked.value) {
-        router.go(-1)
+        router.push('/begin')
       }
     }
 

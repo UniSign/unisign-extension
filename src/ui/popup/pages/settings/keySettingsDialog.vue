@@ -195,20 +195,7 @@ export default {
     const validataText = ref('')
     const isShowSecurityDialog = ref(false)
     const selectedprivateKey = ref(null)
-    const mnemonicArr = ref([
-      'defense',
-      'light',
-      'accident',
-      'opinion',
-      'benefit',
-      'match',
-      'trim',
-      'slogan',
-      'festival',
-      'during',
-      'cheap',
-      'mix',
-    ])
+    const mnemonicArr = ref([])
     const onValidateError = (e) => {
       validataText.value = e
       passwordRef.value.validate()

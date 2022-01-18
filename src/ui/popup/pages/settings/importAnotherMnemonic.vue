@@ -65,7 +65,7 @@
           width="100%"
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"
-          validate-text="Incorrect password"
+          :validate-text="validataText"
         ></UniInput>
         <UniBtn class="uni-btn" @click="handleSecurityCancel">
         </UniBtn>
@@ -75,41 +75,53 @@
 </template>
 
 <script>
+import '~/background/polyfill'
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { validateMnemonic } from 'bip39'
+import { useRouter } from 'vue-router'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageImportAnotherMnemonic',
   setup () {
     const router = useRouter()
-    const route = useRoute()
-    const password = ref('')
-    const passwordRef = ref(null)
+
     const mnemonic = ref('')
     const mnemonicRef = ref(null)
     const isShowSecurityDialog = ref(false)
     const onClickSubmit = () => {
       if (!mnemonic.value) return
-      if (mnemonic.value.length < 5) {
+      if (!validateMnemonic(mnemonic.value)) {
         mnemonicRef.value.validate()
-        return false
+        return
       }
       isShowSecurityDialog.value = true
     }
-    const handleSecurityCancel = () => {
+
+    const password = ref('')
+    const passwordRef = ref(null)
+    const validataText = ref('')
+    const handleSecurityCancel = async () => {
       if (!password.value) return
-      if (password.value !== 1) {
+      await wallet.verifyPassword(password.value).catch((e) => {
+        validataText.value = e
         passwordRef.value.validate()
-      }
+        throw new Error(e)
+      })
+      await wallet.importMnemonic(mnemonic.value)
       isShowSecurityDialog.value = false
+      router.push('/addAddressSuccess')
     }
+
     return {
       mnemonic,
       mnemonicRef,
+      isShowSecurityDialog,
       onClickSubmit,
+
       password,
       passwordRef,
-      isShowSecurityDialog,
+      validataText,
       handleSecurityCancel,
     }
   },

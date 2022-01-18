@@ -162,6 +162,7 @@ export default {
     const isShowTipsDialog = ref(false)
     const handleTipsCancel = () => {
       isShowTipsDialog.value = false
+      wallet.clearAllPassports()
       msgContent.value = 'Canceled'
       canShowMsg.value = true
     }
