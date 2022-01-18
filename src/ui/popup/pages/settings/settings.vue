@@ -35,7 +35,7 @@
   <div class="page-settings">
     <UniTab title="settings"></UniTab>
     <div class="settings-box">
-      <div v-for="(item,index) in settingsArr" :key="index" class="settings-item-box" @click="$router.push(`/${item.router}`)">
+      <div v-for="(item,index) in settingsArr" :key="index" class="settings-item-box" @click="onClickSettingItem(item)">
         <Iconfont class="icon-key mr-[20px]" :name="item.key" width="16" height="16" :color="item.color"></Iconfont>
         <span>{{ item.value }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
@@ -47,10 +47,12 @@
 
 <script>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'PageSettings',
   setup () {
+    const router = useRouter()
     const settingsArr = ref([
       { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'keyManagement' },
       { key: 'language', value: 'Language', color: '#4190FF', router: 'languageSettings' },
@@ -58,8 +60,18 @@ export default {
       { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'advancedReset' },
       { key: 'about', value: 'About UniSign', color: '#9094AE', router: 'about' },
     ])
+    const onClickSettingItem = (item) => {
+      if (item.router === 'about') {
+        // todo:
+        // window.location.href = 'https://unisign.org'
+        return
+      }
+      router.push(`/${item.router}`)
+    }
+
     return {
       settingsArr,
+      onClickSettingItem,
     }
   },
 }

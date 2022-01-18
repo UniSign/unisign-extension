@@ -45,7 +45,7 @@
   <div class="ironman-wrapper">
     <div class="ironman-box" @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">
       <img src="/assets/page-begin/identification-icon.png">
-      <span>Ironman</span>
+      <span>{{ antiPhishingCode }}</span>
     </div>
     <div v-show="isShowDetail" class="ironman-detail">
       {{ antiPhishingCode }}
@@ -61,13 +61,17 @@ export default {
   setup (props, context) {
     const isShowDetail = ref(false)
     const antiPhishingCode = ref('')
-    onMounted(async () => {
+    const onAntiPhishingCodeChange = async () => {
       antiPhishingCode.value = await wallet.getAntiPhishingCode()
+    }
+    onMounted(() => {
+      onAntiPhishingCodeChange()
     })
 
     return {
       isShowDetail,
       antiPhishingCode,
+      onAntiPhishingCodeChange,
     }
   },
 }

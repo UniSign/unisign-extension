@@ -78,14 +78,20 @@
 
 <script>
 import { ref } from 'vue'
+import { wallet } from '~/ui/controllers/wallet'
+import { sleep } from '~/utils'
 
 export default {
   name: 'PageAdvancedReset',
   setup () {
     const isShowTipsDialog = ref(false)
-    const handleTipsCancel = () => {
+    const handleTipsCancel = async () => {
+      await wallet.reset()
+      await sleep(1000)
+      window.location.reload()
       isShowTipsDialog.value = false
     }
+
     return {
       isShowTipsDialog,
       handleTipsCancel,

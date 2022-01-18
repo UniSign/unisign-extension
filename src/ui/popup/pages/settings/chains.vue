@@ -6,7 +6,6 @@
 
 <template>
   <div class="page-settings-chains">
-
   </div>
 </template>
 

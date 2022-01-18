@@ -59,7 +59,7 @@ export default {
   name: 'PageAddAddress',
   setup () {
     const keyTypes = Object.values(CHAINS)
-    
+
     return {
       keyTypes,
       getImageUrl,

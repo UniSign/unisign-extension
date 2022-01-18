@@ -185,14 +185,17 @@
       <template v-if="derivedUniKeys.length">
         <h2>Derived from Mnemonic</h2>
         <div v-for="unikey in derivedUniKeys" :key="unikey.key" class="settings-item-box">
-          <img :src="getImageUrl(unikey.keySymbol)">
+          <img :src="getImageUrl(unikey.keySymbol,unikey.hidden ? true : false)">
           <span>{{ substringKey(unikey.key) }}</span>
           <div class="arrow-right" @click="onClickSettings(unikey)">
             <Iconfont name="more" width="12" height="12" color="#6F7684"></Iconfont>
           </div>
           <div v-show="unikey.isSetting" class="popover">
-            <div @click="onClickDisabled(unikey)">
-              Disabled
+            <div v-if="unikey.hidden" @click="onClickEnable(unikey)">
+              Enable
+            </div>
+            <div v-else @click="onClickDisable(unikey)">
+              Disable
             </div>
             <div @click="onClickViewPrivateKey(unikey)">
               View Private Key
@@ -228,102 +231,39 @@
       </UniBtn>
     </div>
     <Ironman></Ironman>
-    <UniDialog class="dangerousDialog" error :visible="isShowDangerousDialog" title="Dangerous Action" @cancel="isShowDangerousDialog = false">
-      <div class="slot-container">
-        <div class="text">
-          {{ dangerousText }}
-        </div>
-        <UniBtn class="uni-btn" error @click="handleDangerousCancel">
-          I got it
-        </UniBtn>
-      </div>
-    </UniDialog>
-    <UniDialog class="securityDialog" :visible="isShowSecurityDialog" title="Security Verification" @cancel="isShowSecurityDialog = false">
-      <div class="slot-container">
-        <UniInput
-          ref="passwordRef"
-          v-model="password"
-          width="100%"
-          background-color="#F7F8FA"
-          class="uni-input mb-[58px]"
-          :validate-text="validataText"
-        ></UniInput>
-        <UniBtn class="uni-btn" :disabled="!password" @click="handleSecurityCancel">
-        </UniBtn>
-      </div>
-    </UniDialog>
-    <UniDialog class="privateKeyDialog" :visible="isShowPrivateKeyDialog" title="Private Key" @cancel="isShowPrivateKeyDialog= false">
-      <div class="slot-container">
-        <div class="text">
-          {{ selectedprivateKey }}
-        </div>
-        <UniBtn class="uni-btn" @click="handlePrivateKeyCancel">
-          OK
-        </UniBtn>
-      </div>
-    </UniDialog>
-    <UniDialog class="mnemonicDialog" :visible="isShowMnemonicDialog" title="Mnemonic" @cancel="isShowMnemonicDialog= false">
-      <div class="slot-container">
-        <div class="mnemonic-box">
-          <div v-for="(item,index) in mnemonicArr" :key="index" class="mnemonic-item">
-            <span>{{ index+1 }}</span>
-            <p>{{ item }}</p>
-          </div>
-        </div>
-        <UniBtn class="uni-btn" @click="handleMnemonicCancel">
-          OK
-        </UniBtn>
-      </div>
-    </UniDialog>
-    <UniDialog class="deleteKeyDialog" error :visible="isShowDeleteKeyDialog" title="Delete Key" @cancel="isShowDeleteKeyDialog= false">
-      <div class="slot-container">
-        <p>Confirm to delete,</p>
-        <p>enter <span>Delete Key</span> below.</p>
-        <UniInput
-          ref="deleteKeyRef"
-          v-model="deleteKey"
-          width="100%"
-          background-color="#F7F8FA"
-          class="uni-input mb-[48px]"
-          placeholder="Please enter Delete Key"
-          validate-text="Incorrect input"
-        ></UniInput>
-        <UniDoubleBtn class="uni-btn" :disabled="!deleteKey" @rejectClick="isShowDeleteKeyDialog= false" @allowClick="handleDeleteKeyCancel">
-          <template #reject>
-            Cancle
-          </template>
-          <template #allow>
-            Delete
-          </template>
-        </UniDoubleBtn>
-      </div>
-    </UniDialog>
+    <keySettingsDialog ref="keySettingsDialogRef" @onUnikeysChanged="onUnikeysChanged"></keySettingsDialog>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import keySettingsDialog from './keySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
-import { getImageUrl,substringKey } from '~/utils'
+import { getImageUrl, substringKey } from '~/utils'
 
 export default {
   name: 'PageKeyManagement',
+  components: {
+    keySettingsDialog,
+  },
   setup () {
+    const keySettingsDialogRef = ref(null)
+
     // unikey
     const unikeys = ref([])
     const derivedUniKeys = ref([])
     const importedUniKeys = ref([])
     const getkeysCategory = () => {
-      derivedUniKeys.value = unikeys.value.filter(key => HDKeyrings.includes(key.keyringType))
+      derivedUniKeys.value = unikeys.value.filter(key => HDKeyrings.includes(key.keyringType)).sort(a => a.hidden === true ? 1 : -1)
       importedUniKeys.value = unikeys.value.filter(key => !HDKeyrings.includes(key.keyringType))
     }
-    const onUnikeysChanged = async() => {
+    const onUnikeysChanged = async () => {
       unikeys.value = await wallet.getUnikeys()
-      unikeys.value = unikeys.value.map(key=>{
+      unikeys.value = unikeys.value.map((key) => {
         return {
           ...key,
-          isSetting:false
+          isSetting: false,
         }
       })
       getkeysCategory()
@@ -336,183 +276,81 @@ export default {
     })
 
     // Settings
-    const onClickSettings = (unikey) =>{
-      if(!unikey.isSetting) {
-        unikeys.value = unikeys.value.map(key=>{
+    const onClickSettings = (unikey) => {
+      if (!unikey.isSetting) {
+        unikeys.value = unikeys.value.map((key) => {
           return {
             ...key,
-            isSetting:key.key == unikey.key
+            isSetting: key.key === unikey.key,
           }
         })
         getkeysCategory()
-      }else {
+      }
+      else {
         unikey.isSetting = false
       }
     }
 
-    // securityDialog
-    let currentEventName = null
-    let currentUnikey = {}
-    const password = ref('')
-    const passwordRef = ref(null)
-    const validataText = ref('')
-    const isShowSecurityDialog = ref(false)
-    const mnemonicArr = ref([
-      'defense',
-      'light',
-      'accident',
-      'opinion',
-      'benefit',
-      'match',
-      'trim',
-      'slogan',
-      'festival',
-      'during',
-      'cheap',
-      'mix',
-    ])
-    const onValidateError = () => {
-      validataText.value = e
-      passwordRef.value.validate()
-      throw new Error(e)
-    } 
-    const handleSecurityCancel = async() => {
-      if (!password.value) return
-      if(currentEventName == 'viewPrivateKey') {
-        selectedprivateKey.value = await wallet.getPrivateKey(password.value, currentUnikey.key, currentUnikey.keyringType).catch((e) => {
-          onValidateError()
-        })
-        isShowPrivateKeyDialog.value = true
-      }else if(currentEventName == 'viewMnemonic') {
-        let mnemonic = await wallet.getMnemonic(password.value).catch((e) => {
-          onValidateError()
-        })
-        // Error
-        console.log(mnemonic,'mnemonic')
-        mnemonicArr.value = mnemonic.split(' ')
-        isShowMnemonicDialog.value = true
-      }else if (currentEventName == 'deletePrivateKey') {
-        console.log(currentUnikey,'unikey');
-        selectedprivateKey.value = await wallet.removeUnikey(password.value, currentUnikey).catch((e) => {
-          onValidateError()
-        })
-      }
-      currentUnikey = {}
-      currentEventName = null
-      password.value = ''
-      isShowSecurityDialog.value = false
+    // Disable
+    const onClickDisable = async (unikey) => {
+      await wallet.hideUnikey(unikey.key)
+      unikey.isSetting = false
       onUnikeysChanged()
     }
 
-    // dangerousDialog
-    const isShowDangerousDialog = ref(false)
-    const dangerousText = ref('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.')
-    const handleDangerousCancel = () => {
-      isShowDangerousDialog.value = false
-      if(currentEventName == 'viewPrivateKey' || currentEventName == 'viewMnemonic') {
-        isShowSecurityDialog.value = true
-      }else if (currentEventName == 'deletePrivateKey') {
-        isShowDeleteKeyDialog.value = true
-      }
+    // Enable
+    const onClickEnable = async (unikey) => {
+      await wallet.showUnikey(unikey.key)
+      unikey.isSetting = false
+      onUnikeysChanged()
     }
 
-    // disabled
-    const onClickDisabled = async(unikey) => {
-      await wallet.hideUnikey(unikey.key)
-      unikey.isSetting = false
-    }
-                                                      
     // viewPrivateKey
-    const selectedprivateKey = ref(null)
-    const isShowPrivateKeyDialog = ref(false)
     const onClickViewPrivateKey = (unikey) => {
       unikey.isSetting = false
-      currentUnikey = unikey
-      currentEventName = 'viewPrivateKey'
-      isShowDangerousDialog.value = true
-    }
-    const handlePrivateKeyCancel = () => {
-      isShowPrivateKeyDialog.value = false
+      keySettingsDialogRef.value.onClickViewPrivateKey(unikey)
     }
 
     // viewMnemonic
-    const isShowMnemonicDialog = ref(false)
-    const onClickViewMnemonic = (unikey) => {
+    const onClickViewMnemonic = () => {
       unikey.isSetting = false
-      currentEventName = 'viewMnemonic'
-      isShowDangerousDialog.value = true
+      keySettingsDialogRef.value.onClickViewMnemonic()
     }
-    const handleMnemonicCancel = () => {
-      isShowMnemonicDialog.value = false
-    }
-    
 
     // deletePrivateKey
-    const deleteKey = ref(null)
-    const deleteKeyRef = ref(null)
-    const isShowDeleteKeyDialog = ref(false)
     const onClickDeletePrivateKey = (unikey) => {
       unikey.isSetting = false
-      currentUnikey = unikey
-      currentEventName = 'deletePrivateKey'
-      dangerousText.value = 'You may lost your asset if you are not backup properly.'
-      isShowDangerousDialog.value = true
+      keySettingsDialogRef.value.onClickDeletePrivateKey(unikey)
     }
-    const handleDeleteKeyCancel = () => {
-      if(deleteKey.value.toLowerCase() != 'delete key') {
-        deleteKeyRef.value.validate()
-        return
-      }
-      deleteKey.value = ''
-      isShowDeleteKeyDialog.value = false
-      isShowSecurityDialog.value = true
-    }
-
 
     return {
+      keySettingsDialogRef,
+
       // unikey
       unikeys,
       derivedUniKeys,
       importedUniKeys,
       getImageUrl,
       substringKey,
+      onUnikeysChanged,
 
       // Settings
       onClickSettings,
 
-      // securityDialog
-      password,
-      passwordRef,
-      validataText,
-      isShowSecurityDialog,
-      mnemonicArr,
-      handleSecurityCancel,
-
-      //dangerousDialog
-      isShowDangerousDialog,
-      dangerousText,
-      handleDangerousCancel,
-
       // disabled
-      onClickDisabled,
+      onClickDisable,
+
+      // Enable
+      onClickEnable,
 
       // viewPrivateKey
-      selectedprivateKey,
-      isShowPrivateKeyDialog,
       onClickViewPrivateKey,
-      handlePrivateKeyCancel,
 
       // viewMnemonic
-      isShowMnemonicDialog,
-      onClickViewMnemonic, 
-      handleMnemonicCancel,
+      onClickViewMnemonic,
 
       // deletePrivateKey
-      deleteKey,
-      deleteKeyRef,
-      isShowDeleteKeyDialog,
       onClickDeletePrivateKey,
-      handleDeleteKeyCancel,
     }
   },
 }

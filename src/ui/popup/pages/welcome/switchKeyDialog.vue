@@ -88,7 +88,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
-import { getImageUrl,substringKey } from '~/utils'
+import { getImageUrl, substringKey } from '~/utils'
 
 export default {
   name: 'SwitchKeyDialog',

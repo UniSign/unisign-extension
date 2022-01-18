@@ -45,6 +45,7 @@
     }
     .content {
       position: relative;
+      min-height: 214px;
     }
   }
 }

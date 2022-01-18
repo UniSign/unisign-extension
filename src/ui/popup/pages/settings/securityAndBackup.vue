@@ -75,14 +75,14 @@
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
-      <div class="settings-item-box">
+      <div class="settings-item-box" @click="onClickViewMnemonic">
         <span>Backup Mnemonic</span>
         <div class="arrow-right">
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
     </div>
-    <Ironman></Ironman>
+    <Ironman ref="ironmanRef"></Ironman>
     <UniDialog class="phishingCodeDialog" :visible="isShowPhishingCodeDialog" title="Anti-Phishing Code" @cancel="isShowPhishingCodeDialog = false">
       <div class="slot-container">
         <UniInput
@@ -109,16 +109,20 @@
         </UniBtn>
       </div>
     </UniDialog>
+    <keySettingsDialog ref="keySettingsDialogRef"></keySettingsDialog>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import keySettingsDialog from './keySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
-
 
 export default {
   name: 'PageSecurityAndBackup',
+  components: {
+    keySettingsDialog,
+  },
   setup () {
     const canShowMsg = ref(false)
     const msgContent = ref('')
@@ -128,10 +132,11 @@ export default {
     const phishingCode = ref('')
     const phishingCodeRef = ref(null)
     const isShowPhishingCodeDialog = ref(false)
-    const onPhishingCodeChanged = async() => {
+    const ironmanRef = ref(null)
+    const onPhishingCodeChanged = async () => {
       antiPhishingCode.value = await wallet.getAntiPhishingCode()
     }
-    const handlePhishingCodeCancel = async() => {
+    const handlePhishingCodeCancel = async () => {
       if (!phishingCode.value) return
       if (phishingCode.value.length > 10) {
         phishingCodeRef.value.validate()
@@ -139,6 +144,7 @@ export default {
       }
       await wallet.setAntiPhishingCode(phishingCode.value)
       onPhishingCodeChanged()
+      ironmanRef.value.onAntiPhishingCodeChange()
       isShowPhishingCodeDialog.value = false
       msgContent.value = 'Saved'
       canShowMsg.value = true
@@ -146,6 +152,12 @@ export default {
     onMounted(() => {
       onPhishingCodeChanged()
     })
+
+    // viewMnemonic
+    const keySettingsDialogRef = ref(null)
+    const onClickViewMnemonic = () => {
+      keySettingsDialogRef.value.onClickViewMnemonic()
+    }
 
     const isShowTipsDialog = ref(false)
     const handleTipsCancel = () => {
@@ -164,7 +176,12 @@ export default {
       phishingCode,
       phishingCodeRef,
       isShowPhishingCodeDialog,
+      ironmanRef,
       handlePhishingCodeCancel,
+
+      // viewMnemonic
+      keySettingsDialogRef,
+      onClickViewMnemonic,
 
       isShowTipsDialog,
       handleTipsCancel,
