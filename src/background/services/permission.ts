@@ -57,6 +57,10 @@ export class PermissionService {
 
     Object.assign(passport, passportDto)
   }
+
+  clearAllPassports () {
+    this.store.sites = []
+  }
 }
 
 export const permissionService = new PermissionService()

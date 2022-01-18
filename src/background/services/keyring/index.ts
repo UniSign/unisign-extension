@@ -39,6 +39,7 @@ interface MemStoreData {
 
 interface StoreData {
   vault: string
+  hasMnemonic: boolean
 }
 
 interface TypedSerializedKeyring {
@@ -96,6 +97,7 @@ export class KeyringService extends EventEmitter {
     const storageKey = 'keyring'
     const store = await loadDiskStore<StoreData>(storageKey, {
       vault: '',
+      hasMnemonic: false,
     })
 
     this.store = new ObservableStore(store)
@@ -123,6 +125,10 @@ export class KeyringService extends EventEmitter {
 
   async isSetup (): Promise<boolean> {
     return Boolean(this.store?.getState().vault)
+  }
+
+  async hasMnemonic () {
+    return this.store.getState().hasMnemonic
   }
 
   /**
@@ -175,6 +181,7 @@ export class KeyringService extends EventEmitter {
           throw new Error('KeyringController - First Account not found.')
         }
       })
+      .then(() => this.store.updateState({ hasMnemonic: true }))
       .then(() => this.persistAllKeyrings())
       .then(() => this.updateMemStoreKeyrings())
       .then(() => this.fullUpdate())

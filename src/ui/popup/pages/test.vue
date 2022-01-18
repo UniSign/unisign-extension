@@ -168,10 +168,18 @@
 
     <fieldset>
       <legend>Keyring</legend>
-      <input v-model="importedPrivateKey" type="text">
+      <label>
+        BTC PrivateKey
+        <input v-model="importedPrivateKey" type="text">
+      </label>
       <button @click="onClickImportKey">
         Import
       </button>
+      <hr>
+      <button @click="onClickShowMnemonic">
+        Show Mnemonic
+      </button>
+      {{ importedMnemonic }}
     </fieldset>
 
     <fieldset>
@@ -200,11 +208,12 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { ApprovalPage } from '~/background/services/approval'
 import { ChainData } from '~/background/services/chain'
-import { wallet } from '~/ui/controllers/wallet'
-import { KeyIdentifier, CHAINS, LocaleOptions, LOCALES } from '~/constants'
-import { sleep } from '~/utils'
 import { Unikey } from '~/background/services/unikey'
+import { CHAINS, KeyIdentifier, LocaleOptions, LOCALES } from '~/constants'
+import { wallet } from '~/ui/controllers/wallet'
+import { sleep } from '~/utils'
 
 export default {
   name: 'PageTest',
@@ -323,6 +332,7 @@ export default {
 
     // keyring
     const importedPrivateKey = ref('')
+    const importedMnemonic = ref('')
     const chain = ref<KeyIdentifier>(KeyIdentifier.BTC)
     async function onClickDeriveAddress (identifier: KeyIdentifier) {
       await wallet.deriveNewAccountFromMnemonic(identifier)
@@ -333,8 +343,8 @@ export default {
       await wallet.importPrivateKey(importedPrivateKey.value, CHAINS[chain.value].simpleKeyringType)
       await onUnikeysChanged()
     }
-    async function onShowMnemonic () {
-      const mnemonic = await wallet.getMnemonic('')
+    async function onClickShowMnemonic () {
+      importedMnemonic.value = await wallet.getMnemonic(passwordForUnlock.value)
     }
 
     // Approval
@@ -348,7 +358,7 @@ export default {
       await wallet._mockRequestApproval!({
         params: mockApproval,
         origin: 'unisign.org',
-        approvalPage: 'connect',
+        approvalPage: ApprovalPage.requestPermission,
       })
     }
     // todo: there should be a more complex showcase
@@ -407,8 +417,10 @@ export default {
 
       // keyring
       importedPrivateKey,
+      importedMnemonic,
       onClickDeriveAddress,
       onClickImportKey,
+      onClickShowMnemonic,
 
       // Approval
       approval,

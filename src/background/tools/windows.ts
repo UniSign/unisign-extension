@@ -53,4 +53,11 @@ export const windows = {
     const tabs = await browser.tabs.query({ active: true, currentWindow: true })
     return tabs[0]
   },
+
+  async createNewTab (url: string) {
+    await browser.tabs.create({
+      active: true,
+      url,
+    })
+  },
 }

@@ -35,6 +35,10 @@ export interface KeyObject extends KeyObjectType {
   key: string
 }
 
+export type PermittedKeyObjectType = KeyObjectType & {
+  permission: string[]
+}
+
 export type PermittedKeyObject = KeyObject & {
   permission: string[]
 }
@@ -59,44 +63,19 @@ export class ProviderController {
     return unikey
   }
 
-  @Reflect.metadata('SAFE', true)
+  @Reflect.metadata('OPEN', true)
   tabCheckin ({ session, data: { params } }: ProviderRequest<SessionData>) {
     sessionService.update(session.id, params[0])
   }
 
-  @Reflect.metadata('SAFE', true)
+  @Reflect.metadata('OPEN', true)
   async getProviderState () {
     return {
       isUnlocked: !(await keyringService.isLocked()),
     }
   }
 
-  async getCurrentKey ({ session: { origin } }: ProviderRequest): Promise<KeyObjectType|null> {
-    if (!siteService.hasBeenConnected(origin)) {
-      return null
-    }
-
-    const currentUnikey = await this._getCurrentUnikey()
-
-    if (currentUnikey) {
-      const chain = CHAINS[currentUnikey.keySymbol]
-
-      return {
-        type: currentUnikey.keyType,
-        meta: {
-          coinType: chain.coinType,
-          chainId: chain.chainId || '',
-          chainName: chain.name,
-          symbol: chain.unikeySymbol,
-        },
-      }
-    }
-    else {
-      return null
-    }
-  }
-
-  @Reflect.metadata('SAFE', true)
+  @Reflect.metadata('OPEN', true)
   async getCurrentKeyType (): Promise<KeyObjectType | null> {
     const currentUnikey = await this._getCurrentUnikey()
 
@@ -118,9 +97,7 @@ export class ProviderController {
     }
   }
 
-  requestPermissionOfCurrentKey () {
-  }
-
+  @Reflect.metadata('OPEN', true)
   async getPermittedKeys ({ session: { origin } }: ProviderRequest): Promise<PermittedKeysResponse> {
     const passport = await permissionService.getPassport(origin)
 
@@ -156,6 +133,74 @@ export class ProviderController {
     }
   }
 
+  async requestPermissionOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>) {
+    const param = data.params[0]
+    const meta = param.meta
+
+    const currentUnikey = await personalService.getCurrentUnikey()
+    if (currentUnikey) {
+      const currentChain = CHAINS[currentUnikey.keySymbol]
+
+      if (meta.coinType === currentChain.coinType && meta.chainId === currentChain.chainId) {
+        // todo: go through with it
+        const result = await approvalService.requestApproval({
+          origin: session.origin,
+          approvalPage: ApprovalPage.requestPermission,
+          params: param,
+        })
+
+        return result
+      }
+      else {
+        throw ethErrors.rpc.invalidParams('Requested key\'s metadata doesn\'t match current key\'s metadata')
+      }
+    }
+    else {
+      throw ethErrors.rpc.resourceNotFound('There isn\'t a current key')
+    }
+  }
+
+  @Reflect.metadata('PROTECTED', true)
+  async getCurrentKey ({ session: { origin } }: ProviderRequest): Promise<KeyObjectType|null> {
+    if (!siteService.hasBeenConnected(origin)) {
+      return null
+    }
+
+    const currentUnikey = await this._getCurrentUnikey()
+
+    if (currentUnikey) {
+      const chain = CHAINS[currentUnikey.keySymbol]
+
+      return {
+        type: currentUnikey.keyType,
+        meta: {
+          coinType: chain.coinType,
+          chainId: chain.chainId || '',
+          chainName: chain.name,
+          symbol: chain.unikeySymbol,
+        },
+      }
+    }
+    else {
+      return null
+    }
+  }
+
+  @Reflect.metadata('PROTECTED', true)
+  signPlainMessage ({ session, data }: ProviderRequest) {
+
+  }
+
+  @Reflect.metadata('PROTECTED', true)
+  signTypedMessage () {
+
+  }
+
+  @Reflect.metadata('PROTECTED', true)
+  signTransaction () {
+
+  }
+
   async route (req: ProviderRequest): Promise<any> {
     const { data: { method }, session } = req
     // @ts-ignore
@@ -170,7 +215,7 @@ export class ProviderController {
     }
 
     // todo: connect before getCurrentKeyType
-    if (!Reflect.getMetadata('SAFE', this, method)) {
+    if (!Reflect.getMetadata('OPEN', this, method)) {
       // check wallet is setup
       const isSetup = await keyringService.isSetup()
       if (!isSetup) {
@@ -189,12 +234,12 @@ export class ProviderController {
         })
       }
 
-      // check if connected
+      // check if it has permission
       if (!siteService.hasBeenConnected(session.origin)) {
         req.needApproval = true
 
         await approvalService.requestApproval({
-          approvalPage: ApprovalPage.connect,
+          approvalPage: ApprovalPage.requestPermission,
           params: {
             origin: session.origin,
             name: session.name,

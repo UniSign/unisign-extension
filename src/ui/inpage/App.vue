@@ -7,8 +7,12 @@
   <div class="unisign-panel" @click="lock">
     UniSign {{ isLocked }}
 
-    <button @click="onClickConnect">
-      connect
+    <button @click="onClickGetCurrentKeyType">
+      getCurrentKeyType
+    </button>
+
+    <button @click="onClickRequestPermissionOfCurrentKey">
+      requestPermissionOfCurrentKey
     </button>
   </div>
 </template>
@@ -19,16 +23,23 @@ import { ref } from 'vue'
 export default {
   setup () {
     const isLocked = ref(false)
+
     return {
       isLocked,
 
-      async onClickConnect () {
+      async onClickGetCurrentKeyType () {
         const res = await window.unisign.request({
           method: 'getCurrentKeyType',
         })
 
         // eslint-disable-next-line no-alert
-        window.alert(res)
+        window.alert(JSON.stringify(res))
+      },
+
+      async onClickRequestPermissionOfCurrentKey () {
+        const res = await window.unisign.request({
+          method: 'requestPermissionOfCurrentKey',
+        })
       },
     }
   },

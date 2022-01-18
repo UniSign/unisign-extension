@@ -6,7 +6,7 @@ import { IS_CHROME, IS_LINUX } from '~/env'
 
 export enum ApprovalPage {
   unlock = 'unlock',
-  connect = 'connect',
+  requestPermission = 'requestPermission',
 }
 
 interface ApprovalData {
