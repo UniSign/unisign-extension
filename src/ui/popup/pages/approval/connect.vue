@@ -79,9 +79,12 @@ h2 {
   </SignWrapper>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import SignWrapper from './-/SignWrapper.vue'
+import { ApprovalData } from '~/background/services/approval'
+import { Unikey } from '~/background/services/unikey'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageConnect',
@@ -89,10 +92,19 @@ export default {
     SignWrapper,
   },
   setup () {
-    function onRejectClick (e) {
+    const params = ref<ApprovalData|null>(null)
+    const currentUnikey = ref<Unikey|null>(null)
+    async function onRejectClick () {
+      await wallet.resolveApproval(params)
     }
-    function onAllowClick (e) {
+    async function onAllowClick () {
+      await wallet.rejectApproval()
     }
+
+    onMounted(async () => {
+      currentUnikey.value = await wallet.getCurrentUnikey()
+      params.value = await wallet.getApproval()
+    })
 
     return {
       onRejectClick,
