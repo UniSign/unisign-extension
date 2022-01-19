@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import LayoutDefault from './layouts/default.vue'
 import PageIndex from './pages/index.vue'
-import PageUnlock from './pages/unlock.vue'
 import PageSetup from './pages/setup/setup.vue'
 import PagePhishingCode from './pages/setup/phishingCode.vue'
 import PageHome from './pages/setup/home.vue'
@@ -20,11 +19,11 @@ import PageKeyManagement from './pages/settings/keyManagement.vue'
 import PageSecurityAndBackup from './pages/settings/securityAndBackup.vue'
 import PageAdvancedReset from './pages/settings/advancedReset.vue'
 import PageImportAnotherMnemonic from './pages/settings/importAnotherMnemonic.vue'
-import PageConnect from './pages/connect/connect.vue'
-import PageSignPlainMessage from './pages/connect/signPlainMessage.vue'
-import PageSignTypedMessage from './pages/connect/signTypedMessage.vue'
-import PageSignTransaction from './pages/connect/signTransaction.vue'
-import PageDecodeMessage from './pages/connect/decodeMessage.vue'
+import PageConnect from './pages/approval/connect.vue'
+import PageSignPlainMessage from './pages/approval/signPlainMessage.vue'
+import PageSignTypedMessage from './pages/approval/signTypedMessage.vue'
+import PageSignTransaction from './pages/approval/signTransaction.vue'
+import PageDecodeMessage from './pages/approval/decodeMessage.vue'
 import PageTest from './pages/test.vue'
 
 const routes = [{
@@ -37,9 +36,6 @@ const routes = [{
   }, {
     path: '/test',
     component: PageTest,
-  }, {
-    path: '/unlock',
-    component: PageUnlock,
   }, {
     path: '/setup',
     component: PageSetup,
