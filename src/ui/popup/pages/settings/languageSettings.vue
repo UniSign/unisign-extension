@@ -53,7 +53,7 @@ export default {
   name: 'PageSettings',
   setup () {
     const locale = ref('')
-    async function onChangeLocale (value:LOCALES) {
+    async function onChangeLocale (value: LOCALES) {
       locale.value = await wallet.setLocale(value)
     }
     onMounted(async () => {

@@ -41,7 +41,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, toRefs } from 'vue'
 
 export default {
@@ -71,12 +71,13 @@ export default {
       default: 'Incorrect private key',
     },
   },
+  emits: ['update:modelValue'],
   setup (props, context) {
     const canShowValidateText = ref(false)
     const { validateText } = toRefs(props)
-    function onInputChange (e) {
+    function onInputChange (evt: Event) {
       canShowValidateText.value = false
-      context.emit('update:modelValue', e.target.value)
+      context.emit('update:modelValue', (evt.target as HTMLInputElement).value)
     }
     const validate = () => {
       if (validateText.value) {

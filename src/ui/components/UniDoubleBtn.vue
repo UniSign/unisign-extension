@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { toRefs } from 'vue'
 
 export default {
@@ -65,12 +65,12 @@ export default {
   emits: ['rejectClick', 'allowClick'],
   setup (props, context) {
     const { disabled } = toRefs(props)
-    function onRejectClick (e) {
-      context.emit('rejectClick', e.target.value)
+    function onRejectClick (evt: Event) {
+      context.emit('rejectClick', (evt.target as HTMLInputElement).value)
     }
-    function onAllowClick (e) {
+    function onAllowClick (evt: Event) {
       if (disabled.value) return
-      context.emit('allowClick', e.target.value)
+      context.emit('allowClick', (evt.target as HTMLInputElement).value)
     }
     return {
       onRejectClick,
