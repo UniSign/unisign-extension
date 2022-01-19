@@ -85,6 +85,7 @@ export default {
       rePassword,
       passwordRef,
       rePasswordRef,
+      validataText,
       onClickSetup,
     }
   },

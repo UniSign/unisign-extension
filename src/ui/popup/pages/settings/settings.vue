@@ -48,6 +48,7 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { windows } from '~/background/tools/windows'
 
 export default {
   name: 'PageSettings',
@@ -60,10 +61,9 @@ export default {
       { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'advancedReset' },
       { key: 'about', value: 'About UniSign', color: '#9094AE', router: 'about' },
     ])
-    const onClickSettingItem = (item) => {
+    const onClickSettingItem = async (item) => {
       if (item.router === 'about') {
-        // todo:
-        // window.location.href = 'https://unisign.org'
+        await windows.createNewTab('https://unisign.org')
         return
       }
       router.push(`/${item.router}`)

@@ -45,7 +45,7 @@
 <script>
 import '~/background/polyfill'
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { validateMnemonic } from 'bip39'
 import { wallet } from '~/ui/controllers/wallet'
 
@@ -53,7 +53,6 @@ export default {
   name: 'PageImportMnemonic',
   setup () {
     const router = useRouter()
-    const route = useRoute()
 
     const mnemonic = ref('')
     const mnemonicRef = ref(null)
@@ -61,6 +60,7 @@ export default {
       if (!mnemonic.value) return
       if (!validateMnemonic(mnemonic.value)) {
         mnemonicRef.value.validate()
+        return
       }
       await wallet.importMnemonic(mnemonic.value)
       router.push('/addAddressSuccess')

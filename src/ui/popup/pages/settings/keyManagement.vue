@@ -185,7 +185,7 @@
       <template v-if="derivedUniKeys.length">
         <h2>Derived from Mnemonic</h2>
         <div v-for="unikey in derivedUniKeys" :key="unikey.key" class="settings-item-box">
-          <img :src="getImageUrl(unikey.keySymbol,unikey.hidden ? true : false)">
+          <img :src="getImageUrl(unikey.keySymbol,unikey.hidden)">
           <span>{{ substringKey(unikey.key) }}</span>
           <div class="arrow-right" @click="onClickSettings(unikey)">
             <Iconfont name="more" width="12" height="12" color="#6F7684"></Iconfont>
@@ -312,7 +312,7 @@ export default {
     }
 
     // viewMnemonic
-    const onClickViewMnemonic = () => {
+    const onClickViewMnemonic = (unikey) => {
       unikey.isSetting = false
       keySettingsDialogRef.value.onClickViewMnemonic()
     }
