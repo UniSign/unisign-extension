@@ -49,9 +49,9 @@ export class ApprovalService extends AutoBindService {
     return this.approval?.data || null
   }
 
-  resolveApproval (data?: any) {
+  async resolveApproval (data?: any) {
     this.approval?.resolve(data)
-    this.approval = null
+    await this.clear()
   }
 
   async rejectApproval (errMsg?: string) {

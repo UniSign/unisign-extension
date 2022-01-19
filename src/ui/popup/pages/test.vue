@@ -33,6 +33,12 @@
 <template>
   <div class="page-test">
     <fieldset>
+      <router-link to="/">
+        Home
+      </router-link>
+    </fieldset>
+
+    <fieldset>
       <legend>Locale</legend>
 
       Current: {{ locale }}

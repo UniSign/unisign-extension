@@ -91,7 +91,10 @@ export class WalletController {
   disabledChain = chainService.disableChain
 
   // ----- permission -------
-  clearAllPassports = permissionService.clearAllPassports
+  clearAllPermission () {
+    permissionService.clearAllPassports()
+    siteService.removeAllSites()
+  }
 
   // ----- settings -------
   getLocale = settingsService.getLocale

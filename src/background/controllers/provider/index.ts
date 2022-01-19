@@ -2,18 +2,18 @@ import { ethErrors } from 'eth-rpc-errors'
 import 'reflect-metadata'
 import { ApprovalPage, approvalService } from '~/background/services/approval'
 import { keyringService } from '~/background/services/keyring'
-import { permissionService } from '~/background/services/permission'
+import { Permissions, permissionService } from '~/background/services/permission'
 import { personalService } from '~/background/services/personal'
 import { Session, SessionData, sessionService } from '~/background/services/session'
 import { siteService } from '~/background/services/site'
 import { Unikey, unikeyService, UnikeyType } from '~/background/services/unikey'
-import { CHAINS, KeyIdentifier } from '~/constants'
+import { CHAINS } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
-interface ProviderRequest<T1 = any, T2 = any, T3 = any> {
+interface ProviderRequest<T1 = any> {
   data: {
     method: string
-    params: [T1, T2, T3]
+    params: [T1]
   }
   session: Session
   needApproval: boolean
@@ -25,7 +25,7 @@ export interface KeyObjectType {
   // currently, we only have blockchain meta
   meta: {
     coinType: string
-    chainId: string
+    chainId?: string
     chainName?: string
     symbol?: string
   }
@@ -36,11 +36,11 @@ export interface KeyObject extends KeyObjectType {
 }
 
 export type PermittedKeyObjectType = KeyObjectType & {
-  permission: string[]
+  permissions: string[]
 }
 
 export type PermittedKeyObject = KeyObject & {
-  permission: string[]
+  permissions: string[]
 }
 
 export interface PermittedKeysResponse {
@@ -86,7 +86,7 @@ export class ProviderController {
         type: currentUnikey.keyType,
         meta: {
           coinType: chain.coinType,
-          chainId: chain.chainId || '',
+          chainId: chain.chainId,
           chainName: chain.name,
           symbol: chain.tokenSymbol,
         },
@@ -105,8 +105,8 @@ export class ProviderController {
       return {
         invoker: origin,
         // @ts-ignore
-        keys: passport.authorities.map((authority) => {
-          const unikey = unikeyService.findUnikeyByKey(authority.key)
+        keys: passport.consents.map((consent) => {
+          const unikey = unikeyService.findUnikeyByKey(consent.key)
 
           if (unikey) {
             const chain = CHAINS[unikey.keySymbol]
@@ -119,7 +119,7 @@ export class ProviderController {
                 chainName: chain.name,
                 symbol: chain.tokenSymbol,
               },
-              permission: authority.permissions,
+              permissions: consent.permissions,
             } as PermittedKeyObject
           }
           return null
@@ -133,7 +133,7 @@ export class ProviderController {
     }
   }
 
-  async requestPermissionOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>) {
+  async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>) {
     const param = data.params[0]
     const meta = param.meta
 
@@ -148,6 +148,8 @@ export class ProviderController {
           params: param,
         })
 
+        // todo: save requested permission
+
         return result
       }
       else {
@@ -160,11 +162,7 @@ export class ProviderController {
   }
 
   @Reflect.metadata('PROTECTED', true)
-  async getCurrentKey ({ session: { origin } }: ProviderRequest): Promise<KeyObjectType|null> {
-    if (!siteService.hasBeenConnected(origin)) {
-      return null
-    }
-
+  async getCurrentKey (): Promise<KeyObject|null> {
     const currentUnikey = await this._getCurrentUnikey()
 
     if (currentUnikey) {
@@ -172,6 +170,7 @@ export class ProviderController {
 
       return {
         type: currentUnikey.keyType,
+        key: currentUnikey.key,
         meta: {
           coinType: chain.coinType,
           chainId: chain.chainId || '',
@@ -186,7 +185,7 @@ export class ProviderController {
   }
 
   @Reflect.metadata('PROTECTED', true)
-  signPlainMessage ({ session, data }: ProviderRequest) {
+  signPlainMessage () {
 
   }
 
@@ -213,7 +212,6 @@ export class ProviderController {
       })
     }
 
-    // todo: connect before getCurrentKeyType
     if (!Reflect.getMetadata('OPEN', this, method)) {
       // check wallet is setup
       const isSetup = await keyringService.isSetup()
@@ -232,26 +230,43 @@ export class ProviderController {
           approvalPage: ApprovalPage.unlock,
         })
       }
+    }
 
-      // check if it has permission
-      if (!siteService.hasBeenConnected(session.origin)) {
-        req.needApproval = true
+    if (Reflect.getMetadata('PROTECTED', this, method)) {
+      req.needApproval = true
 
-        await approvalService.requestApproval({
-          approvalPage: ApprovalPage.requestPermission,
-          params: {
+      const currentUnikey = (await this._getCurrentUnikey())!
+
+      // check if it has permission. If not, we will request the permission for developers
+      if (!permissionService.hasPermission(session.origin, currentUnikey.key, method as Permissions)) {
+        const chain = CHAINS[currentUnikey.keySymbol]
+        const permissionReq: PermittedKeyObject = {
+          type: currentUnikey.keyType,
+          key: currentUnikey.key,
+          meta: {
+            coinType: chain.coinType,
+            chainId: chain.chainId,
+          },
+          permissions: [method],
+        }
+
+        await this.requestPermissionsOfCurrentKey({
+          session,
+          data: {
+            method: 'requestPermissionsOfCurrentKey',
+            params: [permissionReq],
+          },
+          needApproval: true,
+        })
+
+        if (!siteService.hasBeenConnected(session.origin)) {
+          siteService.addSite({
             origin: session.origin,
             name: session.name,
             icon: session.icon,
-          },
-        })
-
-        siteService.addSite({
-          origin: session.origin,
-          name: session.name,
-          icon: session.icon,
-          unikeySymbol: KeyIdentifier.BTC, // todo: this should come from connect page
-        })
+            unikeySymbol: chain.unikeySymbol,
+          })
+        }
       }
     }
 

@@ -130,6 +130,11 @@ export class SiteService {
     this.sync()
   }
 
+  removeAllSites () {
+    this.lrcCache.reset()
+    this.sync()
+  }
+
   getSites () {
     return this.lrcCache.values()
   }
