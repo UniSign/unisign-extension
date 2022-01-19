@@ -3,8 +3,8 @@ import { IS_WINDOWS } from '~/env'
 
 const BROWSER_HEADER = 80
 const WINDOW_SIZE = {
-  width: 400 + (IS_WINDOWS ? 14 : 0), // idk why windows cut the width.
-  height: 600,
+  width: 350 + (IS_WINDOWS ? 14 : 0), // idk why windows cut the width.
+  height: 650,
 }
 
 export interface CreateWindowProps {
@@ -23,6 +23,7 @@ export const windows = {
     const left = cLeft! + width! - WINDOW_SIZE.width
 
     const win = await browser.windows.create({
+      url,
       focused: true,
       type: 'popup',
       top,

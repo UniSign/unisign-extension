@@ -142,10 +142,9 @@ export class ProviderController {
       const currentChain = CHAINS[currentUnikey.keySymbol]
 
       if (meta.coinType === currentChain.coinType && meta.chainId === currentChain.chainId) {
-        // todo: go through with it
         const result = await approvalService.requestApproval({
-          origin: session.origin,
           approvalPage: ApprovalPage.requestPermission,
+          origin: session.origin,
           params: param,
         })
 
@@ -277,7 +276,7 @@ export function setupProviderController () {
     const session = sessionService.getOrCreate(tabId)
 
     return await providerController.route({
-      data: data.data,
+      data: data.data as any,
       session,
       needApproval: false,
     })

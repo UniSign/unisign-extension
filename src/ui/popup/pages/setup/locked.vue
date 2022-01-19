@@ -73,8 +73,13 @@ export default {
         throw new Error(e)
       })
       isLocked.value = await wallet.isLocked()
+
       if (!isLocked.value) {
-        router.push('/')
+        const approval = await wallet.getApproval()
+        if (approval) {
+          await wallet.resolveApproval()
+        }
+        router.replace('/')
       }
     }
 

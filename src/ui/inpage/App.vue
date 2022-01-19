@@ -11,6 +11,10 @@
       getCurrentKeyType
     </button>
 
+    <button @click="onClickGetPermittedKeys">
+      getPermittedKeys
+    </button>
+
     <button @click="onClickRequestPermissionOfCurrentKey">
       requestPermissionOfCurrentKey
     </button>
@@ -24,6 +28,9 @@ export default {
   setup () {
     const isLocked = ref(false)
 
+    // eslint-disable-next-line no-alert
+    const alert = (res: any) => window.alert(JSON.stringify(res))
+
     return {
       isLocked,
 
@@ -32,14 +39,22 @@ export default {
           method: 'getCurrentKeyType',
         })
 
-        // eslint-disable-next-line no-alert
-        window.alert(JSON.stringify(res))
+        alert(res)
       },
 
       async onClickRequestPermissionOfCurrentKey () {
         const res = await window.unisign.request({
           method: 'requestPermissionOfCurrentKey',
         })
+
+        alert(res)
+      },
+
+      async onClickGetPermittedKeys () {
+        const res = await window.unisign.request({
+          method: 'getPermittedKeys',
+        })
+        alert(res)
       },
     }
   },
