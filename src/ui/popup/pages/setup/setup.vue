@@ -50,10 +50,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
+import UniInput from '~/ui/components/UniInput.vue'
 
 export default {
   name: 'PageSetup',
@@ -63,7 +64,7 @@ export default {
     const password = ref('')
     const rePassword = ref('')
     const passwordRef = ref(null)
-    const rePasswordRef = ref(null)
+    const rePasswordRef = ref<InstanceType<typeof UniInput>>(null)
     const validataText = ref('')
     const onClickSetup = async () => {
       if (!password.value || !rePassword.value) return

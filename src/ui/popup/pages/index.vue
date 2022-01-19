@@ -14,17 +14,16 @@ export default {
     onMounted(async () => {
       const isSetup = await wallet.isSetup()
       const isLocked = await wallet.isLocked()
-      console.log(isSetup, isLocked, 'isLocked')
       if (isSetup) {
         if (isLocked) {
-          router.push('/setup/locked')
+          router.replace('/setup/locked')
         }
         else {
-          router.push('/setup/home')
+          router.replace('/setup/home')
         }
       }
       else {
-        router.push('/setup')
+        router.replace('/setup')
       }
     })
     return {

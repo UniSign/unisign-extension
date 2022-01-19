@@ -91,7 +91,7 @@ export default {
       await sleep(1000)
       window.location.reload()
       isShowTipsDialog.value = false
-      router.push('/')
+      router.replace('/')
     }
 
     return {
