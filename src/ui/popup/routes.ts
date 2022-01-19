@@ -92,22 +92,22 @@ const routes = [{
     path: '/settings/importAnotherMnemonic',
     component: PageImportAnotherMnemonic,
   }, {
-    path: '/connect',
+    path: '/approval/connect',
     component: PageConnect,
   }, {
-    path: '/requestPermission',
+    path: '/approval/requestPermission',
     component: PageRequestPermission,
   }, {
-    path: '/signPlainMessage',
+    path: '/approval/signPlainMessage',
     component: PageSignPlainMessage,
   }, {
-    path: '/connect/signTypedMessage',
+    path: '/approval/signTypedMessage',
     component: PageSignTypedMessage,
   }, {
-    path: '/connect/signTransaction',
+    path: '/approval/signTransaction',
     component: PageSignTransaction,
   }, {
-    path: '/connect/decodeMessage',
+    path: '/approval/decodeMessage',
     component: PageDecodeMessage,
   }],
 }]
