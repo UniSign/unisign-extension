@@ -64,18 +64,18 @@ export default {
     const password = ref('')
     const rePassword = ref('')
     const passwordRef = ref(null)
-    const rePasswordRef = ref<InstanceType<typeof UniInput>>(null)
+    const rePasswordRef = ref<InstanceType<typeof UniInput>>()
     const validataText = ref('')
     const onClickSetup = async () => {
       if (!password.value || !rePassword.value) return
       if (rePassword.value !== password.value) {
         validataText.value = 'The passwords do not match'
-        rePasswordRef.value.validate()
+        rePasswordRef.value?.validate()
         return
       }
       await wallet.setupWallet(password.value).catch((e) => {
         validataText.value = e
-        rePasswordRef.value.validate()
+        rePasswordRef.value?.validate()
         throw new Error(e)
       })
       router.push('/setup/phishingCode')

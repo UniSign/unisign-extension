@@ -425,15 +425,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
 import SwitchKeyDialog from './-/SwitchKeyDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
-import { HDKeyrings, CHAINS } from '~/constants'
+import { CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
+import { Unikey } from '~/background/services/unikey'
 
 export default {
   name: 'PageHome',
@@ -449,7 +450,7 @@ export default {
     // animation
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
-    const topLineBoxRef = ref(null)
+    const topLineBoxRef = ref<null | HTMLDivElement>(null)
     onMounted(async () => {
       window.onscroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -457,12 +458,12 @@ export default {
         if (scrollTop > 0) {
           isScroll.value = true
           iconFontColor.value = '#8D919C'
-          topLineBoxRef.value.style.background = `rgba(255,255,255,${transferScrollTop})`
+          topLineBoxRef.value!.style.background = `rgba(255,255,255,${transferScrollTop})`
         }
         else {
           isScroll.value = false
           iconFontColor.value = '#fff'
-          topLineBoxRef.value.style.background = 'rgba(255,255,255,0)'
+          topLineBoxRef.value!.style.background = 'rgba(255,255,255,0)'
         }
       }
     })
@@ -502,11 +503,12 @@ export default {
 
     // unikey
     const isShowSwitchKeyDialog = ref(false)
-    const currentUnikey = ref(null)
-    const currentUnikeyName = ref(null)
+    const currentUnikey = ref<Unikey| null>(null)
+    const currentUnikeyName = ref('')
     async function getCurrentUnikey () {
       currentUnikey.value = await wallet.getCurrentUnikey()
-      currentUnikeyName.value = CHAINS[currentUnikey.value.keySymbol].name
+      console.log(currentUnikey.value, 'currentUnikey.value')
+      currentUnikeyName.value = CHAINS[currentUnikey.value!.keySymbol].name
     }
     onMounted(async () => {
       await getCurrentUnikey()

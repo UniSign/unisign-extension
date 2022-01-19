@@ -32,7 +32,7 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
 import { watch } from 'vue'
 
 export default {

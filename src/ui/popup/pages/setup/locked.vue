@@ -47,29 +47,30 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
+import UniInput from '~/ui/components/UniInput.vue'
 
 export default {
   name: 'PageLocked',
   setup () {
     const router = useRouter()
 
-    const passwordRef = ref('')
+    const passwordRef = ref<InstanceType<typeof UniInput>>()
     const password = ref('')
     const validataText = ref('')
     const isLocked = ref(false)
     const triggerValidate = async () => {
       if (!password.value) {
         validataText.value = 'Please enter password'
-        passwordRef.value.validate()
+        passwordRef.value?.validate()
         return
       }
       await wallet.unlock(password.value).catch((e) => {
         validataText.value = e
-        passwordRef.value.validate()
+        passwordRef.value?.validate()
         throw new Error(e)
       })
       isLocked.value = await wallet.isLocked()
