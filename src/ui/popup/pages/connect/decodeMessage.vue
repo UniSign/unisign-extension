@@ -51,7 +51,7 @@
 </style>
 
 <template>
-  <signWrapper @rejectClick="onRejectClick" @allowClick="onAllowClick">
+  <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>
@@ -72,17 +72,17 @@
     <div class="main-message-box">
       Unlike centralized account systems, such as cell phone numbers/email/social accounts, DAS offers a decentralized and open sourced approach to account systems. DAS can be used as a digital assets collection account, as an account for accessing general Internet services.
     </div>
-  </signWrapper>
+  </SignWrapper>
 </template>
 
 <script>
 import { ref } from 'vue'
-import signWrapper from './signWrapper.vue'
+import SignWrapper from './-/SignWrapper.vue'
 
 export default {
   name: 'PageDecodeMessage',
   components: {
-    signWrapper,
+    SignWrapper,
   },
   setup () {
     function onRejectClick (e) {

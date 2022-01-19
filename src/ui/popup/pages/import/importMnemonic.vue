@@ -63,7 +63,7 @@ export default {
         return
       }
       await wallet.importMnemonic(mnemonic.value)
-      router.push('/addAddressSuccess')
+      router.push('/addAddress/addAddressSuccess')
     }
     return {
       onClickSubmit,

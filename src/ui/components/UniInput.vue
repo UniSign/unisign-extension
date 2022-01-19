@@ -65,9 +65,9 @@
 </template>
 
 <script>
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     width: {
       type: String,
@@ -125,5 +125,5 @@ export default {
       triggerValidate,
     }
   },
-}
+})
 </script>

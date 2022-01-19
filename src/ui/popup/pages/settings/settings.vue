@@ -55,10 +55,10 @@ export default {
   setup () {
     const router = useRouter()
     const settingsArr = ref([
-      { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'keyManagement' },
-      { key: 'language', value: 'Language', color: '#4190FF', router: 'languageSettings' },
-      { key: 'security', value: 'Security & Backup', color: '#66D5AA', router: 'securityAndBackup' },
-      { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'advancedReset' },
+      { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'settings/keyManagement' },
+      { key: 'language', value: 'Language', color: '#4190FF', router: 'settings/language' },
+      { key: 'security', value: 'Security & Backup', color: '#66D5AA', router: 'settings/securityAndBackup' },
+      { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'settings/advancedReset' },
       { key: 'about', value: 'About UniSign', color: '#9094AE', router: 'about' },
     ])
     const onClickSettingItem = async (item) => {

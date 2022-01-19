@@ -109,19 +109,19 @@
         </UniBtn>
       </div>
     </UniDialog>
-    <keySettingsDialog ref="keySettingsDialogRef"></keySettingsDialog>
+    <KeySettingsDialog ref="keySettingsDialogRef"></KeySettingsDialog>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
-import keySettingsDialog from './keySettingsDialog.vue'
+import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageSecurityAndBackup',
   components: {
-    keySettingsDialog,
+    KeySettingsDialog,
   },
   setup () {
     const canShowMsg = ref(false)

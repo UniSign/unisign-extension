@@ -58,7 +58,7 @@ h2 {
 </style>
 
 <template>
-  <signWrapper @rejectClick="onRejectClick" @allowClick="onAllowClick">
+  <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>
@@ -76,17 +76,17 @@ h2 {
       </div>
       <p>DO NOT sign any plain message which you don’t know about it’s real means.</p>
     </div>
-  </signWrapper>
+  </SignWrapper>
 </template>
 
 <script>
 import { ref } from 'vue'
-import signWrapper from './signWrapper.vue'
+import SignWrapper from './-/SignWrapper.vue'
 
 export default {
   name: 'PageSignPlainMessage',
   components: {
-    signWrapper,
+    SignWrapper,
   },
   setup () {
     function onRejectClick (e) {

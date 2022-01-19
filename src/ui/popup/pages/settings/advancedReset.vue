@@ -49,7 +49,7 @@
   <div class="page-advanced-reset">
     <UniTab title="Advanced"></UniTab>
     <div class="settings-box">
-      <div class="settings-item-box" @click="$router.push('/importAnotherMnemonic')">
+      <div class="settings-item-box" @click="$router.push('/settings/importAnotherMnemonic')">
         <span>Import another Mnemonic</span>
         <div class="arrow-right">
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
@@ -78,6 +78,7 @@
 
 <script>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
 import { sleep } from '~/utils'
 
@@ -90,6 +91,7 @@ export default {
       await sleep(1000)
       window.location.reload()
       isShowTipsDialog.value = false
+      router.replace('/')
     }
 
     return {

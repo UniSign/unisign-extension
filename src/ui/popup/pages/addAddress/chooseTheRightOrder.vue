@@ -121,7 +121,7 @@ export default {
     const onClickSubmit = async () => {
       if (!canClickBtn.value) return
       await wallet.importMnemonic(route.query.mnemonic)
-      router.push('/addAddressSuccess')
+      router.push('/addAddress/addAddressSuccess')
     }
     return {
       isNullOrEmpty,

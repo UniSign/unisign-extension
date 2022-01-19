@@ -112,7 +112,7 @@
 </style>
 
 <template>
-  <signWrapper @rejectClick="onRejectClick" @allowClick="onAllowClick">
+  <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>
@@ -151,17 +151,17 @@
         </div>
       </div>
     </div>
-  </signWrapper>
+  </SignWrapper>
 </template>
 
 <script>
 import { ref } from 'vue'
-import signWrapper from './signWrapper.vue'
+import SignWrapper from './-/SignWrapper.vue'
 
 export default {
   name: 'PageSignTransaction',
   components: {
-    signWrapper,
+    SignWrapper,
   },
   setup () {
     function onRejectClick (e) {

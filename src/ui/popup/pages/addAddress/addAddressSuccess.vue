@@ -29,7 +29,7 @@
       <img class="w-[189px] h-[161px] mx-auto mt-[77px]" src="/assets/page-addAddress/success-bg.png">
       <h2>Success</h2>
     </div>
-    <UniBtn class="uni-btn" @click="$router.push(`/begin`)">
+    <UniBtn class="uni-btn" @click="$router.push(`/setup/home`)">
       Start to use
     </UniBtn>
     <Ironman></Ironman>

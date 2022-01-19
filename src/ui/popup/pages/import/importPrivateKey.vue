@@ -38,7 +38,7 @@
         ref="privateKeyRef"
         v-model="privateKey"
         class="block mt-[32px] mx-auto"
-        validate-text="Incorrect private key"
+        :validate-text="validataText"
         :placeholder="`${keyName} private key`"
       ></UniTextArea>
       <UniBtn :disabled="!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
@@ -61,21 +61,22 @@ export default {
 
     const privateKey = ref('')
     const privateKeyRef = ref(null)
+    const validataText = ref('')
     const keyName = CHAINS[route.params.key].name
     const onClickSubmit = async () => {
       if (!privateKey.value) return
-      // todo:To be verified
-      if (privateKey.value.length < 5) {
+      await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key].simpleKeyringType).catch((e) => {
+        validataText.value = e
         privateKeyRef.value.validate()
-        return
-      }
-      await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key].simpleKeyringType)
-      router.push('/addAddressSuccess')
+        throw new Error(e)
+      })
+      router.push('/addAddress/addAddressSuccess')
     }
     return {
       onClickSubmit,
       privateKey,
       privateKeyRef,
+      validataText,
       keyName,
     }
   },

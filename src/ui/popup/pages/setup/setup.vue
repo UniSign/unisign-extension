@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
-.page-welcome {
+.page-setup {
   height: 100%;
-  background: url("/assets/page-welcome/page-welcome-bg.png") no-repeat;
+  background: url("/assets/page-setup/page-setup-bg.png") no-repeat;
   background-size:100% 100%;
   h2 {
     margin-top: 13px;
@@ -34,9 +34,9 @@
 </style>
 
 <template>
-  <div class="page-welcome">
-    <img class="w-[350px] h-[78px]" src="/assets/page-welcome/page-welcome-top-bg.png">
-    <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-welcome/page-welcome-logo.png">
+  <div class="page-setup">
+    <img class="w-[350px] h-[78px]" src="/assets/page-setup/page-setup-top-bg.png">
+    <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-setup/page-setup-logo.png">
     <h2>Bring all crypto users into<span>Web3.0</span></h2>
 
     <div class="input-box">
@@ -50,20 +50,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
+import UniInput from '~/ui/components/UniInput.vue'
 
 export default {
-  name: 'PageWelcome',
+  name: 'PageSetup',
   setup (props, context) {
     const router = useRouter()
 
     const password = ref('')
     const rePassword = ref('')
     const passwordRef = ref(null)
-    const rePasswordRef = ref(null)
+    const rePasswordRef = ref<InstanceType<typeof UniInput>>(null)
     const validataText = ref('')
     const onClickSetup = async () => {
       if (!password.value || !rePassword.value) return
@@ -77,7 +78,7 @@ export default {
         rePasswordRef.value.validate()
         throw new Error(e)
       })
-      router.push('/phishingCode')
+      router.push('/setup/phishingCode')
     }
 
     return {

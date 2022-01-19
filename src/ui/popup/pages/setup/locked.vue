@@ -29,7 +29,7 @@
 
 <template>
   <div class="page-locked">
-    <img class="w-[122px] h-[122px] mx-auto mt-[119px]" src="/assets/page-welcome/locked-logo.png">
+    <img class="w-[122px] h-[122px] mx-auto mt-[119px]" src="/assets/page-setup/locked-logo.png">
     <h2>Welcome Back</h2>
     <UniInput
       ref="passwordRef"
@@ -74,7 +74,7 @@ export default {
       })
       isLocked.value = await wallet.isLocked()
       if (!isLocked.value) {
-        router.push('/begin')
+        router.push('/')
       }
     }
 
