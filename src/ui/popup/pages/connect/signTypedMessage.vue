@@ -77,7 +77,7 @@
 </style>
 
 <template>
-  <signWrapper @rejectClick="onRejectClick" @allowClick="onAllowClick">
+  <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>
@@ -99,17 +99,17 @@
         <h2>Transfer Owner of jack.bit to 0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD</h2>
       </div>
     </div>
-  </signWrapper>
+  </SignWrapper>
 </template>
 
 <script>
 import { ref } from 'vue'
-import signWrapper from './signWrapper.vue'
+import SignWrapper from './-/SignWrapper.vue'
 
 export default {
   name: 'PageSignTypedMessage',
   components: {
-    signWrapper,
+    SignWrapper,
   },
   setup () {
     function onRejectClick (e) {

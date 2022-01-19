@@ -49,21 +49,21 @@
         <span>Derive From Mnemonic</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div v-else class="key-item-box mb-[24px]" @click="$router.push('/createMnemonic')">
+      <div v-else class="key-item-box mb-[24px]" @click="$router.push('/addAddress/createMnemonic')">
         <div>
           <Iconfont name="create" size="17" color="#6D8AF3"></Iconfont>
         </div>
         <span>Create Mnemonic</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div class="key-item-box" style="border-radius: 12px 12px 0px 0px;" @click="$router.push(`/importPrivateKey/${$route.params.key}`)">
+      <div class="key-item-box" style="border-radius: 12px 12px 0px 0px;" @click="$router.push(`/import/importPrivateKey/${$route.params.key}`)">
         <div>
           <Iconfont name="key" size="17" color="#8E98B2"></Iconfont>
         </div>
         <span>Import by priority key</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
-      <div v-if="!hasMnemonic" class="key-item-box" style="border-radius: 0px;" @click="$router.push('/importMnemonic')">
+      <div v-if="!hasMnemonic" class="key-item-box" style="border-radius: 0px;" @click="$router.push('/import/importMnemonic')">
         <div>
           <Iconfont name="mnemonic" size="17" color="#B2EED7"></Iconfont>
         </div>
@@ -107,7 +107,7 @@ export default {
     const route = useRoute()
     const onClickDeriveAddress = async () => {
       await wallet.deriveNewAccountFromMnemonic(route.params.key as KeyIdentifier)
-      router.push('/addAddressSuccess')
+      router.push('/addAddress/addAddressSuccess')
     }
 
     return {

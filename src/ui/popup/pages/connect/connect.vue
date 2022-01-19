@@ -58,7 +58,7 @@ h2 {
 </style>
 
 <template>
-  <signWrapper title="Connect Request" @rejectClick="onRejectClick" @allowClick="onAllowClick">
+  <SignWrapper title="Connect Request" @reject="onRejectClick" @allow="onAllowClick">
     <h2>
       Website
     </h2>
@@ -76,17 +76,17 @@ h2 {
         0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD
       </div>
     </div>
-  </signWrapper>
+  </SignWrapper>
 </template>
 
 <script>
 import { ref } from 'vue'
-import signWrapper from './signWrapper.vue'
+import SignWrapper from './-/SignWrapper.vue'
 
 export default {
   name: 'PageConnect',
   components: {
-    signWrapper,
+    SignWrapper,
   },
   setup () {
     function onRejectClick (e) {

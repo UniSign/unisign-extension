@@ -44,7 +44,7 @@
 <template>
   <div class="ironman-wrapper">
     <div class="ironman-box" @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">
-      <img src="/assets/page-begin/identification-icon.png">
+      <img src="/assets/page-home/identification-icon.png">
       <span>{{ antiPhishingCode }}</span>
     </div>
     <div v-show="isShowDetail" class="ironman-detail">

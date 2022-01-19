@@ -74,7 +74,7 @@ export default {
         passwordRef.value.validate()
         return
       }
-      router.push(`/addAddressSuccess/${route.params.key}`)
+      router.push(`/addAddress/addAddressSuccess/${route.params.key}`)
     }
     return {
       onClickSubmit,

@@ -110,7 +110,7 @@ export default {
       })
       await wallet.importMnemonic(mnemonic.value)
       isShowSecurityDialog.value = false
-      router.push('/addAddressSuccess')
+      router.push('/addAddress/addAddressSuccess')
     }
 
     return {

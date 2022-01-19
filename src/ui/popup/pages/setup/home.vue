@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-.page-begin {
+.page-home {
   position: relative;
   background-color: #DCE5F0;
   min-height: 630px;
@@ -318,7 +318,7 @@
 </style>
 
 <template>
-  <div class="page-begin">
+  <div class="page-home">
     <UniMsg :visible="canShowMsg" content="Copied" @close="canShowMsg= false"></UniMsg>
     <div class="top-bg"></div>
     <div ref="topLineBoxRef" class="top-line-box">
@@ -328,7 +328,7 @@
           Settings
         </div>
       </div>
-      <img class="w-[134px] h-[36px]" :src="`/assets/page-begin/nav-${isScroll?'logo-scroll':'logo'}.png`">
+      <img class="w-[134px] h-[36px]" :src="`/assets/page-home/nav-${isScroll?'logo-scroll':'logo'}.png`">
       <div class="icon-wrapper cursor-pointer" @click="onClickLock">
         <Iconfont name="lock" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
@@ -379,7 +379,7 @@
         <span>No Connect</span>
         <div>
           <div>
-            <img class="w-[8px] h-[11px]" src="/assets/page-begin/icon-pin-true.png">
+            <img class="w-[8px] h-[11px]" src="/assets/page-home/icon-pin-true.png">
             <div class="popover popover-top">
               Pin
             </div>
@@ -397,13 +397,13 @@
         <p>https://<span>mibao.com</span></p>
         <div>
           <div class="mr-[7px]">
-            <img class="w-[16px] h-[16px]" src="/assets/page-begin/icon-disconnect.png">
+            <img class="w-[16px] h-[16px]" src="/assets/page-home/icon-disconnect.png">
             <div class="popover popover-top">
               Disconnect
             </div>
           </div>
           <div>
-            <img class="w-[8px] h-[11px]" src="/assets/page-begin/icon-pin.png">
+            <img class="w-[8px] h-[11px]" src="/assets/page-home/icon-pin.png">
             <div class="popover popover-top">
               Pin
             </div>
@@ -421,7 +421,7 @@
         </div>
       </div>
     </UniDialog>
-    <switchKeyDialog v-if="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></switchKeyDialog>
+    <SwitchKeyDialog v-if="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></SwitchKeyDialog>
   </div>
 </template>
 
@@ -430,16 +430,16 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
-import switchKeyDialog from './switchKeyDialog.vue'
+import SwitchKeyDialog from './-/SwitchKeyDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings, CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
 
 export default {
-  name: 'PageBegin',
+  name: 'PageHome',
   components: {
     QrcodeVue,
-    switchKeyDialog,
+    SwitchKeyDialog,
   },
   setup (props, context) {
     const router = useRouter()
@@ -475,7 +475,7 @@ export default {
     async function onClickLock () {
       await wallet.lock()
       isLocked.value = await wallet.isLocked()
-      isLocked.value && router.push('/locked')
+      isLocked.value && router.push('/setup/locked')
     }
 
     // settings

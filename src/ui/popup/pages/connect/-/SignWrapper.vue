@@ -68,13 +68,13 @@ export default {
       default: 'Signature Request',
     },
   },
-  emits: ['rejectClick', 'allowClick'],
+  emits: ['reject', 'allow'],
   setup (props, context) {
     function onRejectClick (e) {
-      context.emit('rejectClick', e)
+      context.emit('reject', e)
     }
     function onAllowClick (e) {
-      context.emit('allowClick', e)
+      context.emit('allow', e)
     }
     return {
       onRejectClick,

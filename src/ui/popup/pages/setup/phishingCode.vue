@@ -2,7 +2,7 @@
 .page-phishing-code {
   height: 100%;
   padding: 78px 24px 0;
-  background: url("/assets/page-welcome/page-welcome-bg.png") no-repeat;
+  background: url("/assets/page-setup/page-setup-bg.png") no-repeat;
   background-size:100% 100%;
   h2 {
     font-size: $title-font-size;

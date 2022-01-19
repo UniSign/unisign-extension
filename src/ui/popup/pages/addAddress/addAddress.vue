@@ -41,7 +41,7 @@
   <div class="page-add-address">
     <UniTab></UniTab>
     <div class="key-box">
-      <div v-for="(item,index) in keyTypes" :key="index" class="key-item-box" @click="$router.push(`/selectWays/${item.unikeySymbol}`)">
+      <div v-for="(item,index) in keyTypes" :key="index" class="key-item-box" @click="$router.push(`/addAddress/selectWays/${item.unikeySymbol}`)">
         <img :src="getImageUrl(item.unikeySymbol)">
         <span>{{ item.name }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>

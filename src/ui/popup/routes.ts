@@ -1,9 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import LayoutDefault from './layouts/default.vue'
-import PageWelcome from './pages/welcome/welcome.vue'
+import PageIndex from './pages/index.vue'
 import PageUnlock from './pages/unlock.vue'
-import PagePhishingCode from './pages/welcome/phishingCode.vue'
-import PageBegin from './pages/welcome/begin.vue'
+import PageSetup from './pages/setup/setup.vue'
+import PagePhishingCode from './pages/setup/phishingCode.vue'
+import PageHome from './pages/setup/home.vue'
+import PageLocked from './pages/setup/locked.vue'
 import PageAddAddress from './pages/addAddress/addAddress.vue'
 import PageSelectWays from './pages/addAddress/selectWays.vue'
 import PageCreateMnemonic from './pages/addAddress/createMnemonic.vue'
@@ -12,7 +14,6 @@ import PageAddAddressSuccess from './pages/addAddress/addAddressSuccess.vue'
 import PageImportPrivateKey from './pages/import/importPrivateKey.vue'
 import PageImportMnemonic from './pages/import/importMnemonic.vue'
 import PageImportKeystoreFile from './pages/import/importKeystoreFile.vue'
-import PageLocked from './pages/welcome/locked.vue'
 import PageSettings from './pages/settings/settings.vue'
 import PageLanguageSettings from './pages/settings/languageSettings.vue'
 import PageKeyManagement from './pages/settings/keyManagement.vue'
@@ -32,7 +33,7 @@ const routes = [{
   component: LayoutDefault,
   children: [{
     path: '/',
-    component: PageWelcome,
+    component: PageIndex,
   }, {
     path: '/test',
     component: PageTest,
@@ -40,70 +41,73 @@ const routes = [{
     path: '/unlock',
     component: PageUnlock,
   }, {
-    path: '/phishingCode',
+    path: '/setup',
+    component: PageSetup,
+  }, {
+    path: '/setup/phishingCode',
     component: PagePhishingCode,
   }, {
-    path: '/begin',
-    component: PageBegin,
+    path: '/setup/home',
+    component: PageHome,
+  }, {
+    path: '/setup/locked',
+    component: PageLocked,
   }, {
     path: '/addAddress',
     component: PageAddAddress,
   }, {
-    path: '/selectWays/:key',
+    path: '/addAddress/selectWays/:key',
     component: PageSelectWays,
   }, {
-    path: '/createMnemonic',
+    path: '/addAddress/createMnemonic',
     component: PageCreateMnemonic,
   }, {
-    path: '/chooseTheRightOrder',
+    path: '/addAddress/chooseTheRightOrder',
     component: PageChooseTheRightOrder,
   }, {
-    path: '/addAddressSuccess',
+    path: '/addAddress/addAddressSuccess',
     component: PageAddAddressSuccess,
   }, {
-    path: '/importPrivateKey/:key',
+    path: '/import/importPrivateKey/:key',
     component: PageImportPrivateKey,
   }, {
-    path: '/importMnemonic',
+    path: '/import/importMnemonic',
     component: PageImportMnemonic,
   }, {
-    path: '/importKeystoreFile/:key',
+    path: '/import/importKeystoreFile/:key',
     component: PageImportKeystoreFile,
-  }, {
-    path: '/locked',
-    component: PageLocked,
   }, {
     path: '/settings',
     component: PageSettings,
   }, {
-    path: '/languageSettings',
+    path: '/settings/language',
     component: PageLanguageSettings,
   }, {
-    path: '/keyManagement',
+    path: '/settings/keyManagement',
     component: PageKeyManagement,
   }, {
-    path: '/securityAndBackup',
+    path: '/settings/securityAndBackup',
     component: PageSecurityAndBackup,
   }, {
-    path: '/advancedReset',
+    path: '/settings/advancedReset',
     component: PageAdvancedReset,
   }, {
-    path: '/importAnotherMnemonic',
+    path: '/settings/importAnotherMnemonic',
     component: PageImportAnotherMnemonic,
   }, {
     path: '/connect',
     component: PageConnect,
   }, {
-    path: '/signPlainMessage',
+    path: '/connect/signPlainMessage',
     component: PageSignPlainMessage,
   }, {
-    path: '/signTypedMessage',
+    path: '/connect/signTypedMessage',
     component: PageSignTypedMessage,
   }, {
-    path: '/signTransaction',
+    path: '/connect/signTransaction',
     component: PageSignTransaction,
   }, {
-    path: '/decodeMessage',
+    path: '/connect/decodeMessage',
     component: PageDecodeMessage,
   }],
 }]

@@ -70,7 +70,7 @@
         </div>
       </div>
     </div>
-    <UniBtn class="uni-btn" @click="$router.push(`/chooseTheRightOrder?mnemonic=${mnemonic}`)"></UniBtn>
+    <UniBtn class="uni-btn" @click="$router.push(`/addAddress/chooseTheRightOrder?mnemonic=${mnemonic}`)"></UniBtn>
     <Ironman></Ironman>
   </div>
 </template>

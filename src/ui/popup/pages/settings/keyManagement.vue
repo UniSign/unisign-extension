@@ -231,13 +231,13 @@
       </UniBtn>
     </div>
     <Ironman></Ironman>
-    <keySettingsDialog ref="keySettingsDialogRef" @onUnikeysChanged="onUnikeysChanged"></keySettingsDialog>
+    <KeySettingsDialog ref="keySettingsDialogRef" @onUnikeysChanged="onUnikeysChanged"></KeySettingsDialog>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
-import keySettingsDialog from './keySettingsDialog.vue'
+import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
 import { getImageUrl, substringKey } from '~/utils'
@@ -245,7 +245,7 @@ import { getImageUrl, substringKey } from '~/utils'
 export default {
   name: 'PageKeyManagement',
   components: {
-    keySettingsDialog,
+    KeySettingsDialog,
   },
   setup () {
     const keySettingsDialogRef = ref(null)
