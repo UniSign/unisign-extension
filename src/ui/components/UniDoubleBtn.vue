@@ -65,12 +65,12 @@ export default {
   emits: ['rejectClick', 'allowClick'],
   setup (props, context) {
     const { disabled } = toRefs(props)
-    function onRejectClick (evt: Event) {
-      context.emit('rejectClick', (evt.target as HTMLInputElement).value)
+    function onRejectClick (e: InputEvent) {
+      context.emit('rejectClick', e.target.value)
     }
-    function onAllowClick (evt: Event) {
+    function onAllowClick (e: InputEvent) {
       if (disabled.value) return
-      context.emit('allowClick', (evt.target as HTMLInputElement).value)
+      context.emit('allowClick', e.target.value)
     }
     return {
       onRejectClick,

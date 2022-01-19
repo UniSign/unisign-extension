@@ -113,10 +113,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
+import UniInput from '~/ui/components/UniInput.vue'
+import Ironman from '~/ui/components/Ironman.vue'
 
 export default {
   name: 'PageSecurityAndBackup',
@@ -130,21 +132,21 @@ export default {
     // antiPhishingCode
     const antiPhishingCode = ref('')
     const phishingCode = ref('')
-    const phishingCodeRef = ref(null)
+    const phishingCodeRef = ref<InstanceType<typeof UniInput>>()
     const isShowPhishingCodeDialog = ref(false)
-    const ironmanRef = ref(null)
+    const ironmanRef = ref<InstanceType<typeof Ironman>>()
     const onPhishingCodeChanged = async () => {
       antiPhishingCode.value = await wallet.getAntiPhishingCode()
     }
     const handlePhishingCodeCancel = async () => {
       if (!phishingCode.value) return
       if (phishingCode.value.length > 10) {
-        phishingCodeRef.value.validate()
+        phishingCodeRef.value?.validate()
         return
       }
       await wallet.setAntiPhishingCode(phishingCode.value)
       onPhishingCodeChanged()
-      ironmanRef.value.onAntiPhishingCodeChange()
+      ironmanRef.value?.onAntiPhishingCodeChange()
       isShowPhishingCodeDialog.value = false
       msgContent.value = 'Saved'
       canShowMsg.value = true
@@ -154,9 +156,9 @@ export default {
     })
 
     // viewMnemonic
-    const keySettingsDialogRef = ref(null)
+    const keySettingsDialogRef = ref<InstanceType<typeof KeySettingsDialog>>()
     const onClickViewMnemonic = () => {
-      keySettingsDialogRef.value.onClickViewMnemonic()
+      keySettingsDialogRef.value?.onClickViewMnemonic()
     }
 
     const isShowTipsDialog = ref(false)

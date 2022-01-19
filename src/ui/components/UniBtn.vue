@@ -44,8 +44,8 @@ export default {
   },
   emits: ['click'],
   setup (props, context) {
-    function click (evt: Event) {
-      context.emit('click', (evt.target as HTMLInputElement).value)
+    function click (e: InputEvent) {
+      context.emit('click', e.target.value)
     }
     return {
       click,

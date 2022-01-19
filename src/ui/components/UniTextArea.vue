@@ -42,9 +42,9 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     width: {
       type: String,
@@ -90,5 +90,5 @@ export default {
       validate,
     }
   },
-}
+})
 </script>

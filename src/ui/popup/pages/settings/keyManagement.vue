@@ -190,7 +190,7 @@
           <div class="arrow-right" @click="onClickSettings(unikey)">
             <Iconfont name="more" width="12" height="12" color="#6F7684"></Iconfont>
           </div>
-          <div v-show="unikey.isSetting" class="popover">
+          <div v-show="unikey.key === isSettingkey" class="popover">
             <div v-if="unikey.hidden" @click="onClickEnable(unikey)">
               Enable
             </div>
@@ -214,7 +214,7 @@
           <div class="arrow-right" @click="onClickSettings(unikey)">
             <Iconfont name="more" width="12" height="12" color="#6F7684"></Iconfont>
           </div>
-          <div v-show="unikey.isSetting" class="popover">
+          <div v-show="unikey.key === isSettingkey" class="popover">
             <div @click="onClickDeletePrivateKey(unikey)">
               Delete
             </div>
@@ -235,12 +235,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
 import { getImageUrl, substringKey } from '~/utils'
+import { Unikey } from '~/background/services/unikey'
 
 export default {
   name: 'PageKeyManagement',
@@ -248,24 +249,18 @@ export default {
     KeySettingsDialog,
   },
   setup () {
-    const keySettingsDialogRef = ref(null)
+    const keySettingsDialogRef = ref<InstanceType<typeof KeySettingsDialog>>()
 
     // unikey
-    const unikeys = ref([])
-    const derivedUniKeys = ref([])
-    const importedUniKeys = ref([])
-    const getkeysCategory = () => {
+    const unikeys = ref<Unikey[]>([])
+    const derivedUniKeys = ref<Unikey[]>([])
+    const importedUniKeys = ref<Unikey[]>([])
+    const getkeysCategory = async () => {
+      unikeys.value = await wallet.getUnikeys()
       derivedUniKeys.value = unikeys.value.filter(key => HDKeyrings.includes(key.keyringType)).sort(a => a.hidden === true ? 1 : -1)
       importedUniKeys.value = unikeys.value.filter(key => !HDKeyrings.includes(key.keyringType))
     }
     const onUnikeysChanged = async () => {
-      unikeys.value = await wallet.getUnikeys()
-      unikeys.value = unikeys.value.map((key) => {
-        return {
-          ...key,
-          isSetting: false,
-        }
-      })
       getkeysCategory()
       console.log(unikeys.value, 'unikeys.value')
       console.log(derivedUniKeys.value, 'derivedUniKeys.value')
@@ -276,51 +271,46 @@ export default {
     })
 
     // Settings
-    const onClickSettings = (unikey) => {
-      if (!unikey.isSetting) {
-        unikeys.value = unikeys.value.map((key) => {
-          return {
-            ...key,
-            isSetting: key.key === unikey.key,
-          }
-        })
-        getkeysCategory()
+    const isSettingkey = ref('')
+    const onClickSettings = (unikey: Unikey) => {
+      if (unikey.key === isSettingkey.value) {
+        isSettingkey.value = ''
       }
       else {
-        unikey.isSetting = false
+        isSettingkey.value = unikey.key
       }
     }
 
     // Disable
-    const onClickDisable = async (unikey) => {
+    const onClickDisable = async (unikey: Unikey) => {
       await wallet.hideUnikey(unikey.key)
-      unikey.isSetting = false
+      isSettingkey.value = ''
       onUnikeysChanged()
     }
 
     // Enable
-    const onClickEnable = async (unikey) => {
+    const onClickEnable = async (unikey: Unikey) => {
       await wallet.showUnikey(unikey.key)
-      unikey.isSetting = false
+      isSettingkey.value = ''
       onUnikeysChanged()
     }
 
     // viewPrivateKey
-    const onClickViewPrivateKey = (unikey) => {
-      unikey.isSetting = false
-      keySettingsDialogRef.value.onClickViewPrivateKey(unikey)
+    const onClickViewPrivateKey = (unikey: Unikey) => {
+      isSettingkey.value = ''
+      keySettingsDialogRef.value?.onClickViewPrivateKey(unikey)
     }
 
     // viewMnemonic
-    const onClickViewMnemonic = (unikey) => {
-      unikey.isSetting = false
-      keySettingsDialogRef.value.onClickViewMnemonic()
+    const onClickViewMnemonic = () => {
+      isSettingkey.value = ''
+      keySettingsDialogRef.value?.onClickViewMnemonic()
     }
 
     // deletePrivateKey
-    const onClickDeletePrivateKey = (unikey) => {
-      unikey.isSetting = false
-      keySettingsDialogRef.value.onClickDeletePrivateKey(unikey)
+    const onClickDeletePrivateKey = (unikey: Unikey) => {
+      isSettingkey.value = ''
+      keySettingsDialogRef.value?.onClickDeletePrivateKey(unikey)
     }
 
     return {
@@ -335,6 +325,7 @@ export default {
       onUnikeysChanged,
 
       // Settings
+      isSettingkey,
       onClickSettings,
 
       // disabled

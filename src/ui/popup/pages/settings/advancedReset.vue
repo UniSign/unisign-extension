@@ -76,7 +76,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
@@ -86,12 +86,14 @@ export default {
   name: 'PageAdvancedReset',
   setup () {
     const isShowTipsDialog = ref(false)
+    const router = useRouter()
+    // todo: we must use reload(),Subsequent logic can be executed。
     const handleTipsCancel = async () => {
       await wallet.reset()
       await sleep(1000)
-      window.location.reload()
       isShowTipsDialog.value = false
-      router.replace('/')
+      await router.replace('/')
+      window.location.reload()
     }
 
     return {

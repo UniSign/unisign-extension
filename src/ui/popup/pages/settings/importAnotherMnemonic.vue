@@ -74,12 +74,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import '~/background/polyfill'
 import { ref } from 'vue'
 import { validateMnemonic } from 'bip39'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
+import UniTextArea from '~/ui/components/UniTextArea.vue'
+import UniInput from '~/ui/components/UniInput.vue'
 
 export default {
   name: 'PageImportAnotherMnemonic',
@@ -87,25 +89,25 @@ export default {
     const router = useRouter()
 
     const mnemonic = ref('')
-    const mnemonicRef = ref(null)
+    const mnemonicRef = ref<InstanceType<typeof UniTextArea>>()
     const isShowSecurityDialog = ref(false)
     const onClickSubmit = () => {
       if (!mnemonic.value) return
       if (!validateMnemonic(mnemonic.value)) {
-        mnemonicRef.value.validate()
+        mnemonicRef.value?.validate()
         return
       }
       isShowSecurityDialog.value = true
     }
 
     const password = ref('')
-    const passwordRef = ref(null)
+    const passwordRef = ref<InstanceType<typeof UniInput>>()
     const validataText = ref('')
     const handleSecurityCancel = async () => {
       if (!password.value) return
       await wallet.verifyPassword(password.value).catch((e) => {
         validataText.value = e
-        passwordRef.value.validate()
+        passwordRef.value?.validate()
         throw new Error(e)
       })
       await wallet.importMnemonic(mnemonic.value)
