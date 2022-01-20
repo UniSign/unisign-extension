@@ -450,7 +450,7 @@ export default {
     // animation
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
-    const topLineBoxRef = ref<null | HTMLDivElement>(null)
+    const topLineBoxRef = ref<HTMLDivElement | null>(null)
     onMounted(async () => {
       window.onscroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop

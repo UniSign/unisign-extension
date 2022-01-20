@@ -47,11 +47,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { CHAINS } from '~/constants'
+import { CHAINS, KeyIdentifier } from '~/constants'
 import { wallet } from '~/ui/controllers/wallet'
+import UniTextArea from '~/ui/components/UniTextArea.vue'
 
 export default {
   name: 'PageImportPrivateKey',
@@ -60,14 +61,14 @@ export default {
     const route = useRoute()
 
     const privateKey = ref('')
-    const privateKeyRef = ref(null)
+    const privateKeyRef = ref<InstanceType<typeof UniTextArea>>()
     const validataText = ref('')
-    const keyName = CHAINS[route.params.key].name
+    const keyName = CHAINS[route.params.key as KeyIdentifier].name
     const onClickSubmit = async () => {
       if (!privateKey.value) return
-      await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key].simpleKeyringType).catch((e) => {
+      await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key as KeyIdentifier].simpleKeyringType).catch((e) => {
         validataText.value = e
-        privateKeyRef.value.validate()
+        privateKeyRef.value?.validate()
         throw new Error(e)
       })
       router.push('/addAddress/addAddressSuccess')

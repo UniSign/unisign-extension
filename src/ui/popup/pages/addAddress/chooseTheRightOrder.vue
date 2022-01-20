@@ -85,10 +85,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { isNullOrEmpty } from '~/utils/index.ts'
+import { isNullOrEmpty } from '~/utils/index'
 import { wallet } from '~/ui/controllers/wallet'
 
 export default {
@@ -98,14 +98,14 @@ export default {
     const route = useRoute()
     const canShowMsg = ref(false)
     const mnemonicArr = ref(new Array(12).fill(''))
-    const mnemonicChooseArr = ref([])
-    const mnemonicCorrectArr = ref([])
+    const mnemonicChooseArr = ref<string[]>([])
+    const mnemonicCorrectArr = ref<string[]>([])
     onMounted(async () => {
       console.log(route.query.mnemonic, 'route.query.mnemonic')
-      mnemonicChooseArr.value = route.query.mnemonic.split(' ').sort(() => 0.5 - Math.random())
-      mnemonicCorrectArr.value = route.query.mnemonic.split(' ')
+      mnemonicChooseArr.value = (route.query.mnemonic as string).split(' ').sort(() => 0.5 - Math.random())
+      mnemonicCorrectArr.value = (route.query.mnemonic as string).split(' ')
     })
-    const chooseMnemonic = (index) => {
+    const chooseMnemonic = (index: number) => {
       if (isNullOrEmpty(mnemonicChooseArr.value[index])) return
       const emptyIndex = mnemonicArr.value.findIndex(item => isNullOrEmpty(item))
       if (mnemonicChooseArr.value[index] !== mnemonicCorrectArr.value[emptyIndex]) {
@@ -120,7 +120,7 @@ export default {
     })
     const onClickSubmit = async () => {
       if (!canClickBtn.value) return
-      await wallet.importMnemonic(route.query.mnemonic)
+      await wallet.importMnemonic(route.query.mnemonic as string)
       router.push('/addAddress/addAddressSuccess')
     }
     return {

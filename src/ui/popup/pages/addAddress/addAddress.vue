@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
 
