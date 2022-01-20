@@ -20,12 +20,12 @@
       }
     }
     .central-content {
-      padding: 24px 24px 0;
+      padding: 24px 24px 100px;
       position: absolute;
       top: 83px;
       box-sizing: border-box;
       width: 100%;
-      height: 511px;
+      min-height: 511px;
       border-radius: 12px;
       background: #FFFFFF;
     }
@@ -35,6 +35,7 @@
       bottom: 20px;
       width: 100%;
       box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+      background: #FFFFFF;
     }
   }
 }

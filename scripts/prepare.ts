@@ -8,7 +8,7 @@ import { r, port, isDev, log } from './script-utils'
  * Stub index.html to use Vite in development
  */
 async function stubIndexHtml () {
-  const iconfontUrl = 'https://at.alicdn.com/t/font_2960793_yo2qt6koylp.js'
+  const iconfontUrl = 'https://at.alicdn.com/t/font_2960793_udbf2z0x1mh.js'
 
   const views = [
     'options',
