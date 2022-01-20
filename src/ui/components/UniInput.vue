@@ -107,15 +107,15 @@ export default defineComponent({
   emits: ['update:modelValue', 'triggerValidate'],
   setup (props, context) {
     const canShowValidateText = ref(false)
-    function onInputChange (evt: Event) {
+    function onInputChange (e: InputEvent) {
       canShowValidateText.value = false
-      context.emit('update:modelValue', (evt.target as HTMLInputElement).value)
+      context.emit('update:modelValue', e.target.value)
     }
     const validate = () => {
       canShowValidateText.value = true
     }
-    function triggerValidate (evt: Event) {
-      context.emit('triggerValidate', (evt.target as HTMLInputElement).value)
+    function triggerValidate (e: InputEvent) {
+      context.emit('triggerValidate', e.target.value)
     }
     return {
       onInputChange,

@@ -75,9 +75,9 @@ export default defineComponent({
   setup (props, context) {
     const canShowValidateText = ref(false)
     const { validateText } = toRefs(props)
-    function onInputChange (evt: Event) {
+    function onInputChange (e: InputEvent) {
       canShowValidateText.value = false
-      context.emit('update:modelValue', (evt.target as HTMLInputElement).value)
+      context.emit('update:modelValue', e.target.value)
     }
     const validate = () => {
       if (validateText.value) {
