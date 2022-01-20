@@ -146,7 +146,7 @@ export class ProviderController {
           approvalPage: ApprovalPage.requestPermission,
           origin: session.origin,
           params: param,
-        })
+        }) || []
 
         const deniedPermissions = param.permissions.filter(perm => !permittedPermissions.includes(perm))
 

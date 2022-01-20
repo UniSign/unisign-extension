@@ -103,6 +103,42 @@
     </fieldset>
 
     <fieldset>
+      <legend>Sites</legend>
+
+      <b>Sites</b>
+      <ul>
+        <li v-for="site in sites" :key="site.origin" style="display: flex">
+          <img :src="site.icon" alt="">
+
+          <div>
+            <div>
+              <b>{{ site.name.slice(0, 10) }}</b>
+            </div>
+            <div>
+              <code>{{ site.origin }}</code>
+            </div>
+          </div>
+
+          <div>
+            <button v-if="site.isPinned" @click="onClickUnpinSite(site.origin)">
+              ↓
+            </button>
+            <button v-if="!site.isPinned" @click="onClickPinSite(site.origin)">
+              ↑
+            </button>
+            <button @click="onClickRemoveSite(site.origin)">
+              ×
+            </button>
+          </div>
+        </li>
+      </ul>
+      <b>CurrentSite</b>
+      <pre>
+          {{ currentSite }}
+        </pre>
+    </fieldset>
+
+    <fieldset>
       <legend>Chains</legend>
 
       <b>enabledChains:</b>
@@ -216,6 +252,7 @@
 import { ref } from 'vue'
 import { ApprovalPage } from '~/background/services/approval'
 import { ChainData } from '~/background/services/chain'
+import { SiteData } from '~/background/services/site'
 import { Unikey } from '~/background/services/unikey'
 import { CHAINS, KeyIdentifier, LocaleOptions, LOCALES } from '~/constants'
 import { wallet } from '~/ui/controllers/wallet'
@@ -284,6 +321,27 @@ export default {
     onMounted(async () => {
       isLocked.value = await wallet.isLocked()
     })
+
+    // Sites
+    const sites = ref<SiteData[]>([])
+    const currentSite = ref<SiteData>()
+    async function onClickPinSite (origin: string) {
+      await wallet.pinSite(origin)
+      await onSitesDataChanged()
+    }
+    async function onClickUnpinSite (origin: string) {
+      await wallet.unpinSite(origin)
+      await onSitesDataChanged()
+    }
+    async function onClickRemoveSite (origin: string) {
+      await wallet.removeSiteAndSession(origin)
+      await onSitesDataChanged()
+    }
+    async function onSitesDataChanged () {
+      sites.value = await wallet.getSitesSorted()
+      currentSite.value = await wallet.getCurrentSite()
+    }
+    onMounted(onSitesDataChanged)
 
     // Chains
     const supportedChains = ref<ChainData[]>([])
@@ -409,6 +467,13 @@ export default {
       enabledChains,
       onClickEnableChain,
       onClickDisableChain,
+
+      // Sites
+      sites,
+      currentSite,
+      onClickPinSite,
+      onClickUnpinSite,
+      onClickRemoveSite,
 
       // unikey
       unikeys,

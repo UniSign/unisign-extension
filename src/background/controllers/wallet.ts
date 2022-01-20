@@ -126,10 +126,11 @@ export class WalletController {
   getSitesSorted = siteService.getSitesSorted
   getSitesByUnikeySymbol = siteService.getSitesByUnikeySymbol
   async getCurrentSite () {
-    const { id: tabId } = await windows.getCurrentTab()
-    if (!tabId) return
+    const currentTab = await windows.getCurrentTab()
 
-    const session = sessionService.get(tabId)
+    if (!(currentTab?.id)) return
+
+    const session = sessionService.get(currentTab.id)
     if (!session) return
 
     return siteService.getSiteSilently(session.origin)
@@ -147,6 +148,7 @@ export class WalletController {
   removeSiteAndSession (origin: string) {
     sessionService.broadcast(Events.accountsChanged, [], origin)
     siteService.removeSite(origin)
+    permissionService.removeSitePassport(origin)
   }
 
   // ----- keyring -------

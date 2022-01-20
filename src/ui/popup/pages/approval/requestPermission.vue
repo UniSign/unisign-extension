@@ -44,7 +44,7 @@ export default {
     return {
       approval,
       async onClickApprove () {
-        await wallet.resolveApproval()
+        await wallet.resolveApproval(approval.value?.params?.permissions)
       },
 
       async onClickReject () {

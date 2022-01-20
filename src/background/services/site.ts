@@ -1,4 +1,5 @@
 import LRU from 'lru-cache'
+import { AutoBindService } from '~/background/services/base/auto-bind'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { KeyIdentifier, UNISIGN_ORIGIN } from '~/constants'
 
@@ -20,11 +21,12 @@ interface SiteStore {
 /**
  * Used to manage every connected site, identified by origin
  */
-export class SiteService {
+export class SiteService extends AutoBindService {
   private lrcCache = new LRU<string, SiteData>()
   private store!: SiteStore
 
   constructor () {
+    super()
     this.init().then(() => console.log('SiteService initialized'))
   }
 
@@ -60,7 +62,7 @@ export class SiteService {
   }
 
   addSite (site: Pick<SiteData, 'name'|'icon'|'origin'|'unikeySymbol'>) {
-    this.lrcCache.set(origin, {
+    this.lrcCache.set(site.origin, {
       ...site,
       isPinned: false,
       hasSigned: false,
@@ -139,9 +141,9 @@ export class SiteService {
     return this.lrcCache.values()
   }
 
-  getSitesSorted () {
+  async getSitesSorted () {
     const weight = (site: SiteData) => Number(site.isPinned) * 10 + Number(site.hasSigned)
-    return this.lrcCache.values().sort((a, b) => weight(a) - weight(b))
+    return this.lrcCache.values().sort((a, b) => weight(b) - weight(a))
   }
 
   getSitesByUnikeySymbol (unikeySymbol: string) {
