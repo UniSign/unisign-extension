@@ -149,84 +149,6 @@
     width: 100px;
     height: 100px;
   }
-  .connect-box,.await-connect-box {
-    position: relative;
-    margin: 226px auto 0;
-    display: block;
-    padding: 6px;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    width: 310px;
-    background: #FFFFFF;
-    .status-item {
-      margin-bottom: 13px;
-      padding: 6px;
-      display: flex;
-      align-items: center;
-      span {
-        margin-left: 8px;
-        font-size: $detail-font-size;
-        color: #2ABA82;
-      }
-    }
-    .connect-item {
-      padding: 8px 6px;
-      display: flex;
-      align-items: center;
-      border-radius: 6px;
-      span {
-        margin-left: 12px;
-        font-size: $input-font-size;
-        color: #8D919C;
-      }
-      >div {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-        >div {
-          position: relative;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 4px;
-          cursor: pointer;
-          &:hover {
-            background: rgba(0, 0, 0, 0.06);
-            .popover {
-              display: block;
-            }
-          }
-        }
-      }
-    }
-  }
-  .await-connect-box {
-    margin: 16px auto 0px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.3);
-    .status-item {
-      span {
-        color: #6F7684;
-      }
-    }
-    .connect-item {
-      >p {
-        margin-left: 12px;
-        font-size: $input-font-size;
-        color: #8D919C;
-        span {
-          margin-left: 0px;
-          color: #242C3F;
-        }
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: #fff;
-      }
-    }
-  }
   >p {
     position: absolute;
     top: 577px;
@@ -369,48 +291,7 @@
       </div>
     </div>
     <img class="key-icon" :src="getImageUrl(currentUnikey?.keySymbol)">
-    <div class="connect-box">
-      <div class="status-item">
-        <Iconfont name="current" size="14"></Iconfont>
-        <span>Current connect</span>
-      </div>
-      <div class="connect-item">
-        <Iconfont name="connect" size="24"></Iconfont>
-        <span>No Connect</span>
-        <div>
-          <div>
-            <img class="w-[8px] h-[11px]" src="/assets/page-home/icon-pin-true.png">
-            <div class="popover popover-top">
-              Pin
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="await-connect-box">
-      <div class="status-item">
-        <Iconfont name="connected" size="14" color="#6F7684"></Iconfont>
-        <span>Connected Apps</span>
-      </div>
-      <div class="connect-item">
-        <Iconfont name="connect" size="24"></Iconfont>
-        <p>https://<span>mibao.com</span></p>
-        <div>
-          <div class="mr-[7px]">
-            <img class="w-[16px] h-[16px]" src="/assets/page-home/icon-disconnect.png">
-            <div class="popover popover-top">
-              Disconnect
-            </div>
-          </div>
-          <div>
-            <img class="w-[8px] h-[11px]" src="/assets/page-home/icon-pin.png">
-            <div class="popover popover-top">
-              Pin
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ConnectSites></ConnectSites>
     <Ironman></Ironman>
     <UniDialog class="qr-code-box" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
       <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
@@ -431,6 +312,7 @@ import { useRouter } from 'vue-router'
 import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
 import SwitchKeyDialog from './-/SwitchKeyDialog.vue'
+import ConnectSites from './-/ConnectSites.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
@@ -441,6 +323,7 @@ export default {
   components: {
     QrcodeVue,
     SwitchKeyDialog,
+    ConnectSites,
   },
   setup (props, context) {
     const router = useRouter()

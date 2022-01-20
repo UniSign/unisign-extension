@@ -15,6 +15,10 @@ h2 {
   border-radius: 8px;
   border: 1px solid #E4E9F0;
   background: #F1F4F8;
+  img {
+    width: 24px;
+    height: 24px;
+  }
   >p {
     margin-left: 12px;
     font-size: $input-font-size;
@@ -85,7 +89,7 @@ h2 {
       Website
     </h2>
     <div class="website-detail-box">
-      <Iconfont name="connect" size="24"></Iconfont>
+      <img :src="site?.icon">
       <p>{{ substringOrigin(approval?.origin,true) }}<span>{{ substringOrigin(approval?.origin,false) }}</span></p>
     </div>
     <h2>Connect Address</h2>
@@ -100,7 +104,7 @@ h2 {
     </div>
     <h2>Allow this site to</h2>
     <div class="allow-site-box">
-      <div v-for="permission in approval?.params.permissions" :key="permission" class="allow-site-item" @click="onclickChoosePermission(permission)">
+      <div v-for="permission in approval?.params.permissions" :key="permission" class="allow-site-item" @click="onClickChoosePermission(permission)">
         <Iconfont :name="choosePermissions.includes(permission)?'checkbox-check':'checkbox-uncheck'" size="16"></Iconfont>
         <span>{{ permission }}</span>
       </div>
@@ -115,7 +119,7 @@ import { ApprovalData } from '~/background/services/approval'
 import { PermittedKeyObjectType } from '~/background/controllers/provider/index'
 import { Unikey } from '~/background/services/unikey'
 import { wallet } from '~/ui/controllers/wallet'
-import { getImageUrl } from '~/utils'
+import { getImageUrl, substringOrigin } from '~/utils'
 
 export default {
   name: 'PageConnect',
@@ -126,22 +130,13 @@ export default {
     const approval = ref<ApprovalData<PermittedKeyObjectType>|null>(null)
     const currentUnikey = ref<Unikey|null>(null)
     const choosePermissions = ref<string[]>([])
-    const onclickChoosePermission = (permission: string) => {
+    const onClickChoosePermission = (permission: string) => {
       if (choosePermissions.value.includes(permission) && choosePermissions.value.length > 1) {
         const index = choosePermissions.value.indexOf(permission)
         choosePermissions.value.splice(index, 1)
       }
       else {
         choosePermissions.value.push(permission)
-      }
-    }
-    const substringOrigin = (str: string, type: boolean) => {
-      if (!str) return
-      if (type) {
-        return str.substring(0, 6)
-      }
-      else {
-        return str.substring(6)
       }
     }
     async function onRejectClick () {
@@ -156,7 +151,6 @@ export default {
       currentUnikey.value = await wallet.getCurrentUnikey()
       approval.value = await wallet.getApproval()
       choosePermissions.value = [...approval.value!.params!.permissions]
-      // todo: getSite Error
       const siteVal = await wallet.getSite(approval.value!.origin as string)
       if (siteVal) {
         site.value = siteVal as any
@@ -167,7 +161,7 @@ export default {
       approval,
       currentUnikey,
       choosePermissions,
-      onclickChoosePermission,
+      onClickChoosePermission,
       substringOrigin,
       onRejectClick,
       onAllowClick,
