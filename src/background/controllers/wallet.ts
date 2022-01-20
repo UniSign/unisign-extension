@@ -92,7 +92,7 @@ export class WalletController {
 
   // ----- permission -------
   clearAllPermission () {
-    permissionService.clearAllPassports()
+    permissionService.clearAllSitePassports()
     siteService.removeAllSites()
   }
 

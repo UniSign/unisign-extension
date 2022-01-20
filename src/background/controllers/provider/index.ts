@@ -36,11 +36,11 @@ export interface KeyObject extends KeyObjectType {
 }
 
 export type PermittedKeyObjectType = KeyObjectType & {
-  permissions: string[]
+  permissions: Permissions[]
 }
 
 export type PermittedKeyObject = KeyObject & {
-  permissions: string[]
+  permissions: Permissions[]
 }
 
 export interface PermittedKeysResponse {
@@ -99,7 +99,7 @@ export class ProviderController {
 
   @Reflect.metadata('OPEN', true)
   async getPermittedKeys ({ session: { origin } }: ProviderRequest): Promise<PermittedKeysResponse> {
-    const passport = await permissionService.getPassport(origin)
+    const passport = await permissionService.getSitePassport(origin)
 
     if (passport) {
       return {
@@ -133,7 +133,7 @@ export class ProviderController {
     }
   }
 
-  async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>) {
+  async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>): Promise<{permittedPermissions: Permissions[]; deniedPermissions: Permissions[]}> {
     const param = data.params[0]
     const meta = param.meta
 
@@ -142,15 +142,23 @@ export class ProviderController {
       const currentChain = CHAINS[currentUnikey.keySymbol]
 
       if (meta.coinType === currentChain.coinType && meta.chainId === currentChain.chainId) {
-        const result = await approvalService.requestApproval({
+        const permittedPermissions = await approvalService.requestApproval<Permissions[]>({
           approvalPage: ApprovalPage.requestPermission,
           origin: session.origin,
           params: param,
         })
 
-        // todo: save requested permission
+        const deniedPermissions = param.permissions.filter(perm => !permittedPermissions.includes(perm))
 
-        return result
+        permissionService.addSitePassport(session.origin, {
+          key: currentUnikey.key,
+          permissions: param.permissions,
+        })
+
+        return {
+          permittedPermissions,
+          deniedPermissions,
+        }
       }
       else {
         throw ethErrors.rpc.invalidParams('Requested key\'s metadata doesn\'t match current key\'s metadata')
@@ -247,7 +255,7 @@ export class ProviderController {
             coinType: chain.coinType,
             chainId: chain.chainId,
           },
-          permissions: [method],
+          permissions: [method as Permissions],
         }
 
         await this.requestPermissionsOfCurrentKey({

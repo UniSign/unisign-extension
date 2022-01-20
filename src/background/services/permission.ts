@@ -4,6 +4,9 @@ type Wildcard = '*'
 
 export enum Permissions {
   all = '*',
+  getCurrentUnikey = 'getCurrentUnikey',
+  signTypedMessage = 'signTypedMessage',
+  signTransaction = 'signTransaction',
 }
 
 export const WildcardConsent = {
@@ -11,14 +14,14 @@ export const WildcardConsent = {
   permissions: ['*'],
 }
 
-interface Consent {
+interface KeyConsent {
   key: string | Wildcard
   permissions: Permissions[]
 }
 
 interface SitePassport {
   origin: string
-  consents: Consent[]
+  consents: KeyConsent[]
 }
 
 interface PermissionStore {
@@ -38,32 +41,46 @@ export class PermissionService {
     })
   }
 
-  addPassport (passport: SitePassport) {
-    this.store.sites.push(passport)
+  addSitePassport (origin: string, keyConsent: KeyConsent) {
+    const sitePassport = this.getSitePassport(origin)
+
+    if (sitePassport) {
+      const existConsent = sitePassport.consents.find(consent => consent.key === keyConsent.key)
+
+      if (existConsent) return
+
+      sitePassport.consents.push(keyConsent)
+    }
+    else {
+      this.store.sites.push({
+        origin,
+        consents: [keyConsent],
+      })
+    }
   }
 
-  getPassport (origin: string) {
+  getSitePassport (origin: string) {
     return this.store.sites.find(site => site.origin === origin)
   }
 
-  removePassport (origin: string) {
+  removeSitePassport (origin: string) {
     const index = this.store.sites.findIndex(site => site.origin === origin)
 
     this.store.sites.splice(index, 1)
   }
 
-  updatePassport (origin: string, passportDto: SitePassport) {
+  updateSitePassport (origin: string, passportDto: SitePassport) {
     const passport = this.store.sites.find(site => site.origin === origin)
 
     Object.assign(passport, passportDto)
   }
 
-  clearAllPassports () {
+  clearAllSitePassports () {
     this.store.sites = []
   }
 
   hasPermission (origin: string, key: string, permission: Permissions): boolean {
-    const site = this.getPassport(origin)
+    const site = this.getSitePassport(origin)
 
     if (site) {
       const consent = site.consents.find(auth => auth.key === key)
