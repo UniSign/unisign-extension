@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Iconfont from '~/ui/components/Iconfont.vue'
 
 export default {

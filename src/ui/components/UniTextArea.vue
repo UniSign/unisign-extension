@@ -41,10 +41,10 @@
   </div>
 </template>
 
-<script>
-import { ref, toRefs } from 'vue'
+<script lang="ts">
+import { ref, toRefs, defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     width: {
       type: String,
@@ -71,10 +71,11 @@ export default {
       default: 'Incorrect private key',
     },
   },
+  emits: ['update:modelValue'],
   setup (props, context) {
     const canShowValidateText = ref(false)
     const { validateText } = toRefs(props)
-    function onInputChange (e) {
+    function onInputChange (e: InputEvent) {
       canShowValidateText.value = false
       context.emit('update:modelValue', e.target.value)
     }
@@ -89,5 +90,5 @@ export default {
       validate,
     }
   },
-}
+})
 </script>

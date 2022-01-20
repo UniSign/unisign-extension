@@ -173,11 +173,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { wallet } from '~/ui/controllers/wallet'
-import { HDKeyrings } from '~/constants'
-import { getImageUrl, substringKey } from '~/utils'
+import UniInput from '~/ui/components/UniInput.vue'
+import { Unikey } from '~/background/services/unikey'
+
+type CurrentEventName ='viewPrivateKey' | 'viewMnemonic' | 'deletePrivateKey' | null
 
 export default {
   name: 'KeySettingsDialog',
@@ -188,43 +190,48 @@ export default {
     const isShowDeleteKeyDialog = ref(false)
 
     // securityDialog
-    let currentEventName = null
-    const currentUnikey = ref({})
+    let currentEventName: CurrentEventName = null
+    const currentUnikey = ref<Unikey | null>(null)
     const password = ref('')
-    const passwordRef = ref(null)
+    const passwordRef = ref<InstanceType<typeof UniInput>>()
     const validataText = ref('')
     const isShowSecurityDialog = ref(false)
-    const selectedprivateKey = ref(null)
-    const mnemonicArr = ref([])
-    const onValidateError = (e) => {
+    const selectedprivateKey = ref('')
+    const mnemonicArr = ref<string[]>([])
+    const onValidateError = (e: any) => {
       validataText.value = e
-      passwordRef.value.validate()
+      passwordRef.value?.validate()
       throw new Error(e)
     }
     const handleSecurityCancel = async () => {
       if (!password.value) return
       if (currentEventName === 'viewPrivateKey') {
-        selectedprivateKey.value = await wallet.getPrivateKey(password.value, currentUnikey.value.key, currentUnikey.value.keyringType).catch((e) => {
+        try {
+          selectedprivateKey.value = await wallet.getPrivateKey(password.value, currentUnikey.value!.key, currentUnikey.value!.keyringType)
+        }
+        catch (e: any) {
           onValidateError(e)
-        })
+        }
         isShowPrivateKeyDialog.value = true
       }
       else if (currentEventName === 'viewMnemonic') {
-        const mnemonic = await wallet.getMnemonic(password.value).catch((e) => {
+        let mnemonic = ''
+        try {
+          mnemonic = await wallet.getMnemonic(password.value)
+        }
+        catch (e: any) {
           onValidateError(e)
-        })
-        // Error
-        console.log(mnemonic, 'mnemonic')
+        }
         mnemonicArr.value = mnemonic.split(' ')
         isShowMnemonicDialog.value = true
       }
       else if (currentEventName === 'deletePrivateKey') {
-        selectedprivateKey.value = await wallet.removeUnikey(password.value, currentUnikey.value).catch((e) => {
+        await wallet.removeUnikey(password.value, currentUnikey.value!).catch((e) => {
           onValidateError(e)
         })
         context.emit('onUnikeysChanged')
       }
-      currentUnikey.value = {}
+      currentUnikey.value = null
       currentEventName = null
       password.value = ''
       isShowSecurityDialog.value = false
@@ -244,7 +251,7 @@ export default {
     }
 
     // viewPrivateKey
-    const onClickViewPrivateKey = (unikey) => {
+    const onClickViewPrivateKey = (unikey: Unikey) => {
       currentUnikey.value = unikey
       currentEventName = 'viewPrivateKey'
       isShowDangerousDialog.value = true
@@ -263,9 +270,9 @@ export default {
     }
 
     // deletePrivateKey
-    const deleteKey = ref(null)
-    const deleteKeyRef = ref(null)
-    const onClickDeletePrivateKey = (unikey) => {
+    const deleteKey = ref('')
+    const deleteKeyRef = ref<InstanceType<typeof UniInput>>()
+    const onClickDeletePrivateKey = (unikey: Unikey) => {
       currentUnikey.value = unikey
       currentEventName = 'deletePrivateKey'
       dangerousText.value = 'You may lost your asset if you are not backup properly.'
@@ -273,7 +280,7 @@ export default {
     }
     const handleDeleteKeyCancel = () => {
       if (deleteKey.value.toLowerCase() !== 'delete key') {
-        deleteKeyRef.value.validate()
+        deleteKeyRef.value?.validate()
         return
       }
       deleteKey.value = ''

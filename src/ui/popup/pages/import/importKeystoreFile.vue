@@ -51,9 +51,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import UniTextArea from '~/ui/components/UniTextArea.vue'
+import UniInput from '~/ui/components/UniInput.vue'
 
 export default {
   name: 'PageImportKeystoreFile',
@@ -62,16 +64,16 @@ export default {
     const route = useRoute()
     const keystore = ref('')
     const password = ref('')
-    const keystoreRef = ref(null)
-    const passwordRef = ref(null)
+    const keystoreRef = ref<InstanceType<typeof UniTextArea>>()
+    const passwordRef = ref<InstanceType<typeof UniInput>>()
     const onClickSubmit = () => {
       if (!keystore.value || !password.value) return
       if (keystore.value.length < 5) {
-        keystoreRef.value.validate()
+        keystoreRef.value?.validate()
         return
       }
       if (password.value.length < 5) {
-        passwordRef.value.validate()
+        passwordRef.value?.validate()
         return
       }
       router.push(`/addAddress/addAddressSuccess/${route.params.key}`)

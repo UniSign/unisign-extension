@@ -53,12 +53,12 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 import { wallet } from '~/ui/controllers/wallet'
 
-export default {
-  setup (props, context) {
+export default defineComponent({
+  setup () {
     const isShowDetail = ref(false)
     const antiPhishingCode = ref('')
     const onAntiPhishingCodeChange = async () => {
@@ -74,5 +74,5 @@ export default {
       onAntiPhishingCodeChange,
     }
   },
-}
+})
 </script>

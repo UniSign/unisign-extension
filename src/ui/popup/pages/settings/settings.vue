@@ -45,23 +45,29 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { windows } from '~/background/tools/windows'
 
+interface Setting {
+  key: string
+  value: string
+  color: string
+  router: string
+}
 export default {
   name: 'PageSettings',
   setup () {
     const router = useRouter()
-    const settingsArr = ref([
+    const settingsArr = ref<Setting[]>([
       { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'settings/keyManagement' },
       { key: 'language', value: 'Language', color: '#4190FF', router: 'settings/language' },
       { key: 'security', value: 'Security & Backup', color: '#66D5AA', router: 'settings/securityAndBackup' },
       { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'settings/advancedReset' },
       { key: 'about', value: 'About UniSign', color: '#9094AE', router: 'about' },
     ])
-    const onClickSettingItem = async (item) => {
+    const onClickSettingItem = async (item: Setting) => {
       if (item.router === 'about') {
         await windows.createNewTab('https://unisign.org')
         return

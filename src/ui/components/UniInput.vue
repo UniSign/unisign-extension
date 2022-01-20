@@ -64,8 +64,8 @@
   </div>
 </template>
 
-<script>
-import { ref, toRefs, defineComponent } from 'vue'
+<script lang="ts">
+import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
@@ -107,15 +107,14 @@ export default defineComponent({
   emits: ['update:modelValue', 'triggerValidate'],
   setup (props, context) {
     const canShowValidateText = ref(false)
-    const { validateText } = toRefs(props)
-    function onInputChange (e) {
+    function onInputChange (e: InputEvent) {
       canShowValidateText.value = false
       context.emit('update:modelValue', e.target.value)
     }
     const validate = () => {
       canShowValidateText.value = true
     }
-    function triggerValidate (e) {
+    function triggerValidate (e: InputEvent) {
       context.emit('triggerValidate', e.target.value)
     }
     return {

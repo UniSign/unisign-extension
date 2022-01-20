@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'

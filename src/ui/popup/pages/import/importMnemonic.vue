@@ -42,12 +42,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import '~/background/polyfill'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { validateMnemonic } from 'bip39'
 import { wallet } from '~/ui/controllers/wallet'
+import UniTextArea from '~/ui/components/UniTextArea.vue'
 
 export default {
   name: 'PageImportMnemonic',
@@ -55,11 +56,11 @@ export default {
     const router = useRouter()
 
     const mnemonic = ref('')
-    const mnemonicRef = ref(null)
+    const mnemonicRef = ref<InstanceType<typeof UniTextArea>>()
     const onClickSubmit = async () => {
       if (!mnemonic.value) return
       if (!validateMnemonic(mnemonic.value)) {
-        mnemonicRef.value.validate()
+        mnemonicRef.value?.validate()
         return
       }
       await wallet.importMnemonic(mnemonic.value)

@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import { wallet } from '~/ui/controllers/wallet'
 
@@ -83,7 +83,7 @@ export default {
   name: 'PageCreateMnemonic',
   setup () {
     const mnemonic = ref('')
-    const mnemonicArr = ref([])
+    const mnemonicArr = ref<string[]>([])
 
     onMounted(async () => {
       mnemonic.value = await wallet.generateMnemonic()

@@ -27,7 +27,7 @@
   </button>
 </template>
 
-<script>
+<script lang="ts">
 
 export default {
   props: {
@@ -44,7 +44,7 @@ export default {
   },
   emits: ['click'],
   setup (props, context) {
-    function click (e) {
+    function click (e: InputEvent) {
       context.emit('click', e.target.value)
     }
     return {
