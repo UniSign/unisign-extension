@@ -6,6 +6,6 @@ declare module '~/utils/webext-bridge' {
     // see https://github.com/antfu/webext-bridge#type-safe-protocols
     'wallet-controller': ProtocolWithReturn<{ method: string; params: any[] }, any>
     'background-to-provider': ProtocolWithReturn<{ event: string; data: any }, any>
-    'provider-to-background': ProtocolWithReturn<{ method: string; params: any }, any>
+    'provider-to-background': ProtocolWithReturn<{ method: string; params: any[] }, any>
   }
 }

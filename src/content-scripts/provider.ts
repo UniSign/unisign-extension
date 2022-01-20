@@ -6,6 +6,11 @@ import { messageBridge } from '~/utils/messages'
 
 messageBridge.setNamespace()
 
+interface JsonRpcPayload {
+  method: string
+  params: any[]
+}
+
 export class UniSignProvider extends EventEmitter {
   isUniSign = true
 
@@ -67,11 +72,16 @@ export class UniSignProvider extends EventEmitter {
     console.log(event, data)
   }
 
-  request (data: any) {
+  request (data: Partial<JsonRpcPayload>) {
     if (!data) {
       throw ethErrors.rpc.invalidRequest()
     }
-    return messageBridge.send('provider-to-background', data, 'background')
+
+    if (!data.params) {
+      data.params = []
+    }
+
+    return messageBridge.send('provider-to-background', data as JsonRpcPayload, 'background')
   }
 }
 

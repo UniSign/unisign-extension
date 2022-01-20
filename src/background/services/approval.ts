@@ -5,12 +5,12 @@ import { CreateWindowProps, windows } from '~/background/tools/windows'
 import { IS_CHROME, IS_LINUX } from '~/env'
 
 export enum ApprovalPage {
-  unlock = 'unlock',
-  requestPermission = 'requestPermission',
+  unlock = '/setup/locked',
+  requestPermission = '/approval/requestPermission',
 }
 
-interface ApprovalData {
-  params?: any
+export interface ApprovalData<T = any> {
+  params?: T
   origin?: string
   approvalPage: ApprovalPage
   requestDefer?: Promise<any>
@@ -45,17 +45,17 @@ export class ApprovalService extends AutoBindService {
     browser.windows.onRemoved.addListener(this.onApprovalWindowRemoved)
   }
 
-  getApproval () {
-    return this.approval?.data
+  async getApproval (): Promise<ApprovalData|null> {
+    return this.approval?.data || null
   }
 
-  resolveApproval (data: any) {
+  async resolveApproval (data?: any) {
     this.approval?.resolve(data)
-    this.approval = null
+    await this.clear()
   }
 
-  async rejectApproval (err?: string) {
-    this.approval?.resolve(ethErrors.provider.userRejectedRequest<any>(err))
+  async rejectApproval (errMsg?: string) {
+    this.approval?.reject(ethErrors.provider.userRejectedRequest<any>(errMsg))
     await this.clear()
   }
 
@@ -87,7 +87,7 @@ export class ApprovalService extends AutoBindService {
 
   private onApprovalWindowRemoved (windowId: number) {
     if (windowId === this.approvalWindowId) {
-      this.approvalWindowId = 0
+      this.rejectApproval().then(() => console.log(`Window ${windowId} lost focus, so the approval was rejected`))
     }
   }
 

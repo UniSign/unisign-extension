@@ -18,7 +18,7 @@ interface Consent {
 
 interface SitePassport {
   origin: string
-  authorities: Consent[]
+  consents: Consent[]
 }
 
 interface PermissionStore {
@@ -60,6 +60,20 @@ export class PermissionService {
 
   clearAllPassports () {
     this.store.sites = []
+  }
+
+  hasPermission (origin: string, key: string, permission: Permissions): boolean {
+    const site = this.getPassport(origin)
+
+    if (site) {
+      const consent = site.consents.find(auth => auth.key === key)
+
+      if (consent) {
+        return consent.permissions.includes(permission)
+      }
+    }
+
+    return false
   }
 }
 

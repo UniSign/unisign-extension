@@ -20,6 +20,7 @@ import PageSecurityAndBackup from './pages/settings/securityAndBackup.vue'
 import PageAdvancedReset from './pages/settings/advancedReset.vue'
 import PageImportAnotherMnemonic from './pages/settings/importAnotherMnemonic.vue'
 import PageConnect from './pages/approval/connect.vue'
+import PageRequestPermission from './pages/approval/requestPermission.vue'
 import PageSignPlainMessage from './pages/approval/signPlainMessage.vue'
 import PageSignTypedMessage from './pages/approval/signTypedMessage.vue'
 import PageSignTransaction from './pages/approval/signTransaction.vue'
@@ -91,19 +92,22 @@ const routes = [{
     path: '/settings/importAnotherMnemonic',
     component: PageImportAnotherMnemonic,
   }, {
-    path: '/connect',
+    path: '/approval/connect',
     component: PageConnect,
   }, {
-    path: '/connect/signPlainMessage',
+    path: '/approval/requestPermission',
+    component: PageRequestPermission,
+  }, {
+    path: '/approval/signPlainMessage',
     component: PageSignPlainMessage,
   }, {
-    path: '/connect/signTypedMessage',
+    path: '/approval/signTypedMessage',
     component: PageSignTypedMessage,
   }, {
-    path: '/connect/signTransaction',
+    path: '/approval/signTransaction',
     component: PageSignTransaction,
   }, {
-    path: '/connect/decodeMessage',
+    path: '/approval/decodeMessage',
     component: PageDecodeMessage,
   }],
 }]
