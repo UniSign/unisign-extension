@@ -1,8 +1,9 @@
+import { composeKeyObjectFromUnikey } from '~/background/controllers/provider/index'
+import { Events } from '~/background/controllers/wallet'
 import { AutoBindService } from '~/background/services/base/auto-bind'
 import { sessionService } from '~/background/services/session'
-import { loadDiskStore } from '~/background/tools/diskStore'
 import { Unikey, unikeyService } from '~/background/services/unikey'
-import { Events } from '~/background/controllers/wallet'
+import { loadDiskStore } from '~/background/tools/diskStore'
 
 interface PersonalStore {
   currentUnikey: Unikey | null
@@ -34,7 +35,10 @@ export class PersonalService extends AutoBindService {
     if (unikey) {
       this.store.currentUnikey = unikey
 
-      sessionService.broadcast(Events.accountsChanged, [unikey.key])
+      // todo: maybe we should broadcast different things(with/without key/permissions) to different origin
+      const currentKeyObject = composeKeyObjectFromUnikey(unikey)
+
+      sessionService.broadcast(Events.currentKeyChanged, currentKeyObject)
     }
   }
 
