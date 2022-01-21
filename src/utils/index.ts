@@ -16,30 +16,31 @@ export function substringKey (str: string): string {
   return `${str.substring(0, 6)}...${str.substring(len - 7)}`
 }
 
-export function substringOrigin (str: string, type: boolean) {
-  if (!str) return
-  if (str.includes('https')) {
-    if (type) {
-      return str.substring(0, 8)
+type UrlType = 'agreement' | 'domainName'
+export function substringUrl (url: string, urlType: UrlType) {
+  if (!url) return
+  if (url.includes('https')) {
+    if (urlType === 'agreement') {
+      return url.substring(0, 8)
     }
     else {
-      return str.substring(8)
+      return url.substring(8)
     }
   }
-  else if (str.includes('http')) {
-    if (type) {
-      return str.substring(0, 7)
+  else if (url.includes('http')) {
+    if (urlType === 'agreement') {
+      return url.substring(0, 7)
     }
     else {
-      return str.substring(7)
+      return url.substring(7)
     }
   }
   else {
-    if (type) {
+    if (urlType === 'agreement') {
       return ''
     }
     else {
-      return str
+      return url
     }
   }
 }

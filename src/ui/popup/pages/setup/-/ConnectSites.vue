@@ -201,7 +201,7 @@
       </div>
       <div v-else class="connect-item">
         <img :src="currentSite?.icon">
-        <p>{{ substringOrigin(currentSite?.origin,true) }}<span>{{ substringOrigin(currentSite?.origin,false) }}</span></p>
+        <p>{{ substringUrl(currentSite?.origin,'agreement') }}<span>{{ substringUrl(currentSite?.origin,'domainName') }}</span></p>
       </div>
     </div>
     <div class="await-connect-box">
@@ -211,7 +211,7 @@
       </div>
       <div v-for="site in sites" :key="site.name" class="connect-item">
         <img :src="site?.icon">
-        <p>{{ substringOrigin(site?.origin,true) }}<span>{{ substringOrigin(site?.origin,false) }}</span></p>
+        <p>{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></p>
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
             <img class="w-[16px] h-[16px]" src="/assets/page-home/icon-disconnect.png">
@@ -235,7 +235,7 @@
 import { ref } from 'vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { SiteData } from '~/background/services/site'
-import { substringOrigin } from '~/utils'
+import { substringUrl } from '~/utils'
 
 export default {
   name: 'PageConnectSites',
@@ -245,11 +245,10 @@ export default {
     const currentSite = ref<SiteData>()
     const sites = ref<SiteData[]>()
     const onSiteChanged = async () => {
-      sites.value = await wallet.getSites()
-      if (sites.value) {
-        sites.value.sort(a => a.isPinned === true ? 1 : -1)
-        console.log(sites.value, 'sites')
-      }
+      currentSite.value = await wallet.getCurrentSite()
+      sites.value = await wallet.getSitesSorted()
+      console.log(currentSite.value, 'currentSite')
+      console.log(sites.value, 'sites')
     }
     const onClickPinSite = async (site: SiteData) => {
       if (site.isPinned) {
@@ -265,9 +264,7 @@ export default {
       onSiteChanged()
     }
     onMounted(async () => {
-      currentSite.value = await wallet.getCurrentSite()
       onSiteChanged()
-      console.log(currentSite.value, 'currentSite')
     })
 
     return {
@@ -275,7 +272,7 @@ export default {
       sites,
       onClickPinSite,
       onClickDisconnect,
-      substringOrigin,
+      substringUrl,
     }
   },
 }
