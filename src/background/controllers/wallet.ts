@@ -103,8 +103,6 @@ export class WalletController {
   getApproval = approvalService.getApproval
   resolveApproval = approvalService.resolveApproval
   rejectApproval = approvalService.rejectApproval
-  // todo: this is only for showcase the usage of approval, and should not be used in production
-  _mockRequestApproval = process.env.NODE_ENV === 'development' ? approvalService.requestApproval : undefined
 
   // ----- pageCache -------
   hasPageCache = pageCacheService.has

@@ -6,7 +6,6 @@ import { onMessage, sendMessage, allowWindowMessaging, setNamespace } from './we
 
 // there is also bug with crx-bridge@2.2 now, which will incorrectly consider the popup as background.
 
-// todo: no perfect solution, we can only find a better solution later
 export const messageBridge = {
   send: sendMessage,
   on: onMessage,
