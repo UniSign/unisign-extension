@@ -24,7 +24,12 @@ export function substringUrl (url: string, urlType: UrlType) {
       return url.substring(0, 8)
     }
     else {
-      return url.substring(8)
+      if (url.length > 26) {
+        return `${url.substring(8, 26)}...`
+      }
+      else {
+        return url.substring(8)
+      }
     }
   }
   else if (url.includes('http')) {
@@ -32,7 +37,12 @@ export function substringUrl (url: string, urlType: UrlType) {
       return url.substring(0, 7)
     }
     else {
-      return url.substring(7)
+      if (url.length > 26) {
+        return `${url.substring(7, 26)}...`
+      }
+      else {
+        return url.substring(7)
+      }
     }
   }
   else {
