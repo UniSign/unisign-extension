@@ -13,7 +13,7 @@
     position: relative;
     width: 318px;
     min-height: 275px;
-    max-height: 353px;
+    max-height: 440px;
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.12);
     box-shadow: 0px 19px 22px 0px rgba(141, 145, 156, 0.3);

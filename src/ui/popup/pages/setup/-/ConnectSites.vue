@@ -204,7 +204,7 @@
         <p>{{ substringUrl(currentSite?.origin,'agreement') }}<span>{{ substringUrl(currentSite?.origin,'domainName') }}</span></p>
       </div>
     </div>
-    <div class="await-connect-box">
+    <div v-if="sites.length" class="await-connect-box">
       <div class="status-item">
         <Iconfont name="connected" size="14" color="#6F7684"></Iconfont>
         <span>Connected Apps</span>
@@ -243,7 +243,7 @@ export default {
   },
   setup (props, context) {
     const currentSite = ref<SiteData>()
-    const sites = ref<SiteData[]>()
+    const sites = ref<SiteData[]>([])
     const onSiteChanged = async () => {
       currentSite.value = await wallet.getCurrentSite()
       sites.value = await wallet.getSitesSorted()
