@@ -83,6 +83,7 @@
     "util": "^0.12.4",
     "vue": "^3.2.26",
     "vue-i18n": "^9.2.0-beta.23",
+    "vue-json-viewer": "3",
     "vue-router": "^4.0.12",
     "webext-bridge": "^5.0.2",
     "webextension-polyfill": "^0.8.0"
