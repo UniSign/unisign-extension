@@ -73,10 +73,6 @@
     .connect-item {
       display: flex;
       align-items: center;
-      // >img {
-      //   width: 24px;
-      //   height: 24px;
-      // }
       >p {
         margin-left: 12px;
         font-size: $input-font-size;
@@ -214,7 +210,7 @@
         <p>{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></p>
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
-            <img class="w-[16px] h-[16px]" src="/assets/page-home/icon-disconnect.png">
+            <img class="w-[16px] h-[16px] mt-[2px] ml-[2px]" src="/assets/page-home/icon-disconnect.png">
             <div class="popover popover-top">
               Disconnect
             </div>
