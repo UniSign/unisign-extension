@@ -33,7 +33,7 @@ const routes = [{
   component: LayoutDefault,
   children: [{
     path: '/',
-    component: PageSignTypedMessage,
+    component: PageIndex,
   }, {
     path: '/test',
     component: PageTest,
