@@ -16,6 +16,35 @@ export function substringKey (str: string): string {
   return `${str.substring(0, 6)}...${str.substring(len - 7)}`
 }
 
+type UrlType = 'agreement' | 'domainName'
+export function substringUrl (url: string, urlType: UrlType) {
+  if (!url) return
+  if (url.includes('https')) {
+    if (urlType === 'agreement') {
+      return url.substring(0, 8)
+    }
+    else {
+      return url.substring(8)
+    }
+  }
+  else if (url.includes('http')) {
+    if (urlType === 'agreement') {
+      return url.substring(0, 7)
+    }
+    else {
+      return url.substring(7)
+    }
+  }
+  else {
+    if (urlType === 'agreement') {
+      return ''
+    }
+    else {
+      return url
+    }
+  }
+}
+
 export function getImageUrl (key: string, isDisable?: boolean): string {
   if (isDisable) {
     return `/assets/page-addAddress/key-${key?.toLowerCase()}-disable.png`

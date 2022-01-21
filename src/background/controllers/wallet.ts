@@ -120,6 +120,7 @@ export class WalletController {
 
   // ----- sites -------
   getSite = siteService.getSite
+  addSite = siteService.addSite
   pinSite = siteService.pinSite
   unpinSite = siteService.unpinSite
   getSites = siteService.getSites
