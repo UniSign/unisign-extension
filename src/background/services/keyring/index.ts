@@ -174,7 +174,6 @@ export class KeyringService extends EventEmitter {
     return this.clearKeyrings()
       .then(() => this.persistAllKeyrings())
       .then(() => this.addKeyring(defaultKeyring))
-      .then(() => this.addKeyring(this.createKeyringByType(KeyringType.EthHD, keyringConfig)))
       .then(firstKeyring => firstKeyring.getAccounts())
       .then(([firstAccount]) => {
         if (!firstAccount) {

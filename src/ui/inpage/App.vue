@@ -20,7 +20,7 @@
     </button>
 
     <button @click="onClickGetCurrentKey">
-      onClickGetCurrentKey
+      getCurrentKey
     </button>
   </div>
 </template>
