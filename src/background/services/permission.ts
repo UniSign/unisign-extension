@@ -47,9 +47,16 @@ export class PermissionService {
     if (sitePassport) {
       const existConsent = sitePassport.consents.find(consent => consent.key === keyConsent.key)
 
-      if (existConsent) return
+      if (existConsent) {
+        const unPermittedPermissions = keyConsent.permissions.filter(perm => !existConsent.permissions.includes(perm))
 
-      sitePassport.consents.push(keyConsent)
+        if (unPermittedPermissions.length) {
+          existConsent.permissions = existConsent.permissions.concat(unPermittedPermissions)
+        }
+      }
+      else {
+        sitePassport.consents.push(keyConsent)
+      }
     }
     else {
       this.store.sites.push({

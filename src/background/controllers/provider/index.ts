@@ -152,8 +152,17 @@ export class ProviderController {
 
         permissionService.addSitePassport(session.origin, {
           key: currentUnikey.key,
-          permissions: param.permissions,
+          permissions: permittedPermissions,
         })
+
+        if (!siteService.hasBeenConnected(session.origin)) {
+          siteService.addSite({
+            origin: session.origin,
+            name: session.name,
+            icon: session.icon,
+            unikeySymbol: currentChain.unikeySymbol,
+          })
+        }
 
         return {
           permittedPermissions,
@@ -266,15 +275,6 @@ export class ProviderController {
           },
           needApproval: true,
         })
-
-        if (!siteService.hasBeenConnected(session.origin)) {
-          siteService.addSite({
-            origin: session.origin,
-            name: session.name,
-            icon: session.icon,
-            unikeySymbol: chain.unikeySymbol,
-          })
-        }
       }
     }
 
