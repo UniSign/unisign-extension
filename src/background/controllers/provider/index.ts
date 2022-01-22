@@ -48,6 +48,33 @@ export interface PermittedKeysResponse {
   keys: PermittedKeyObject[]
 }
 
+export function composeKeyObjectFromUnikey (unikey: Unikey): KeyObjectType
+export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean): KeyObject
+export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean, permissions: Permissions[]): PermittedKeyObject
+export function composeKeyObjectFromUnikey (unikey: Unikey, withKey?: boolean, permissions?: Permissions[]): KeyObject|KeyObjectType| PermittedKeyObject {
+  const chain = CHAINS[unikey.keySymbol]
+
+  const res: KeyObjectType = {
+    type: UnikeyType.blockchain,
+    meta: {
+      coinType: chain.coinType,
+      chainId: chain.chainId,
+      chainName: chain.name,
+      symbol: chain.unikeySymbol,
+    },
+  }
+
+  if (withKey) {
+    (res as KeyObject).key = unikey.key
+
+    if (permissions) {
+      (res as PermittedKeyObject).permissions = permissions
+    }
+  }
+
+  return res
+}
+
 export class ProviderController {
   private async _getCurrentUnikey (): Promise<Unikey|null> {
     let unikey = personalService.getCurrentUnikey()
@@ -80,17 +107,7 @@ export class ProviderController {
     const currentUnikey = await this._getCurrentUnikey()
 
     if (currentUnikey) {
-      const chain = CHAINS[currentUnikey.keySymbol]
-
-      return {
-        type: currentUnikey.keyType,
-        meta: {
-          coinType: chain.coinType,
-          chainId: chain.chainId,
-          chainName: chain.name,
-          symbol: chain.tokenSymbol,
-        },
-      }
+      return composeKeyObjectFromUnikey(currentUnikey)
     }
     else {
       return null
@@ -109,18 +126,7 @@ export class ProviderController {
           const unikey = unikeyService.findUnikeyByKey(consent.key)
 
           if (unikey) {
-            const chain = CHAINS[unikey.keySymbol]
-            return {
-              type: unikey.keyType,
-              key: unikey.key,
-              meta: {
-                coinType: chain.coinType,
-                chainId: chain.chainId,
-                chainName: chain.name,
-                symbol: chain.tokenSymbol,
-              },
-              permissions: consent.permissions,
-            } as PermittedKeyObject
+            return composeKeyObjectFromUnikey(unikey, true, consent.permissions)
           }
           return null
         }).filter(unikey => !!unikey),
@@ -152,8 +158,17 @@ export class ProviderController {
 
         permissionService.addSitePassport(session.origin, {
           key: currentUnikey.key,
-          permissions: param.permissions,
+          permissions: permittedPermissions,
         })
+
+        if (!siteService.hasBeenConnected(session.origin)) {
+          siteService.addSite({
+            origin: session.origin,
+            name: session.name,
+            icon: session.icon,
+            unikeySymbol: currentChain.unikeySymbol,
+          })
+        }
 
         return {
           permittedPermissions,
@@ -174,18 +189,7 @@ export class ProviderController {
     const currentUnikey = await this._getCurrentUnikey()
 
     if (currentUnikey) {
-      const chain = CHAINS[currentUnikey.keySymbol]
-
-      return {
-        type: currentUnikey.keyType,
-        key: currentUnikey.key,
-        meta: {
-          coinType: chain.coinType,
-          chainId: chain.chainId || '',
-          chainName: chain.name,
-          symbol: chain.unikeySymbol,
-        },
-      }
+      return composeKeyObjectFromUnikey(currentUnikey, true)
     }
     else {
       return null
@@ -247,16 +251,7 @@ export class ProviderController {
 
       // check if it has permission. If not, we will request the permission for developers
       if (!permissionService.hasPermission(session.origin, currentUnikey.key, method as Permissions)) {
-        const chain = CHAINS[currentUnikey.keySymbol]
-        const permissionReq: PermittedKeyObject = {
-          type: currentUnikey.keyType,
-          key: currentUnikey.key,
-          meta: {
-            coinType: chain.coinType,
-            chainId: chain.chainId,
-          },
-          permissions: [method as Permissions],
-        }
+        const permissionReq = composeKeyObjectFromUnikey(currentUnikey, true, [method as Permissions])
 
         await this.requestPermissionsOfCurrentKey({
           session,
@@ -266,15 +261,6 @@ export class ProviderController {
           },
           needApproval: true,
         })
-
-        if (!siteService.hasBeenConnected(session.origin)) {
-          siteService.addSite({
-            origin: session.origin,
-            name: session.name,
-            icon: session.icon,
-            unikeySymbol: chain.unikeySymbol,
-          })
-        }
       }
     }
 

@@ -14,12 +14,9 @@ import { windows } from '~/background/tools/windows'
 import { KeyIdentifier, CHAINS } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
-// todo: the payload of all events needs to be carefully considered
 export const Events = {
-  unlock: 'unlock',
-  lock: 'lock',
-  accountsChanged: 'accountsChanged',
-  chainChanged: 'chainChanged',
+  lockStatusChanged: 'lockStatusChanged',
+  currentKeyChanged: 'currentKeyChanged',
 }
 
 export class WalletController {
@@ -39,13 +36,13 @@ export class WalletController {
   isLocked = keyringService.isLocked
   async lock () {
     await keyringService.setLocked()
-    sessionService.broadcast(Events.accountsChanged, [])
-    sessionService.broadcast(Events.lock)
+    sessionService.broadcast(Events.currentKeyChanged, null)
+    sessionService.broadcast(Events.lockStatusChanged, true)
   }
 
   async unlock (password: string) {
     await keyringService.submitPassword(password)
-    sessionService.broadcast(Events.unlock)
+    sessionService.broadcast(Events.lockStatusChanged, false)
   }
 
   // ----- personal -------
@@ -106,8 +103,6 @@ export class WalletController {
   getApproval = approvalService.getApproval
   resolveApproval = approvalService.resolveApproval
   rejectApproval = approvalService.rejectApproval
-  // todo: this is only for showcase the usage of approval, and should not be used in production
-  _mockRequestApproval = process.env.NODE_ENV === 'development' ? approvalService.requestApproval : undefined
 
   // ----- pageCache -------
   hasPageCache = pageCacheService.has
@@ -139,15 +134,11 @@ export class WalletController {
 
   updateSiteAndSession (origin: string, data: SiteData) {
     siteService.updateSite(origin, data)
-    // todo: determine the payload of chainChanged event
-    sessionService.broadcast(Events.chainChanged, {
-      // chain: '',
-      // networkVersion: '',
-    }, data.origin)
   }
 
   removeSiteAndSession (origin: string) {
-    sessionService.broadcast(Events.accountsChanged, [], origin)
+    sessionService.broadcast(Events.currentKeyChanged, null, origin)
+
     siteService.removeSite(origin)
     permissionService.removeSitePassport(origin)
   }

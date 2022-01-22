@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import { Unikey } from '~/background/services/unikey'
 
 export default {
@@ -52,13 +52,9 @@ export default {
         const res = await window.unisign.request({
           method: 'requestPermissionsOfCurrentKey',
           params: [{
+            // postMessage doesn't accept proxied value, so we should extract the raw value.
+            ...toRaw(currentUnikeyType.value),
             permissions: ['getCurrentKey', 'signTypedMessage', 'signTransaction'], // 可填 “*” 表示请求所有权限
-            type: 'blockchain',
-            meta: {
-              coinType: '0',
-            },
-            // todo: find out why currentUnikeyType.value will cause error
-            // ...currentUnikeyType.value,
           }],
         })
 

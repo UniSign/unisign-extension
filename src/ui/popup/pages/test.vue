@@ -425,7 +425,6 @@ export default {
         approvalPage: ApprovalPage.requestPermission,
       })
     }
-    // todo: there should be a more complex showcase
     async function onClickGetApproval () {
       approval.value = (await wallet.getApproval())?.params
     }
