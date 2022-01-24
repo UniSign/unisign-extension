@@ -16,4 +16,4 @@ export {
 export {
   sendMessage,
   onMessage,
-} from './apis'
+} from './apis/index'
