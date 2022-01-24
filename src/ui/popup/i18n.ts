@@ -7,7 +7,11 @@ import { wallet } from '~/ui/controllers/wallet'
 
 declare module 'vue-i18n' {
   interface VueI18n {
-    tt: typeof tt
+    $tt: typeof tt
+  }
+
+  interface Composer {
+    $tt: typeof tt
   }
 }
 
@@ -19,6 +23,10 @@ declare module '@vue/runtime-core' {
 
 const i18n = createI18n({
   fallbackLocale: LOCALES.en,
+  // use global to inject $tt to useI18n returns value
+  // maybe we should figure out a way to remove the use of legacy
+  globalInjection: true,
+  legacy: false,
 })
 
 /**
@@ -66,7 +74,7 @@ export function installI18n (app: App) {
 
   app.config.globalProperties.$tt = tt
 
-  i18n.global.tt = tt
+  i18n.global.$tt = tt
 
   wallet.getLocale().then(setLocale).then(locale => console.log(`Locale ${locale} loaded`))
 }

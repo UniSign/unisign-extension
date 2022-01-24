@@ -50,6 +50,7 @@
 <script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
 
@@ -57,6 +58,7 @@ export default {
   name: 'PageLocked',
   setup () {
     const router = useRouter()
+    const i18n = useI18n()
 
     const passwordRef = ref<InstanceType<typeof UniInput>>()
     const password = ref('')
@@ -64,7 +66,7 @@ export default {
     const isLocked = ref(false)
     const triggerValidate = async () => {
       if (!password.value) {
-        validataText.value = 'Please enter password'
+        validataText.value = i18n.$tt('Please enter password')
         passwordRef.value?.validate()
         return
       }
