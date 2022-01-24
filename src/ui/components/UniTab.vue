@@ -49,6 +49,7 @@ import { toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
+  name: 'UniTab',
   props: {
     title: {
       type: String,

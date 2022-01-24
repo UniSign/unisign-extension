@@ -53,6 +53,7 @@
 <script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
 
@@ -60,6 +61,7 @@ export default {
   name: 'PageSetup',
   setup (props, context) {
     const router = useRouter()
+    const i18n = useI18n()
 
     const password = ref('')
     const rePassword = ref('')
@@ -69,7 +71,7 @@ export default {
     const onClickSetup = async () => {
       if (!password.value || !rePassword.value) return
       if (rePassword.value !== password.value) {
-        validataText.value = 'The passwords do not match'
+        validataText.value = i18n.$tt('The passwords do not match')
         rePasswordRef.value?.validate()
         return
       }

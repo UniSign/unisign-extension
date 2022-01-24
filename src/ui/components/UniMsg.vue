@@ -36,6 +36,7 @@
 import { watch } from 'vue'
 
 export default {
+  name: 'UniMsg',
   props: {
     visible: {
       type: Boolean,

@@ -60,6 +60,7 @@ export default {
   name: 'PageSettings',
   setup () {
     const router = useRouter()
+    // todo: variable & attribute  can't translate
     const settingsArr = ref<Setting[]>([
       { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'settings/keyManagement' },
       { key: 'language', value: 'Language', color: '#4190FF', router: 'settings/language' },

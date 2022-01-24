@@ -115,6 +115,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
@@ -128,6 +129,7 @@ export default {
   setup () {
     const canShowMsg = ref(false)
     const msgContent = ref('')
+    const i18n = useI18n()
 
     // antiPhishingCode
     const antiPhishingCode = ref('')
@@ -148,7 +150,7 @@ export default {
       onPhishingCodeChanged()
       ironmanRef.value?.onAntiPhishingCodeChange()
       isShowPhishingCodeDialog.value = false
-      msgContent.value = 'Saved'
+      msgContent.value = i18n.$tt('Saved')
       canShowMsg.value = true
     }
     onMounted(() => {
@@ -165,7 +167,7 @@ export default {
     const handleTipsCancel = () => {
       isShowTipsDialog.value = false
       wallet.clearAllPermission()
-      msgContent.value = 'Canceled'
+      msgContent.value = i18n.$tt('Canceled')
       canShowMsg.value = true
     }
 

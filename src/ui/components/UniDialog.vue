@@ -81,6 +81,7 @@
 <script lang="ts">
 
 export default {
+  name: 'UniDialog',
   props: {
     visible: {
       type: Boolean,
