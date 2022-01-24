@@ -27,7 +27,7 @@
   <transition name="fade">
     <div v-if="visible" class="uni-msg" :style="{'width':width,'height':height,'background-color':error?'#EE5757':'#41C190'}">
       <Iconfont :name="error?'error':'checked'" size="16" color="#fff" class="mr-[8px]"></Iconfont>
-      {{ content }}
+      {{ $tt(content) }}
     </div>
   </transition>
 </template>
