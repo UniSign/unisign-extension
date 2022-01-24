@@ -15,6 +15,7 @@ export const sharedConfig: UserConfig = {
   resolve: {
     alias: {
       '~/': `${r('src')}/`,
+      '~~/': `${r('.')}/`,
       // some deps need `stream` in node core libs, but vite does not polyfill those libs, so we have to alias them ourselves.
       // https://github.com/vitejs/vite/issues/5398#issuecomment-950288364
       'stream': 'readable-stream',
