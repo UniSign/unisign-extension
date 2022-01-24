@@ -31,7 +31,7 @@
       :style="{'width':width,'height':height}"
       :class="{'_error':canShowValidateText}"
       :value="modelValue"
-      :placeholder="placeholder"
+      :placeholder="$tt(placeholder)"
       @input="onInputChange"
     >
     </textarea>
