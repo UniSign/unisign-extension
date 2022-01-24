@@ -52,7 +52,7 @@
       :class="{'_error':canShowValidateText}"
       type="text"
       :value="modelValue"
-      :placeholder="$tt(placeholder)"
+      :placeholder="placeholder"
       @input="onInputChange"
     >
     <div v-if="showLocked" @click="triggerValidate">
@@ -68,6 +68,7 @@
 import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'UniInput',
   props: {
     width: {
       type: String,

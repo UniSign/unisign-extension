@@ -55,6 +55,7 @@
 import { toRefs } from 'vue'
 
 export default {
+  name: 'UniDoubleBtn',
   props: {
     disabled: {
       type: Boolean,

@@ -175,6 +175,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
 import { Unikey } from '~/background/services/unikey'
@@ -188,6 +189,7 @@ export default {
     const isShowPrivateKeyDialog = ref(false)
     const isShowMnemonicDialog = ref(false)
     const isShowDeleteKeyDialog = ref(false)
+    const i18n = useI18n()
 
     // securityDialog
     let currentEventName: CurrentEventName = null
@@ -239,7 +241,7 @@ export default {
 
     // dangerousDialog
     const isShowDangerousDialog = ref(false)
-    const dangerousText = ref('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.')
+    const dangerousText = ref(i18n.$tt('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.'))
     const handleDangerousCancel = () => {
       isShowDangerousDialog.value = false
       if (currentEventName === 'viewPrivateKey' || currentEventName === 'viewMnemonic') {
@@ -275,7 +277,7 @@ export default {
     const onClickDeletePrivateKey = (unikey: Unikey) => {
       currentUnikey.value = unikey
       currentEventName = 'deletePrivateKey'
-      dangerousText.value = 'You may lost your asset if you are not backup properly.'
+      dangerousText.value = i18n.$tt('You may lost your asset if you are not backup properly.')
       isShowDangerousDialog.value = true
     }
     const handleDeleteKeyCancel = () => {

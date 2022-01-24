@@ -31,7 +31,7 @@
       :style="{'width':width,'height':height}"
       :class="{'_error':canShowValidateText}"
       :value="modelValue"
-      :placeholder="$tt(placeholder)"
+      :placeholder="placeholder"
       @input="onInputChange"
     >
     </textarea>
@@ -45,6 +45,7 @@
 import { ref, toRefs, defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'UniTextArea',
   props: {
     width: {
       type: String,
