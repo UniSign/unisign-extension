@@ -23,7 +23,7 @@
 
 <template>
   <button class="uni-btn" :class="{'_disabled':disabled,'_error':error}" @click="click">
-    <slot>Continue</slot>
+    <slot>{{ $tt('Continue') }}</slot>
   </button>
 </template>
 

@@ -52,14 +52,14 @@
       :class="{'_error':canShowValidateText}"
       type="text"
       :value="modelValue"
-      :placeholder="placeholder"
+      :placeholder="$tt(placeholder)"
       @input="onInputChange"
     >
     <div v-if="showLocked" @click="triggerValidate">
       <Iconfont class="icon-font" name="arrow-enter" size="18"></Iconfont>
     </div>
     <p v-show="canShowValidateText">
-      {{ validateText }}
+      {{ $tt(validateText) }}
     </p>
   </div>
 </template>

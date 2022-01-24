@@ -183,7 +183,7 @@
     <UniTab title="Key Management"></UniTab>
     <div class="settings-box">
       <template v-if="derivedUniKeys.length">
-        <h2>Derived from Mnemonic</h2>
+        <h2>{{ $tt('Derived from Mnemonic') }}</h2>
         <div v-for="unikey in derivedUniKeys" :key="unikey.key" class="settings-item-box">
           <img :src="getImageUrl(unikey.keySymbol,unikey.hidden)">
           <span>{{ substringKey(unikey.key) }}</span>
@@ -192,22 +192,22 @@
           </div>
           <div v-show="unikey.key === isSettingkey" class="popover">
             <div v-if="unikey.hidden" @click="onClickEnable(unikey)">
-              Enable
+              {{ $tt('Enable') }}
             </div>
             <div v-else @click="onClickDisable(unikey)">
-              Disable
+              {{ $tt('Disable') }}
             </div>
             <div @click="onClickViewPrivateKey(unikey)">
-              View Private Key
+              {{ $tt('View Private Key') }}
             </div>
             <div @click="onClickViewMnemonic(unikey)">
-              View Mnemonic
+              {{ $tt('View Mnemonic') }}
             </div>
           </div>
         </div>
       </template>
       <template v-if="importedUniKeys.length">
-        <h2>Imported</h2>
+        <h2>{{ $tt('Imported') }}</h2>
         <div v-for="unikey in importedUniKeys" :key="unikey.key" class="settings-item-box">
           <img :src="getImageUrl(unikey.keySymbol)">
           <span>{{ substringKey(unikey.key) }}</span>
@@ -216,10 +216,10 @@
           </div>
           <div v-show="unikey.key === isSettingkey" class="popover">
             <div @click="onClickDeletePrivateKey(unikey)">
-              Delete
+              {{ $tt('Delete') }}
             </div>
             <div @click="onClickViewPrivateKey(unikey)">
-              View Private Key
+              {{ $tt('View Private Key') }}
             </div>
           </div>
         </div>
@@ -227,7 +227,7 @@
     </div>
     <div class="add-key-btn-box">
       <UniBtn class="add-key-btn" @click="$router.push('/addAddress')">
-        Add Key
+        {{ $tt('Add Key') }}
       </UniBtn>
     </div>
     <Ironman></Ironman>

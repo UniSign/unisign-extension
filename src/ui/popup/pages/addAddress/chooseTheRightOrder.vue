@@ -67,7 +67,7 @@
     <UniMsg :visible="canShowMsg" error content="Incorrect order" @close="canShowMsg= false"></UniMsg>
     <UniTab title="Create Mnemonic"></UniTab>
     <div class="central-content">
-      <h2>Keep it carefully</h2>
+      <h2>{{ $tt('keep it carefully') }}</h2>
       <div class="mnemonic-box">
         <div v-for="(item,index) in mnemonicArr" :key="index" class="mnemonic-item">
           <span>{{ index + 1 }}</span>

@@ -27,7 +27,7 @@
   <div class="page-import-keystore-file">
     <UniTab title="Import Keystore File"></UniTab>
     <div class="central-content">
-      <h2>Import Keystore</h2>
+      <h2>{{ $tt('Import Keystore') }}</h2>
       <UniTextArea
         ref="keystoreRef"
         v-model="keystore"

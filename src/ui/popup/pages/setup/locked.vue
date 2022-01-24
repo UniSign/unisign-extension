@@ -30,7 +30,7 @@
 <template>
   <div class="page-locked">
     <img class="w-[122px] h-[122px] mx-auto mt-[119px]" src="/assets/page-setup/locked-logo.png">
-    <h2>Welcome Back</h2>
+    <h2>{{ $tt('Welcome Back') }}</h2>
     <UniInput
       ref="passwordRef"
       v-model="password"
@@ -41,7 +41,7 @@
       @triggerValidate="triggerValidate"
     ></UniInput>
     <p>
-      Need Help?
+      {{ $tt('Need Help?') }}
     </p>
     <Ironman></Ironman>
   </div>

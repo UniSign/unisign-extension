@@ -189,11 +189,11 @@
     <div class="connect-box">
       <div class="status-item">
         <Iconfont name="current" size="14"></Iconfont>
-        <span>Current connect</span>
+        <span>{{ $tt('Current connect') }}</span>
       </div>
       <div v-if="!currentSite" class="connect-item">
         <Iconfont name="connect" size="24"></Iconfont>
-        <p>No Connect</p>
+        <p>{{ $tt('No Connect') }}</p>
       </div>
       <div v-else class="connect-item">
         <img :src="currentSite?.icon">
@@ -203,7 +203,7 @@
     <div v-if="sites.length" class="await-connect-box">
       <div class="status-item">
         <Iconfont name="connected" size="14" color="#6F7684"></Iconfont>
-        <span>Connected Apps</span>
+        <span>{{ $tt('Connected Apps') }}</span>
       </div>
       <div v-for="site in sites" :key="site.name" class="connect-item">
         <img :src="site?.icon">
@@ -212,7 +212,7 @@
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
             <img class="w-[16px] h-[16px] mt-[2px] ml-[2px]" src="/assets/page-home/icon-disconnect.png">
             <div class="popover popover-top">
-              Disconnect
+              {{ $tt('Disconnect') }}
             </div>
           </div>
           <div @click="onClickPinSite(site)">

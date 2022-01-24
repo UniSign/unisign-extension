@@ -55,22 +55,22 @@
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>
-        <p>Current Key</p>
+        <p>{{ $tt('Current Key') }}</p>
         <span>0xe7c00a33…a09dc4f6bd</span>
       </div>
     </div>
     <div class="main-title-box">
-      <h2>Decode Message</h2>
-      <h2>3 Messages in total</h2>
+      <h2>{{ $tt('Decode Message') }}</h2>
+      <h2>{{ $tt('3 Messages in total') }}</h2>
     </div>
     <div class="main-message-box">
-      Decentralized Account Systems
+      {{ $tt('Decentralized Account Systems') }}
     </div>
     <div class="main-message-box">
-      A future-proof, cross-chain decentralized account system
+      {{ $tt('A future-proof, cross-chain decentralized account system') }}
     </div>
     <div class="main-message-box">
-      Unlike centralized account systems, such as cell phone numbers/email/social accounts, DAS offers a decentralized and open sourced approach to account systems. DAS can be used as a digital assets collection account, as an account for accessing general Internet services.
+      {{ $tt('Unlike centralized account systems, such as cell phone numbers/email/social accounts, DAS offers a decentralized and open sourced approach to account systems. DAS can be used as a digital assets collection account, as an account for accessing general Internet services.') }}
     </div>
   </SignWrapper>
 </template>

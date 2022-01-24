@@ -30,9 +30,9 @@
   <div class="page-import-private-key">
     <UniTab title="Import Private Key"></UniTab>
     <div class="central-content">
-      <h2>Import {{ keyName }}</h2>
+      <h2>{{ $tt('Import') }} {{ keyName }}</h2>
       <h2>
-        Private Key
+        {{ $tt('Private Key') }}
       </h2>
       <UniTextArea
         ref="privateKeyRef"
