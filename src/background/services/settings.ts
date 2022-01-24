@@ -26,9 +26,15 @@ export class SettingsService extends AutoBindService {
   private async getAcceptLanguage (): Promise<LOCALES> {
     const langs = (await browser.i18n.getAcceptLanguages()) as LOCALES[] || []
 
-    const locale = langs.find(lang => LocaleOptions.some(option => option.value === lang))
+    for (const lang of langs) {
+      for (const option of LocaleOptions) {
+        if (lang.match(new RegExp(option.value))) {
+          return option.value
+        }
+      }
+    }
 
-    return locale || LOCALES.en
+    return LOCALES.en
   }
 
   async getLocale (): Promise<LOCALES> {
