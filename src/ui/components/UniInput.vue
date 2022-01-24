@@ -52,7 +52,7 @@
       :class="{'_error':canShowValidateText}"
       type="text"
       :value="modelValue"
-      :placeholder="$tt(placeholder)"
+      :placeholder="placeholder"
       @input="onInputChange"
     >
     <div v-if="showLocked" @click="triggerValidate">
