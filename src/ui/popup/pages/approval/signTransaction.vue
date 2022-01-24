@@ -116,26 +116,26 @@
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>
-        <p>Current Key</p>
+        <p>{{ $tt('Current Key') }}</p>
         <span>0xe7c00a33…a09dc4f6bd</span>
       </div>
     </div>
     <div class="main-title-box">
-      <h2>Sign Bitcoin Transaction</h2>
-      <p>View Raw</p>
+      <h2>{{ $tt('Sign Bitcoin Transaction') }}</h2>
+      <p>{{ $tt('View Raw') }}</p>
     </div>
     <div class="main-message-box">
       <div class="main-message-title">
         <img src="/assets/connect/icon-btc.png">
-        <h2>Send BTC</h2>
+        <h2>{{ $tt('Send BTC') }}</h2>
       </div>
       <div class="main-message-content">
         <div class="item">
-          <span>Amount</span>
+          <span>{{ $tt('Amount') }}</span>
           <h2>10 BTC</h2>
         </div>
         <div class="item">
-          <span>To address</span>
+          <span>{{ $tt('To address') }}</span>
           <div>
             <p>1Bn1n…vRUPs  8 BTC</p>
             <p>16FsD…d4z4y  2 BTC</p>
@@ -146,7 +146,7 @@
     <div class="vice-message-box">
       <div class="main-message-content">
         <div class="item">
-          <span>Fee</span>
+          <span>{{ $tt('Fee') }}</span>
           <h2>0.00015 BTC</h2>
         </div>
       </div>

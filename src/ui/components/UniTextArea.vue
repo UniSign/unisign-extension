@@ -31,12 +31,12 @@
       :style="{'width':width,'height':height}"
       :class="{'_error':canShowValidateText}"
       :value="modelValue"
-      :placeholder="placeholder"
+      :placeholder="$tt(placeholder)"
       @input="onInputChange"
     >
     </textarea>
     <p v-show="canShowValidateText">
-      {{ validateText }}
+      {{ $tt(validateText) }}
     </p>
   </div>
 </template>

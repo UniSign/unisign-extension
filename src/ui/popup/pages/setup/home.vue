@@ -247,14 +247,14 @@
       <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
         <Iconfont name="settings" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
-          Settings
+          {{ $tt('Settings') }}
         </div>
       </div>
       <img class="w-[134px] h-[36px]" :src="`/assets/page-home/nav-${isScroll?'logo-scroll':'logo'}.png`">
       <div class="icon-wrapper cursor-pointer" @click="onClickLock">
         <Iconfont name="lock" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
-          Lock
+          {{ $tt('Lock') }}
         </div>
       </div>
     </div>
@@ -262,30 +262,30 @@
     <div class="central-bg-2"></div>
     <div class="central-content">
       <div class="address-part">
-        <h2>{{ currentUnikeyName }} Address</h2>
+        <h2>{{ currentUnikeyName }} {{ $tt('Address') }}</h2>
         <p>{{ currentUnikey?.key }}</p>
         <div>
           <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
             <Iconfont name="copy" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
-              Copy Address
+              {{ $tt('Copy Address') }}
             </div>
           </div>
           <div class="icon-wrapper mr-[16px] cursor-pointer" @click="isShowQRCodeDialog = true">
             <Iconfont name="qrcode" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
-              QR Code
+              {{ $tt('QR Code') }}
             </div>
           </div>
           <i class="mr-[16px]"></i>
           <div class="icon-wrapper cursor-pointer">
             <Iconfont name="switch" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
-              Transfer
+              {{ $tt('Transfer') }}
             </div>
           </div>
           <div class="switch cursor-pointer" @click="isShowSwitchKeyDialog = true">
-            Switch
+            {{ $tt('Switch') }}
           </div>
         </div>
       </div>
@@ -298,7 +298,7 @@
       <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
         {{ currentUnikey?.key }}
         <div class="popover popover-top">
-          Copy Address
+          {{ $tt('Copy Address') }}
         </div>
       </div>
     </UniDialog>

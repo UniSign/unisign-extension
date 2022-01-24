@@ -97,24 +97,24 @@
       <div class="current-key-box">
         <img src="/assets/page-addAddress/key-btc.png">
         <div>
-          <p>Current Key</p>
+          <p>{{ $tt('Current Key') }}</p>
           <span>0xe7c00a33…a09dc4f6bd</span>
         </div>
       </div>
       <div class="main-title-box">
-        <h2>Sign Typed Message</h2>
+        <h2>{{ $tt('Sign Typed Message') }}</h2>
         <p @click="isShowRawDialog = true">
-          View Raw
+          {{ $tt('View Raw') }}
         </p>
       </div>
       <div class="main-message-box">
         <div class="main-message-title">
-          <span>App</span>
-          <h2>DAS</h2>
+          <span>{{ $tt('App') }}</span>
+          <h2>{{ $tt('DAS') }}</h2>
         </div>
         <div class="main-message-content">
-          <span>Details</span>
-          <h2>Transfer Owner of jack.bit to 0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD</h2>
+          <span>{{ $tt('Details') }}</span>
+          <h2>{{ $tt('Transfer Owner of jack.bit to') }} 0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD</h2>
         </div>
       </div>
     </SignWrapper>

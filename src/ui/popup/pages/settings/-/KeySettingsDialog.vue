@@ -106,7 +106,7 @@
           {{ dangerousText }}
         </div>
         <UniBtn class="uni-btn" error @click="handleDangerousCancel">
-          I got it
+          {{ $tt('I got it') }}
         </UniBtn>
       </div>
     </UniDialog>
@@ -130,7 +130,7 @@
           {{ selectedprivateKey }}
         </div>
         <UniBtn class="uni-btn" @click="handlePrivateKeyCancel">
-          OK
+          {{ $tt('OK') }}
         </UniBtn>
       </div>
     </UniDialog>
@@ -143,14 +143,14 @@
           </div>
         </div>
         <UniBtn class="uni-btn" @click="handleMnemonicCancel">
-          OK
+          {{ $tt('OK') }}
         </UniBtn>
       </div>
     </UniDialog>
     <UniDialog class="deleteKeyDialog" error :visible="isShowDeleteKeyDialog" title="Delete Key" @cancel="isShowDeleteKeyDialog= false">
       <div class="slot-container">
-        <p>Confirm to delete,</p>
-        <p>enter <span>Delete Key</span> below.</p>
+        <p>{{ $tt('Confirm to delete,') }}</p>
+        <p>{{ $tt('enter') }} <span>{{ $tt('Delete Key') }}</span> {{ $tt('Dbelow.') }}</p>
         <UniInput
           ref="deleteKeyRef"
           v-model="deleteKey"
@@ -162,10 +162,10 @@
         ></UniInput>
         <UniDoubleBtn class="uni-btn" :disabled="!deleteKey" @rejectClick="isShowDeleteKeyDialog= false" @allowClick="handleDeleteKeyCancel">
           <template #reject>
-            Cancle
+            {{ $tt('Cancle') }}
           </template>
           <template #allow>
-            Delete
+            {{ $tt('Delete') }}
           </template>
         </UniDoubleBtn>
       </div>

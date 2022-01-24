@@ -27,14 +27,14 @@
   <div class="page-import-mnemonic">
     <UniTab title="Import Mnemonic"></UniTab>
     <div class="central-content">
-      <h2>Import Mnemonic</h2>
+      <h2>{{ $tt('Import Mnemonic') }}</h2>
       <UniTextArea
         ref="mnemonicRef"
         v-model="mnemonic"
         class="block mt-[32px] mx-auto"
         height="130px"
         validate-text="Incorrect mnemonic"
-        :placeholder="`Enter mnemonic, separated by space`"
+        placeholder="Enter mnemonic, separated by space"
       ></UniTextArea>
       <UniBtn :disabled="!mnemonic" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>

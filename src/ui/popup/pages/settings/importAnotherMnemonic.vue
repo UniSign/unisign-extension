@@ -42,8 +42,8 @@
   <div class="page-import-another-mnemonic">
     <UniTab title="Import Mnemonic"></UniTab>
     <div class="central-content">
-      <h2>Import another Mnemonic</h2>
-      <p>After importing another helper phrase, your current wallet account will be permanently deleted. <span>This action cannot be undone</span>. It is recommended that you back up before doing so.</p>
+      <h2>{{ $tt('Import another Mnemonic') }}</h2>
+      <p>{{ $tt('After importing another helper phrase, your current wallet account will be permanently deleted.') }}<span>{{ $tt('This action cannot be undone.') }} </span>{{ $tt('It is recommended that you back up before doing so.') }}</p>
       <UniTextArea
         ref="mnemonicRef"
         v-model="mnemonic"
@@ -53,7 +53,7 @@
         placeholder="Enter mnemonic, separated by space"
       ></UniTextArea>
       <UniBtn :disabled="!mnemonic" error class="uni-btn" @click="onClickSubmit">
-        Confirm
+        {{ $tt('Confirm') }}
       </UniBtn>
     </div>
     <Ironman></Ironman>
