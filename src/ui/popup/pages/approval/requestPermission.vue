@@ -55,6 +55,7 @@
       border-top: 1px solid rgba(220, 229, 240, 0.5);
       font-size: $detail-font-size;
       font-weight: 600;
+      font-family: monospace;
       line-height: 16px;
       word-wrap: break-word;
       word-break: break-all;

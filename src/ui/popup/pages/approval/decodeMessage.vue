@@ -21,6 +21,7 @@
     >span {
       font-size: $detail-font-size;
       font-weight: 600;
+      font-family: monospace;
       line-height: 16px;
       color: #6F7684;
     }

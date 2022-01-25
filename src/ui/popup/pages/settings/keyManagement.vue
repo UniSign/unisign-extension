@@ -32,6 +32,7 @@
       span {
         font-size: $input-font-size;
         font-weight: bold;
+        font-family: monospace;
       }
       .arrow-right {
         margin-left: auto;

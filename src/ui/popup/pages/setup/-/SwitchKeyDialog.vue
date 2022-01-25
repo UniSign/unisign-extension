@@ -3,7 +3,7 @@
   .switch-key-content {
     overflow: hidden;
     overflow-y: scroll;
-    max-height: 321px;
+    max-height: 290px;
     &::-webkit-scrollbar {
       display: none;
     }
@@ -32,6 +32,7 @@
         span {
           font-size: $detail-font-size;
           font-weight: bold;
+          font-family: monospace;
           color: #242C3F;
           line-height: 16px;
         }

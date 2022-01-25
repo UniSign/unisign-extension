@@ -91,6 +91,7 @@
         font-size: $code-font-size;
         line-height: 29px;
         font-weight: 500;
+        font-family: monospace;
         letter-spacing: 3px;
         color: #576C80;
       }
@@ -181,6 +182,9 @@
       word-break: break-all;
       cursor: pointer;
       background: #F9F7F6;
+      span {
+        font-family: monospace;
+      }
       &:hover {
         .popover {
           display: block;
@@ -296,7 +300,7 @@
     <UniDialog class="qr-code-box" :title="$tt('Account Detail')" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
       <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
       <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
-        {{ currentUnikey?.key }}
+        <span>{{ currentUnikey?.key }}</span>
         <div class="popover popover-top">
           {{ $tt('Copy Address') }}
         </div>
