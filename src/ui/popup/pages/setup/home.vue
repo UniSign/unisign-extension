@@ -241,7 +241,7 @@
 
 <template>
   <div class="page-home">
-    <UniMsg :visible="canShowMsg" content="Copied" @close="canShowMsg= false"></UniMsg>
+    <UniMsg :visible="canShowMsg" :content="$tt('Copied')" @close="canShowMsg= false"></UniMsg>
     <div class="top-bg"></div>
     <div ref="topLineBoxRef" class="top-line-box">
       <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
@@ -293,7 +293,7 @@
     <img class="key-icon" :src="getImageUrl(currentUnikey?.keySymbol)">
     <ConnectSites></ConnectSites>
     <Ironman></Ironman>
-    <UniDialog class="qr-code-box" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
+    <UniDialog class="qr-code-box" :title="$tt('Account Detail')" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
       <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
       <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
         {{ currentUnikey?.key }}

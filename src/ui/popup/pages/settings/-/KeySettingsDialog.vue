@@ -100,7 +100,7 @@
 
 <template>
   <div class="key-settings-dialog">
-    <UniDialog class="dangerousDialog" error :visible="isShowDangerousDialog" title="Dangerous Action" @cancel="isShowDangerousDialog = false">
+    <UniDialog class="dangerousDialog" error :visible="isShowDangerousDialog" :title="$tt('Dangerous Action')" @cancel="isShowDangerousDialog = false">
       <div class="slot-container">
         <div class="text">
           {{ dangerousText }}
@@ -110,7 +110,7 @@
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="securityDialog" :visible="isShowSecurityDialog" title="Security Verification" @cancel="isShowSecurityDialog = false">
+    <UniDialog class="securityDialog" :visible="isShowSecurityDialog" :title="$tt('Security Verification')" @cancel="isShowSecurityDialog = false">
       <div class="slot-container">
         <UniInput
           ref="passwordRef"
@@ -119,12 +119,13 @@
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"
           :validate-text="validataText"
+          :placeholder="$tt('Set a password')"
         ></UniInput>
         <UniBtn class="uni-btn" :disabled="!password" @click="handleSecurityCancel">
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="privateKeyDialog" :visible="isShowPrivateKeyDialog" title="Private Key" @cancel="isShowPrivateKeyDialog= false">
+    <UniDialog class="privateKeyDialog" :visible="isShowPrivateKeyDialog" :title="$tt('Private Key')" @cancel="isShowPrivateKeyDialog= false">
       <div class="slot-container">
         <div class="text">
           {{ selectedprivateKey }}
@@ -134,7 +135,7 @@
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="mnemonicDialog" :visible="isShowMnemonicDialog" title="Mnemonic" @cancel="isShowMnemonicDialog= false">
+    <UniDialog class="mnemonicDialog" :visible="isShowMnemonicDialog" :title="$tt('Mnemonic')" @cancel="isShowMnemonicDialog= false">
       <div class="slot-container">
         <div class="mnemonic-box">
           <div v-for="(item,index) in mnemonicArr" :key="index" class="mnemonic-item">
@@ -147,18 +148,18 @@
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="deleteKeyDialog" error :visible="isShowDeleteKeyDialog" title="Delete Key" @cancel="isShowDeleteKeyDialog= false">
+    <UniDialog class="deleteKeyDialog" error :visible="isShowDeleteKeyDialog" :title="$tt('Delete Key')" @cancel="isShowDeleteKeyDialog= false">
       <div class="slot-container">
         <p>{{ $tt('Confirm to delete,') }}</p>
-        <p>{{ $tt('enter') }} <span>{{ $tt('Delete Key') }}</span> {{ $tt('Dbelow.') }}</p>
+        <p>{{ $tt('enter') }} <span>{{ $tt('Delete Key') }}</span> {{ $tt('below.') }}</p>
         <UniInput
           ref="deleteKeyRef"
           v-model="deleteKey"
           width="100%"
           background-color="#F7F8FA"
           class="uni-input mb-[48px]"
-          placeholder="Please enter Delete Key"
-          validate-text="Incorrect input"
+          :placeholder="$tt('Please enter Delete Key')"
+          :validate-text="$tt('Incorrect input')"
         ></UniInput>
         <UniDoubleBtn class="uni-btn" :disabled="!deleteKey" @rejectClick="isShowDeleteKeyDialog= false" @allowClick="handleDeleteKeyCancel">
           <template #reject>

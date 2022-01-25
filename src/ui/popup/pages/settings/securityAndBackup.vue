@@ -60,7 +60,7 @@
 <template>
   <div class="page-security-and-backup">
     <UniMsg :visible="canShowMsg" :content="msgContent" @close="canShowMsg= false"></UniMsg>
-    <UniTab title="Security & Backup"></UniTab>
+    <UniTab :title="$tt('Security & Backup')"></UniTab>
     <div class="settings-box">
       <div class="settings-item-box" @click="isShowPhishingCodeDialog = true">
         <span>{{ $tt('Anti-Phishing Code') }}</span>
@@ -83,7 +83,7 @@
       </div>
     </div>
     <Ironman ref="ironmanRef"></Ironman>
-    <UniDialog class="phishingCodeDialog" :visible="isShowPhishingCodeDialog" title="Anti-Phishing Code" @cancel="isShowPhishingCodeDialog = false">
+    <UniDialog class="phishingCodeDialog" :visible="isShowPhishingCodeDialog" :title="$tt('Anti-Phishing Code')" @cancel="isShowPhishingCodeDialog = false">
       <div class="slot-container">
         <UniInput
           ref="phishingCodeRef"
@@ -99,7 +99,7 @@
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="tipsDialog" :visible="isShowTipsDialog" title="Tips" @cancel="isShowTipsDialog = false">
+    <UniDialog class="tipsDialog" :visible="isShowTipsDialog" :title="$tt('Tips')" @cancel="isShowTipsDialog = false">
       <div class="slot-container">
         <div class="text">
           {{ $tt('Are you sure cancel all authorized permissions?') }}

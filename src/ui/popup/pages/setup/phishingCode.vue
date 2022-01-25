@@ -61,12 +61,10 @@
 <template>
   <div class="page-phishing-code">
     <Iconfont class="block mx-auto mb-[31px]" name="anti-phishing" width="61" height="48" color="black"></Iconfont>
-    <h2>{{ $tt('Set an') }}</h2>
-    <h2>{{ $tt('Anti-Phishing Code') }}</h2>
-    <i class="iconfont icon-explore"></i>
+    <h2>{{ $tt('Set an Anti-Phishing Code') }}</h2>
     <h3>{{ $tt('The Anti-Phishing Code is a security feature. It will be included in all windows about UniSign. This Code helping you to prevent phishing attemtps.') }}</h3>
     <div>
-      <input v-model="antiPhishingCode" :class="{'_error':isError}" type="text">
+      <input v-model="antiPhishingCode" :placeholder="$tt('Set a password')" :class="{'_error':isError}" type="text">
       <p v-show="isError">
         {{ $tt('Supports up to 10 characters') }}
       </p>

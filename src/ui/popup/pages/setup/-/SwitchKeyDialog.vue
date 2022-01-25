@@ -56,7 +56,7 @@
 </style>
 
 <template>
-  <UniDialog class="switch-key-box" :visible="true" title="Switch Key" @cancel="handleSwitchCancel">
+  <UniDialog class="switch-key-box" :visible="true" :title="$tt('Switch Key')" @cancel="handleSwitchCancel">
     <div class="switch-key-content">
       <div v-if="derivedUniKeys.length" class="derived-box">
         <h2>{{ $tt('Derived from Mnemonic') }}</h2>

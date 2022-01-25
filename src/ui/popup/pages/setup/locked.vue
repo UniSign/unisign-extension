@@ -37,7 +37,7 @@
       show-locked
       class="uni-input"
       :validate-text="validataText"
-      placeholder="Enter password"
+      :placeholder="$tt('Enter password')"
       @triggerValidate="triggerValidate"
     ></UniInput>
     <p>

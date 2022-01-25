@@ -93,7 +93,7 @@
 
 <template>
   <div>
-    <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
+    <SignWrapper :title="$tt('Signature Request')" @reject="onRejectClick" @allow="onAllowClick">
       <div class="current-key-box">
         <img src="/assets/page-addAddress/key-btc.png">
         <div>
@@ -110,7 +110,7 @@
       <div class="main-message-box">
         <div class="main-message-title">
           <span>{{ $tt('App') }}</span>
-          <h2>{{ $tt('DAS') }}</h2>
+          <h2>DAS</h2>
         </div>
         <div class="main-message-content">
           <span>{{ $tt('Details') }}</span>
@@ -118,7 +118,7 @@
         </div>
       </div>
     </SignWrapper>
-    <UniDialog class="raw-box" :visible="isShowRawDialog" @cancel="handleRawCancel">
+    <UniDialog class="raw-box" :title="$tt('Message Detail')" :visible="isShowRawDialog" @cancel="handleRawCancel">
       <div class="raw-container">
         <json-viewer :value="jsonData"></json-viewer>
       </div>

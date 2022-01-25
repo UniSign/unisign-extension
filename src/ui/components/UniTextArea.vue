@@ -36,7 +36,7 @@
     >
     </textarea>
     <p v-show="canShowValidateText">
-      {{ $tt(validateText) }}
+      {{ validateText }}
     </p>
   </div>
 </template>

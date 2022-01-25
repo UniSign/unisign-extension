@@ -45,7 +45,7 @@
   <div class="wrapper-sign">
     <div class="page-connect">
       <div class="top-bg">
-        <h2>{{ $tt(title) }}</h2>
+        <h2>{{ title }}</h2>
       </div>
       <div class="central-content">
         <slot></slot>

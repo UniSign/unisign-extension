@@ -47,7 +47,7 @@
 
 <template>
   <div class="page-advanced-reset">
-    <UniTab title="Advanced"></UniTab>
+    <UniTab :title="$tt('Advanced')"></UniTab>
     <div class="settings-box">
       <div class="settings-item-box" @click="$router.push('/settings/importAnotherMnemonic')">
         <span>{{ $tt('Import another Mnemonic') }}</span>
@@ -63,7 +63,7 @@
       </div>
     </div>
     <Ironman></Ironman>
-    <UniDialog class="tipsDialog" error :visible="isShowTipsDialog" title="Reset UniSign?" @cancel="isShowTipsDialog = false">
+    <UniDialog class="tipsDialog" error :visible="isShowTipsDialog" :title="$tt('Reset UniSign?')" @cancel="isShowTipsDialog = false">
       <div class="slot-container">
         <div class="text">
           {{ $tt('After resetting, UniSign will revert to its initial state and all your addresses will be deleted. Please make sure you have backed up before you reset.') }}

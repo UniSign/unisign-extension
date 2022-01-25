@@ -40,7 +40,7 @@
 
 <template>
   <div class="page-add-address">
-    <UniTab></UniTab>
+    <UniTab :title="$tt('Select ways')"></UniTab>
     <div class="key-box">
       <div v-if="hasMnemonic" class="key-item-box mb-[24px]" @click="onClickDeriveAddress">
         <div>

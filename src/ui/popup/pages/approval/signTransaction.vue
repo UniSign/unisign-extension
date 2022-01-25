@@ -112,7 +112,7 @@
 </style>
 
 <template>
-  <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
+  <SignWrapper :title="$tt('Signature Request')" @reject="onRejectClick" @allow="onAllowClick">
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>

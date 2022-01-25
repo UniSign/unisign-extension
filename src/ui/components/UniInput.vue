@@ -59,7 +59,7 @@
       <Iconfont class="icon-font" name="arrow-enter" size="18"></Iconfont>
     </div>
     <p v-show="canShowValidateText">
-      {{ $tt(validateText) }}
+      {{ validateText }}
     </p>
   </div>
 </template>

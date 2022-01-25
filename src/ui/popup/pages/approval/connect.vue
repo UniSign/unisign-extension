@@ -58,19 +58,19 @@ h2 {
 </style>
 
 <template>
-  <SignWrapper title="Connect Request" @reject="onRejectClick" @allow="onAllowClick">
+  <SignWrapper :title="$tt('Connect Request')" @reject="onRejectClick" @allow="onAllowClick">
     <h2>
       {{ $tt('Website') }}
     </h2>
     <div class="website-detail-box">
       <Iconfont name="connect" size="24"></Iconfont>
-      <p>{{ $tt('https://') }}<span>{{ $tt('rarible.com') }}</span></p>
+      <p>https://<span>rarible.com</span></p>
     </div>
     <h2>{{ $tt('Connect Address') }}</h2>
     <div class="connect-address-box">
       <div class="connect-address-title">
         <img src="/assets/page-addAddress/key-btc.png">
-        <span>{{ $tt('BTC') }}</span>
+        <span>BTC</span>
       </div>
       <div class="connect-address-content">
         0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD

@@ -180,7 +180,7 @@
 
 <template>
   <div class="page-key-management">
-    <UniTab title="Key Management"></UniTab>
+    <UniTab :title="$tt('Key Management')"></UniTab>
     <div class="settings-box">
       <template v-if="derivedUniKeys.length">
         <h2>{{ $tt('Derived from Mnemonic') }}</h2>
@@ -194,7 +194,7 @@
             <div v-if="unikey.hidden" @click="onClickEnable(unikey)">
               {{ $tt('Enable') }}
             </div>
-            <div v-else @click="onClickDisable(unikey)">
+            <div v-else-if="!unikey.hidden && canDisabled" @click="onClickDisable(unikey)">
               {{ $tt('Disable') }}
             </div>
             <div @click="onClickViewPrivateKey(unikey)">
@@ -255,10 +255,12 @@ export default {
     const unikeys = ref<Unikey[]>([])
     const derivedUniKeys = ref<Unikey[]>([])
     const importedUniKeys = ref<Unikey[]>([])
+    const canDisabled = ref(true)
     const getkeysCategory = async () => {
       unikeys.value = await wallet.getUnikeys()
       derivedUniKeys.value = unikeys.value.filter(key => HDKeyrings.includes(key.keyringType)).sort(a => a.hidden === true ? 1 : -1)
       importedUniKeys.value = unikeys.value.filter(key => !HDKeyrings.includes(key.keyringType))
+      canDisabled.value = derivedUniKeys.value.filter(key => !key.hidden).length > 1
     }
     const onUnikeysChanged = async () => {
       getkeysCategory()
@@ -320,6 +322,7 @@ export default {
       unikeys,
       derivedUniKeys,
       importedUniKeys,
+      canDisabled,
       getImageUrl,
       substringKey,
       onUnikeysChanged,

@@ -33,11 +33,11 @@
 
 <template>
   <div class="page-settings">
-    <UniTab title="settings"></UniTab>
+    <UniTab :title="$tt('settings')"></UniTab>
     <div class="settings-box">
       <div v-for="(item,index) in settingsArr" :key="index" class="settings-item-box" @click="onClickSettingItem(item)">
         <Iconfont class="icon-key mr-[20px]" :name="item.key" width="16" height="16" :color="item.color"></Iconfont>
-        <span>{{ $tt(item.value) }}</span>
+        <span>{{ item.value }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
     </div>
@@ -47,6 +47,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { windows } from '~/background/tools/windows'
 
@@ -60,13 +61,14 @@ export default {
   name: 'PageSettings',
   setup () {
     const router = useRouter()
-    // todo: variable & attribute  can't translate
+    const i18n = useI18n()
+
     const settingsArr = ref<Setting[]>([
-      { key: 'keys', value: 'Key Management', color: '#FFAD27', router: 'settings/keyManagement' },
-      { key: 'language', value: 'Language', color: '#4190FF', router: 'settings/language' },
-      { key: 'security', value: 'Security & Backup', color: '#66D5AA', router: 'settings/securityAndBackup' },
-      { key: 'advanced', value: 'Advanced', color: '#66D5AA', router: 'settings/advancedReset' },
-      { key: 'about', value: 'About UniSign', color: '#9094AE', router: 'about' },
+      { key: 'keys', value: i18n.$tt('Key Management'), color: '#FFAD27', router: 'settings/keyManagement' },
+      { key: 'language', value: i18n.$tt('Language'), color: '#4190FF', router: 'settings/language' },
+      { key: 'security', value: i18n.$tt('Security & Backup'), color: '#66D5AA', router: 'settings/securityAndBackup' },
+      { key: 'advanced', value: i18n.$tt('Advanced'), color: '#66D5AA', router: 'settings/advancedReset' },
+      { key: 'about', value: i18n.$tt('About UniSign'), color: '#9094AE', router: 'about' },
     ])
     const onClickSettingItem = async (item: Setting) => {
       if (item.router === 'about') {

@@ -40,7 +40,7 @@
     <div :class="{'_disabled':disabled}" @click="onClickLeft">
       <Iconfont name="arrow-left" width="14" height="12" color="#0C0D0D" :opacity="disabled ? '0.3' : '1'"></Iconfont>
     </div>
-    <p>{{ $tt(title) }}</p>
+    <p>{{ title }}</p>
   </div>
 </template>
 

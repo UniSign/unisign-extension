@@ -28,7 +28,7 @@
 
 <template>
   <div class="page-import-private-key">
-    <UniTab title="Import Private Key"></UniTab>
+    <UniTab :title="$tt('Import Private Key')"></UniTab>
     <div class="central-content">
       <h2>{{ $tt('Import') }} {{ keyName }}</h2>
       <h2>
@@ -39,7 +39,7 @@
         v-model="privateKey"
         class="block mt-[32px] mx-auto"
         :validate-text="validataText"
-        :placeholder="`${keyName} private key`"
+        :placeholder="`${keyName} ${$tt('private key')}`"
       ></UniTextArea>
       <UniBtn :disabled="!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>

@@ -86,7 +86,7 @@
 </style>
 
 <template>
-  <SignWrapper title="request permissions" class="page-request-permission" @reject="onRejectClick" @allow="onAllowClick">
+  <SignWrapper :title="$tt('request permissions')" class="page-request-permission" @reject="onRejectClick" @allow="onAllowClick">
     <h2>
       {{ $tt('Website') }}
     </h2>

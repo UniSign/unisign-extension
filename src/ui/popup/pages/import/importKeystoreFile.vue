@@ -25,7 +25,7 @@
 
 <template>
   <div class="page-import-keystore-file">
-    <UniTab title="Import Keystore File"></UniTab>
+    <UniTab :title="$tt('Import Keystore File')"></UniTab>
     <div class="central-content">
       <h2>{{ $tt('Import Keystore') }}</h2>
       <UniTextArea
@@ -33,8 +33,8 @@
         v-model="keystore"
         class="block mt-[32px] mx-auto"
         height="188px"
-        validate-text="Incorrect keystore"
-        placeholder="Enter Keystore"
+        :validate-text="$tt('Incorrect keystore')"
+        :placeholder="$tt('Enter Keystore')"
       ></UniTextArea>
       <UniInput
         ref="passwordRef"
@@ -42,8 +42,8 @@
         class="mt-[32px] block mx-auto"
         width="302px"
         background-color="#F7F8FA"
-        validate-text="Incorrect password"
-        placeholder="Password of the keystore file"
+        :validate-text="$tt('Incorrect password')"
+        :placeholder="$tt('Password of the keystore file')"
       ></UniInput>
       <UniBtn :disabled="!!(!keystore || !password)" class="uni-btn" @click="onClickSubmit"></UniBtn>
     </div>
