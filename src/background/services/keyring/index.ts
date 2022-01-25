@@ -735,27 +735,10 @@ export class KeyringService extends EventEmitter {
    * @param opts
    * @returns {Promise<Buffer>} The raw signature.
    */
-  signMessage (msgParams: MsgParams, opts = {}) {
+  signPlainMessage (msgParams: MsgParams, opts = {}) {
     const address = msgParams.from
     return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.signMessage(address, msgParams.data, opts)
-    })
-  }
-
-  /**
-   * Sign Personal Message
-   *
-   * Attempts to sign the provided message parameters.
-   * Prefixes the hash before signing per the personal sign expectation.
-   *
-   * @param {Object} msgParams - The message parameters to sign.
-   * @param opts
-   * @returns {Promise<Buffer>} The raw signature.
-   */
-  signPersonalMessage (msgParams: MsgParams, opts = {}) {
-    const address = msgParams.from
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.signPersonalMessage(address, msgParams.data, opts)
+      return keyring.signPlainMessage(address, msgParams.data, opts)
     })
   }
 

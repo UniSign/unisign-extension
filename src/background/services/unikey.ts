@@ -108,7 +108,7 @@ class UnikeyService extends AutoBindService {
 
       newUnikey.nickname = `Mnemonic ${length}`
 
-      this.store.unikeys.splice(lastHDAccountIndex, 0, newUnikey)
+      this.store.unikeys.splice(lastHDAccountIndex + 1, 0, newUnikey)
     }
     else {
       this.store.unikeys.push(newUnikey)
