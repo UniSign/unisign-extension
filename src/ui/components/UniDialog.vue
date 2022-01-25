@@ -64,7 +64,7 @@
       <div class="dialog-wrapper">
         <div class="title">
           <h2 :class="{'_error':error}">
-            {{ $tt(title) }}
+            {{ title }}
           </h2>
           <div class="close" @click="cancel">
             <Iconfont name="close" size="16" color="#8D919C"></Iconfont>

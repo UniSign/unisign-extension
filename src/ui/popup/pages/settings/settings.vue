@@ -37,7 +37,7 @@
     <div class="settings-box">
       <div v-for="(item,index) in settingsArr" :key="index" class="settings-item-box" @click="onClickSettingItem(item)">
         <Iconfont class="icon-key mr-[20px]" :name="item.key" width="16" height="16" :color="item.color"></Iconfont>
-        <span>{{ $tt(item.value) }}</span>
+        <span>{{ item.value }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div>
     </div>
