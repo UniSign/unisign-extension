@@ -110,7 +110,7 @@ export class BtcSimpleKeyring extends EventEmitter {
     return core.util.bufferToHex(signature)
   }
 
-  async signStructMessage (address: string, data: object) {
+  async signStructMessage (address: string, data: object): Promise<string> {
     const keypair = this.getWallet(address)
     const signProvider = btc.SignProvider.create({
       keypairs: [keypair],

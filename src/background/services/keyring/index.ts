@@ -47,9 +47,9 @@ interface TypedSerializedKeyring {
   data: SerializedKeyringData
 }
 
-interface MsgParams {
+interface MsgParams<T = string> {
   from: string
-  data: string
+  data: T
 }
 
 interface Encryptor {
@@ -104,7 +104,7 @@ export class KeyringService extends EventEmitter {
     this.store.subscribe(value => storage.set(storageKey, value))
 
     this.memStore = new ObservableStore({
-      isUnlocked: true,
+      isUnlocked: true, // todo: it should be locked by default
       keyringTypes: this.keyringTypes.map(krt => krt.type),
       keyrings: [],
     } as MemStoreData)
@@ -711,18 +711,16 @@ export class KeyringService extends EventEmitter {
   //
 
   /**
-   * Sign Ethereum Transaction
+   * Sign A Transaction
    *
-   * Signs an Ethereum transaction object.
-   *
-   * @param {Object} ethTx - The transaction to sign.
-   * @param {string} fromAddress - The transaction 'from' address.
+   * @param msgParams
    * @param {Object} opts - Signing options.
    * @returns {Promise<Object>} The signed transaction object.
    */
-  signTransaction (ethTx: object, fromAddress: string, opts = {}) {
-    return this.getKeyringForAccount(fromAddress).then((keyring) => {
-      return keyring.signTransaction(fromAddress, ethTx, opts)
+  signTransaction (msgParams: MsgParams, opts = {}) {
+    const address = msgParams.from
+    return this.getKeyringForAccount(address).then((keyring) => {
+      return keyring.signTransaction(address, msgParams.data, opts)
     })
   }
 
@@ -739,6 +737,20 @@ export class KeyringService extends EventEmitter {
     const address = msgParams.from
     return this.getKeyringForAccount(address).then((keyring) => {
       return keyring.signPlainMessage(address, msgParams.data, opts)
+    })
+  }
+
+  /**
+   * Sign Struct Message
+   *
+   * @param {Object} msgParams - The message parameters to sign.
+   * @param opts
+   * @returns {Promise<Buffer>} The raw signature.
+   */
+  signStructMessage (msgParams: MsgParams<object>, opts = { version: 'V1' }) {
+    const address = msgParams.from
+    return this.getKeyringForAccount(address).then((keyring) => {
+      return keyring.signStructMessage(address, msgParams.data, opts)
     })
   }
 
@@ -770,21 +782,6 @@ export class KeyringService extends EventEmitter {
     const address = msgParams.from
     return this.getKeyringForAccount(address).then((keyring) => {
       return keyring.decryptMessage(address, msgParams.data, opts)
-    })
-  }
-
-  /**
-   * Sign Typed Data
-   * (EIP712 https://github.com/ethereum/EIPs/pull/712#issuecomment-329988454)
-   *
-   * @param {Object} msgParams - The message parameters to sign.
-   * @param opts
-   * @returns {Promise<Buffer>} The raw signature.
-   */
-  signTypedMessage (msgParams: MsgParams, opts = { version: 'V1' }) {
-    const address = msgParams.from
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.signTypedData(address, msgParams.data, opts)
     })
   }
 }

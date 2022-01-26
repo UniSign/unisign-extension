@@ -7,6 +7,9 @@ import { IS_CHROME, IS_LINUX } from '~/env'
 export enum ApprovalPage {
   unlock = '/setup/locked',
   requestPermission = '/approval/requestPermission',
+  signPlainMessage = '/approval/signPlainMessage',
+  signStructMessage = '/approval/signStructMessage',
+  signTransaction = '/approval/signTransaction',
 }
 
 export interface ApprovalData<T = any> {

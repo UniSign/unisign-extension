@@ -5,6 +5,7 @@
   align-items: center;
   border-radius: 8px;
   border: 1px solid rgba(191, 191, 191, 0.29);
+  word-break: break-all;
   background: rgba(247, 245, 244, 0.9) rgba(255, 255, 255, 0.9);
   >img {
     margin-right: 5px;
@@ -94,12 +95,12 @@
 
 <template>
   <div>
-    <SignWrapper :title="$tt('Signature Request')" @reject="onRejectClick" @allow="onAllowClick">
+    <SignWrapper :title="$tt('Signature Request')" @reject="onClickReject" @allow="onClickAllow">
       <div class="current-key-box">
-        <img src="/assets/page-addAddress/key-btc.png">
+        <img :src="getImageUrl(currentUnikey?.keySymbol)">
         <div>
           <p>{{ $tt('Current Key') }}</p>
-          <span>0xe7c00a33…a09dc4f6bd</span>
+          <span>{{ currentUnikey?.key }}</span>
         </div>
       </div>
       <div class="main-title-box">
@@ -111,26 +112,31 @@
       <div class="main-message-box">
         <div class="main-message-title">
           <span>{{ $tt('App') }}</span>
-          <h2>DAS</h2>
+          <h2>{{ approval?.params.message.appName }}</h2>
         </div>
         <div class="main-message-content">
           <span>{{ $tt('Details') }}</span>
-          <h2>{{ $tt('Transfer Owner of jack.bit to') }} 0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD</h2>
+          <h2>{{ approval?.params.message.subject }}</h2>
         </div>
       </div>
     </SignWrapper>
     <UniDialog class="raw-box" :title="$tt('Message Detail')" :visible="isShowRawDialog" @cancel="handleRawCancel">
       <div class="raw-container">
-        <json-viewer :value="jsonData"></json-viewer>
+        <json-viewer :value="approval?.params.message"></json-viewer>
       </div>
     </UniDialog>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import JsonViewer from 'vue-json-viewer'
 import SignWrapper from './-/SignWrapper.vue'
+import { getImageUrl } from '~/utils/index'
+import { SignStructMessageParams } from '~/background/controllers/provider/index'
+import { Unikey } from '~/background/services/unikey'
+import { ApprovalData } from '~/background/services/approval'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageSignTypedMessage',
@@ -139,9 +145,12 @@ export default {
     JsonViewer,
   },
   setup () {
-    function onRejectClick (e) {
+    function onClickAllow () {
+      wallet.resolveApproval()
     }
-    function onAllowClick (e) {
+
+    function onClickReject () {
+      wallet.rejectApproval()
     }
 
     const isShowRawDialog = ref(false)
@@ -149,74 +158,25 @@ export default {
       isShowRawDialog.value = false
     }
     const jsonData = ref({})
-    jsonData.value = {
-      total: 25,
-      limit: 10,
-      skip: 0,
-      links: {
-        previous: undefined,
-        next () {},
-      },
-      data: [
-        {
-          id: '5968fcad629fa84ab65a5247',
-          firstname: 'Ada',
-          lastname: 'Lovelace',
-          awards: null,
-          known: [
-            'mathematics',
-            'computing',
-          ],
-          position: {
-            lat: 44.563836,
-            lng: 6.495139,
-          },
-          description: `Augusta Ada King, Countess of Lovelace (née Byron; 10 December 1815 – 27 November 1852) was an English mathematician and writer,
-            chiefly known for her work on Charles Babbage's proposed mechanical general-purpose computer,
-            the Analytical Engine. She was the first to recognise that the machine had applications beyond pure calculation,
-            and published the first algorithm intended to be carried out by such a machine.
-            As a result, she is sometimes regarded as the first to recognise the full potential of a "computing machine" and the first computer programmer.`,
-          bornAt: '1815-12-10T00:00:00.000Z',
-          diedAt: '1852-11-27T00:00:00.000Z',
-        }, {
-          id: '5968fcad629fa84ab65a5246',
-          firstname: 'Grace',
-          lastname: 'Hopper',
-          awards: [
-            'Defense Distinguished Service Medal',
-            'Legion of Merit',
-            'Meritorious Service Medal',
-            'American Campaign Medal',
-            'World War II Victory Medal',
-            'National Defense Service Medal',
-            'Armed Forces Reserve Medal',
-            'Naval Reserve Medal',
-            'Presidential Medal of Freedom',
-          ],
-          known: null,
-          position: {
-            lat: 43.614624,
-            lng: 3.879995,
-          },
-          description: `Grace Brewster Murray Hopper (née Murray; December 9, 1906 – January 1, 1992)
-            was an American computer scientist and United States Navy rear admiral.
-            One of the first programmers of the Harvard Mark I computer,
-            she was a pioneer of computer programming who invented one of the first compiler related tools.
-            She popularized the idea of machine-independent programming languages, which led to the development of COBOL,
-            an early high-level programming language still in use today.`,
-          bornAt: '1815-12-10T00:00:00.000Z',
-          diedAt: '1852-11-27T00:00:00.000Z',
-        },
-      ],
-    }
+    const approval = ref<ApprovalData<SignStructMessageParams>| null>()
+    const currentUnikey = ref<Unikey|null>()
+
+    onMounted(async () => {
+      approval.value = await wallet.getApproval()
+      currentUnikey.value = await wallet.getCurrentUnikey()
+    })
 
     return {
-      onRejectClick,
-      onAllowClick,
+      onClickReject,
+      onClickAllow,
 
       isShowRawDialog,
       handleRawCancel,
       jsonData,
+
+      approval,
+      currentUnikey,
+      getImageUrl,
     }
   },
 }
