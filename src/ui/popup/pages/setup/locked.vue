@@ -38,6 +38,7 @@
       class="uni-input"
       :validate-text="validataText"
       :placeholder="$tt('Enter password')"
+      @keyup.enter="triggerValidate"
       @triggerValidate="triggerValidate"
     ></UniInput>
     <p>
