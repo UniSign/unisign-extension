@@ -112,6 +112,21 @@
     }
   }
 }
+.raw-box {
+  .raw-container {
+    padding: 24px;
+    border-radius: 8px;
+    .jv-container {
+      overflow: hidden;
+      overflow-y: scroll;
+      max-height: 244px;
+      background: #F1F4F8;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+}
 </style>
 
 <template>
@@ -125,8 +140,11 @@
     </div>
     <div class="main-title-box">
       <h2>{{ $tt('Sign Bitcoin Transaction') }}</h2>
-      <p>{{ $tt('View Raw') }}</p>
+      <p @click="isShowRawDialog = true">
+        {{ $tt('View Raw') }}
+      </p>
     </div>
+    <!-- todo: Not completed -->
     <div class="main-message-box">
       <div class="main-message-title">
         <img :src="`/assets/connect/icon-btc.png`">
@@ -155,10 +173,16 @@
       </div>
     </div>
   </SignWrapper>
+  <UniDialog class="raw-box" :title="$tt('Message Detail')" :visible="isShowRawDialog" @cancel="handleRawCancel">
+    <div class="raw-container">
+      <json-viewer :value="approval?.params.message"></json-viewer>
+    </div>
+  </UniDialog>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
+import JsonViewer from 'vue-json-viewer'
 import SignWrapper from './-/SignWrapper.vue'
 import { getImageUrl } from '~/utils/index'
 import { SignStructMessageParams } from '~/background/controllers/provider/index'
@@ -170,15 +194,22 @@ export default {
   name: 'PageSignTransaction',
   components: {
     SignWrapper,
+    JsonViewer,
   },
   setup () {
-    function onClickReject () {
-      wallet.rejectApproval()
-    }
     function onClickAllow () {
       wallet.resolveApproval()
     }
 
+    function onClickReject () {
+      wallet.rejectApproval()
+    }
+
+    const isShowRawDialog = ref(false)
+    const handleRawCancel = () => {
+      isShowRawDialog.value = false
+    }
+    const jsonData = ref({})
     const approval = ref<ApprovalData<SignStructMessageParams>| null>()
     const currentUnikey = ref<Unikey|null>()
 
@@ -190,10 +221,14 @@ export default {
     return {
       onClickReject,
       onClickAllow,
-      getImageUrl,
+
+      isShowRawDialog,
+      handleRawCancel,
+      jsonData,
 
       approval,
       currentUnikey,
+      getImageUrl,
     }
   },
 }

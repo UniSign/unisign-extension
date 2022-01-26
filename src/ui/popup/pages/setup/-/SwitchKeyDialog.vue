@@ -57,7 +57,7 @@
 </style>
 
 <template>
-  <UniDialog class="switch-key-box" :visible="true" :title="$tt('Switch Key')" @cancel="handleSwitchCancel">
+  <UniDialog class="switch-key-box" :visible="visible" :title="$tt('Switch Key')" @cancel="handleSwitchCancel">
     <div class="switch-key-content">
       <div v-if="derivedUniKeys.length" class="derived-box">
         <h2>{{ $tt('Derived from Mnemonic') }}</h2>
@@ -94,6 +94,13 @@ import { getImageUrl, substringKey } from '~/utils'
 export default {
   name: 'SwitchKeyDialog',
   components: {
+  },
+  props: {
+    visible: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   emits: ['cancel', 'hasSwitch'],
   setup (props, context) {

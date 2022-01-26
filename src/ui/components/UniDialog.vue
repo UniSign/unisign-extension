@@ -79,6 +79,7 @@
 </template>
 
 <script lang="ts">
+import { watch } from 'vue'
 
 export default {
   name: 'UniDialog',
@@ -104,6 +105,18 @@ export default {
     const cancel = () => {
       context.emit('cancel')
     }
+    watch(() => props.visible, (newVal, oldVal) => {
+      const dom = document.getElementsByClassName('layout-default')[0]
+      if (newVal) {
+        (dom as HTMLDivElement).style.height = '600px';
+        (dom as HTMLDivElement).style.overflow = 'hidden'
+      }
+      else {
+        (dom as HTMLDivElement).style.height = '630px';
+        (dom as HTMLDivElement).style.overflow = 'inherit'
+      }
+    })
+
     return {
       cancel,
     }

@@ -306,7 +306,7 @@
         </div>
       </div>
     </UniDialog>
-    <SwitchKeyDialog v-if="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></SwitchKeyDialog>
+    <SwitchKeyDialog :visible="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></SwitchKeyDialog>
   </div>
 </template>
 
