@@ -5,7 +5,9 @@
   align-items: center;
   border-radius: 8px;
   border: 1px solid rgba(191, 191, 191, 0.29);
-  background: rgba(247, 245, 244, 0.9) rgba(255, 255, 255, 0.9);
+  word-break: break-all;
+  background: rgba(247, 245, 244, 0.9);
+
   >img {
     margin-right: 5px;
     width: 26px;
@@ -59,17 +61,17 @@ h2 {
 </style>
 
 <template>
-  <SignWrapper :title="$tt('Signature Request')" @reject="onRejectClick" @allow="onAllowClick">
+  <SignWrapper :title="$tt('Signature Request')" @reject="onClickReject" @allow="onClickAllow">
     <div class="current-key-box">
-      <img src="/assets/page-addAddress/key-btc.png">
+      <img :src="getImageUrl(currentUnikey?.keySymbol)">
       <div>
         <p>{{ $tt('Current Key') }}</p>
-        <span>0xe7c00a33…a09dc4f6bd</span>
+        <span>{{ currentUnikey?.key }}</span>
       </div>
     </div>
     <h2>{{ $tt('Sign Plain Message') }}</h2>
     <div class="sign-plain-message-box">
-      0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD
+      {{ approval?.params.message }}
     </div>
     <div class="tips-box">
       <div>
@@ -80,9 +82,14 @@ h2 {
   </SignWrapper>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue'
 import SignWrapper from './-/SignWrapper.vue'
+import { getImageUrl } from '~/utils/index'
+import { SignPlainMessageParams } from '~/background/controllers/provider/index'
+import { ApprovalData } from '~/background/services/approval'
+import { Unikey } from '~/background/services/unikey'
+import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageSignPlainMessage',
@@ -90,14 +97,29 @@ export default {
     SignWrapper,
   },
   setup () {
-    function onRejectClick (e) {
-    }
-    function onAllowClick (e) {
+    function onClickAllow () {
+      wallet.resolveApproval()
     }
 
+    function onClickReject () {
+      wallet.rejectApproval()
+    }
+
+    const approval = ref<ApprovalData<SignPlainMessageParams>|null>()
+    const currentUnikey = ref<Unikey|null>()
+
+    onMounted(async () => {
+      approval.value = await wallet.getApproval()
+      currentUnikey.value = await wallet.getCurrentUnikey()
+    })
+
     return {
-      onRejectClick,
-      onAllowClick,
+      approval,
+      currentUnikey,
+
+      getImageUrl,
+      onClickReject,
+      onClickAllow,
     }
   },
 }

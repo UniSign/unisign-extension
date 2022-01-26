@@ -4,21 +4,21 @@
 }
 </style>
 <template>
-  <div class="unisign-panel" @click="lock">
-    UniSign {{ isLocked }}
-
-    <button @click="onClickGetCurrentKeyType">
-      getCurrentKeyType
-    </button>
+  <div class="unisign-panel">
+    UniSign Buttons
 
     <button @click="onClickGetPermittedKeys">
       getPermittedKeys
+    </button>
+    |
+    <button @click="onClickGetCurrentKeyType">
+      getCurrentKeyType
     </button>
 
     <button @click="onClickRequestPermissionOfCurrentKey">
       requestPermissionsOfCurrentKey
     </button>
-
+    |
     <button @click="onClickGetCurrentKey">
       getCurrentKey
     </button>
@@ -35,16 +35,12 @@ import { KeyObject, KeyObjectType } from '~/background/controllers/provider/inde
 
 export default {
   setup () {
-    const isLocked = ref(false)
-
     // eslint-disable-next-line no-alert
     const alert = (res: any) => window.alert(JSON.stringify(res))
     const currentUnikeyType = ref<KeyObjectType|null>(null)
     const currentKey = ref<KeyObject>()
 
     return {
-      isLocked,
-
       async onClickGetCurrentKeyType () {
         currentUnikeyType.value = await window.unisign.request({
           method: 'getCurrentKeyType',
@@ -86,7 +82,7 @@ export default {
           method: 'signPlainMessage',
           params: [{
             key: toRaw(currentKey.value),
-            msg: 'jeff',
+            message: 'unisign',
           }],
         })
 

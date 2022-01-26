@@ -16,6 +16,7 @@
     border-radius: 8px;
     border: 1px solid #E4E9F0;
     background: #F1F4F8;
+
     img {
       width: 24px;
       height: 24px;

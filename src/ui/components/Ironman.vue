@@ -46,10 +46,7 @@
     <div class="ironman-box" @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">
       <img src="/assets/page-home/identification-icon.png">
       <span>{{ antiPhishingCode }}</span>
-
-      <router-link to="/test">
-        test
-      </router-link>
+      <!--<router-link to="/test">test</router-link>-->
     </div>
     <div v-show="isShowDetail" class="ironman-detail">
       {{ antiPhishingCode }}

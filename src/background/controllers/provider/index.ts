@@ -50,7 +50,12 @@ export interface PermittedKeysResponse {
 
 export interface SignPlainMessageParams {
   key: KeyObject
-  msg: string
+  message: string
+}
+
+export interface SignPlainMessageResult {
+  key: KeyObject
+  signedMessage: string
 }
 
 export function composeKeyObjectFromUnikey (unikey: Unikey): KeyObjectType
@@ -148,6 +153,11 @@ export class ProviderController {
     const param = data.params[0]
     const meta = param.meta
 
+    // todo: use a more proper way to valid the validity of the params
+    if (!meta) {
+      throw ethErrors.rpc.invalidParams('Missing params when requesting \'requestPermissionOfCurrentKey\': meta')
+    }
+
     const currentUnikey = await personalService.getCurrentUnikey()
     if (currentUnikey) {
       const currentChain = CHAINS[currentUnikey.keySymbol]
@@ -201,16 +211,33 @@ export class ProviderController {
     }
   }
 
-  // todo: add secondary confirmation
   @Reflect.metadata('PROTECTED', true)
-  signPlainMessage ({ data }: ProviderRequest<SignPlainMessageParams>): Promise<string> {
-    // todo: add validation for current key
-    const { key, msg } = data.params[0]
+  async signPlainMessage ({ session, data }: ProviderRequest<SignPlainMessageParams>): Promise<SignPlainMessageResult> {
+    const param = data.params[0]
+    const { key, message } = param
 
-    return keyringService.signPlainMessage({
-      from: key.key,
-      data: msg,
-    })
+    const currentKey = await this._getCurrentUnikey()
+
+    if (currentKey?.key && currentKey.key === key.key) {
+      await approvalService.requestApproval<Permissions[]>({
+        approvalPage: ApprovalPage.signPlainMessage,
+        origin: session.origin,
+        params: param,
+      })
+
+      const signedMessage = await keyringService.signPlainMessage({
+        from: key.key,
+        data: message,
+      })
+
+      return {
+        key: composeKeyObjectFromUnikey(currentKey, true),
+        signedMessage,
+      }
+    }
+    else {
+      throw ethErrors.rpc.invalidParams('Requested key does not match current key')
+    }
   }
 
   @Reflect.metadata('PROTECTED', true)

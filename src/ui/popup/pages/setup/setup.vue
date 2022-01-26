@@ -43,9 +43,7 @@
       <UniInput ref="passwordRef" v-model="password" :placeholder="$tt('Set a password')"></UniInput>
       <UniInput ref="rePasswordRef" v-model="rePassword" :validate-text="validataText" class="mt-[32px] mb-[32px]" :placeholder="$tt('Repeat')"></UniInput>
       <UniBtn :disabled="!!(!password || !rePassword)" @click="onClickSetup"></UniBtn>
-      <router-link to="/test">
-        test
-      </router-link>
+      <!--<router-link to="/test">test</router-link>-->
     </div>
   </div>
 </template>
