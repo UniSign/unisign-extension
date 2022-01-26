@@ -47,9 +47,9 @@ interface TypedSerializedKeyring {
   data: SerializedKeyringData
 }
 
-interface MsgParams {
+interface MsgParams<T = string> {
   from: string
-  data: string
+  data: T
 }
 
 interface Encryptor {
@@ -743,6 +743,20 @@ export class KeyringService extends EventEmitter {
   }
 
   /**
+   * Sign Struct Message
+   *
+   * @param {Object} msgParams - The message parameters to sign.
+   * @param opts
+   * @returns {Promise<Buffer>} The raw signature.
+   */
+  signStructMessage (msgParams: MsgParams<object>, opts = { version: 'V1' }) {
+    const address = msgParams.from
+    return this.getKeyringForAccount(address).then((keyring) => {
+      return keyring.signStructMessage(address, msgParams.data, opts)
+    })
+  }
+
+  /**
    * Get encryption public key
    *
    * Get encryption public key for using in encrypt/decrypt process.
@@ -770,21 +784,6 @@ export class KeyringService extends EventEmitter {
     const address = msgParams.from
     return this.getKeyringForAccount(address).then((keyring) => {
       return keyring.decryptMessage(address, msgParams.data, opts)
-    })
-  }
-
-  /**
-   * Sign Typed Data
-   * (EIP712 https://github.com/ethereum/EIPs/pull/712#issuecomment-329988454)
-   *
-   * @param {Object} msgParams - The message parameters to sign.
-   * @param opts
-   * @returns {Promise<Buffer>} The raw signature.
-   */
-  signTypedMessage (msgParams: MsgParams, opts = { version: 'V1' }) {
-    const address = msgParams.from
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.signTypedData(address, msgParams.data, opts)
     })
   }
 }

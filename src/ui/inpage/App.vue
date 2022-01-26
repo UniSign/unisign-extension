@@ -26,6 +26,10 @@
     <button @click="onClickSignPlainMessage">
       signPlainMessage
     </button>
+
+    <button @click="onClickSignStructMessage">
+      signStructMessage
+    </button>
   </div>
 </template>
 
@@ -83,6 +87,30 @@ export default {
           params: [{
             key: toRaw(currentKey.value),
             message: 'unisign',
+          }],
+        })
+
+        alert(res)
+      },
+
+      async onClickSignStructMessage () {
+        const res = await window.unisign.request({
+          method: 'signStructMessage',
+          // todo: change all the params to object rather than array
+          params: [{
+            key: toRaw(currentKey.value),
+            message: {
+              protocolVersion: '1.0',
+              signFrom: 'test.unisign.org',
+              appName: 'Test Unisign',
+              subject: 'Demonstrate the ability to sign a struct message',
+              signer: 'unisign',
+              digest: '0x1234',
+              content: {
+                year: 2021,
+                chain: 'CKB',
+              },
+            },
           }],
         })
 

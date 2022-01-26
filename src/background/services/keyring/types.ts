@@ -32,15 +32,11 @@ export interface KeyringBase<T extends SerializedKeyringData = SerializedKeyring
 
   signPlainMessage (address: string, data: string, opts: object): Promise<string>
 
-  signPersonalMessage (address: string, msgHex: string, opts: object): Promise<string>
+  signStructMessage (address: string, typedData: object, opts: object): Promise<string>
 
   decryptMessage (withAccount: string, encryptedData: string, opts: object): string
 
-  signTypedData (withAccount: string, typedData: string, opts: object): Promise<Buffer>
-
   getEncryptionPublicKey (withAccount: string, opts: object): Promise<string>
-
-  getAppKeyAddress (address: string, origin: string): Promise<string>
 
   exportAccount (address: string, opts?: object): Promise<string>
 

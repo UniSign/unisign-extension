@@ -22,7 +22,7 @@ import PageImportAnotherMnemonic from './pages/settings/importAnotherMnemonic.vu
 import PageConnect from './pages/approval/connect.vue'
 import PageRequestPermission from './pages/approval/requestPermission.vue'
 import PageSignPlainMessage from './pages/approval/signPlainMessage.vue'
-import PageSignTypedMessage from './pages/approval/signTypedMessage.vue'
+import PageSignStructMessage from './pages/approval/signStructMessage.vue'
 import PageSignTransaction from './pages/approval/signTransaction.vue'
 import PageDecodeMessage from './pages/approval/decodeMessage.vue'
 import PageTest from './pages/test.vue'
@@ -101,8 +101,8 @@ const routes = [{
     path: '/approval/signPlainMessage',
     component: PageSignPlainMessage,
   }, {
-    path: '/approval/signTypedMessage',
-    component: PageSignTypedMessage,
+    path: '/approval/signStructMessage',
+    component: PageSignStructMessage,
   }, {
     path: '/approval/signTransaction',
     component: PageSignTransaction,

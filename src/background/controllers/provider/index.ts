@@ -52,11 +52,16 @@ export interface SignPlainMessageParams {
   key: KeyObject
   message: string
 }
-
 export interface SignPlainMessageResult {
   key: KeyObject
   signedMessage: string
 }
+
+export interface SignStructMessageParams {
+  key: KeyObject
+  message: object
+}
+type SignStructMessageResult = SignPlainMessageResult
 
 export function composeKeyObjectFromUnikey (unikey: Unikey): KeyObjectType
 export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean): KeyObject
@@ -155,7 +160,7 @@ export class ProviderController {
 
     // todo: use a more proper way to valid the validity of the params
     if (!meta) {
-      throw ethErrors.rpc.invalidParams('Missing params when requesting \'requestPermissionOfCurrentKey\': meta')
+      throw ethErrors.rpc.invalidParams('Missing params when requesting \'requestPermissionOfCurrentKey\': `\'meta\'')
     }
 
     const currentUnikey = await personalService.getCurrentUnikey()
@@ -216,6 +221,10 @@ export class ProviderController {
     const param = data.params[0]
     const { key, message } = param
 
+    if (!key) {
+      throw ethErrors.rpc.invalidParams('Missing params when requesting \'signPlainMessage\': \'key\'')
+    }
+
     const currentKey = await this._getCurrentUnikey()
 
     if (currentKey?.key && currentKey.key === key.key) {
@@ -241,8 +250,37 @@ export class ProviderController {
   }
 
   @Reflect.metadata('PROTECTED', true)
-  signTypedMessage () {
+  async signStructMessage ({ session, data }: ProviderRequest<SignStructMessageParams>): Promise<SignStructMessageResult> {
+    const param = data.params[0]
+    const { key, message } = param
 
+    if (!key) {
+      throw ethErrors.rpc.invalidParams('Missing params when requesting \'signStructMessage\': \'key\'')
+    }
+
+    const currentKey = await this._getCurrentUnikey()
+
+    // todo: use decorator to verify key and current key
+    if (currentKey?.key && currentKey.key === key.key) {
+      await approvalService.requestApproval<Permissions[]>({
+        approvalPage: ApprovalPage.signStructMessage,
+        origin: session.origin,
+        params: param,
+      })
+
+      const signedMessage = await keyringService.signStructMessage({
+        from: key.key,
+        data: message,
+      })
+
+      return {
+        key: composeKeyObjectFromUnikey(currentKey, true),
+        signedMessage,
+      }
+    }
+    else {
+      throw ethErrors.rpc.invalidParams('Requested key does not match current key')
+    }
   }
 
   @Reflect.metadata('PROTECTED', true)
