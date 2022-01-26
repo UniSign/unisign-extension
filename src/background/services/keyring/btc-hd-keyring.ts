@@ -1,8 +1,10 @@
-import { mnemonicToSeed } from 'bip39'
-import { BtcSimpleKeyring, BtcWallet } from '~/background/services/keyring/btc-simple-keyring'
+import { BIP32Interface } from 'bip32'
+// @ts-ignore
+import { core, btc } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { BtcSimpleKeyring, BtcKeypair } from '~/background/services/keyring/btc-simple-keyring'
 
 interface BtcHdKeyringOpts {
-  hdPath?: string
+  hdPathBase?: string
   mnemonic: string
   numberOfAccounts: number
 }
@@ -11,7 +13,7 @@ const type = 'BTC HD Key Tree'
 
 const defaultOpts: BtcHdKeyringOpts = {
   mnemonic: '',
-  hdPath: 'm/44\'/60\'/0\'/0', // todo: replace it with bitcoin path
+  hdPathBase: 'm/84\'/0\'/0\'/0', // full path m/84'/0'/0'/0/0
   numberOfAccounts: 1,
 }
 
@@ -21,16 +23,18 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
 
   opts!: BtcHdKeyringOpts
   mnemonic!: string
-  wallets!: BtcWallet[]
-  root!: BtcWallet
+  keypairs!: BtcKeypair[]
+  root!: BIP32Interface
 
   async deserialize(opts: any): Promise<void>
   async deserialize (opts: Partial<BtcHdKeyringOpts> = {}): Promise<void> {
     this.opts = Object.assign({}, defaultOpts, opts)
     this.mnemonic = this.opts.mnemonic
-    this.wallets = []
+    this.keypairs = []
 
-    await this.initFromMnemonic(this.mnemonic)
+    if (this.mnemonic) {
+      await this.initFromMnemonic(this.mnemonic)
+    }
 
     if (opts.numberOfAccounts) {
       // @ts-ignore
@@ -42,41 +46,33 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   serialize (): Promise<BtcHdKeyringOpts> {
     return Promise.resolve({
       mnemonic: this.mnemonic,
-      numberOfAccounts: this.wallets.length,
-      hdPath: this.opts.hdPath,
+      numberOfAccounts: this.keypairs.length,
+      hdPathBase: this.opts.hdPathBase,
     })
   }
 
   addAccounts (): Promise<any>
   addAccounts (numberOfAccounts = 1): Promise<string[]> {
-    const oldLen = this.wallets.length
+    const oldLen = this.keypairs.length
 
-    const newWallets: BtcWallet[] = []
+    const newWallets: BtcKeypair[] = []
 
     for (let i = oldLen; i < oldLen + numberOfAccounts; i++) {
-      const wallet = {
-        privateKey: `bc123:private#${i}`,
-        publicKey: `bc123:public#${i}`,
-        address: `bc123:address#${i}`,
-      }
+      const bip32 = this.root.derive(i)
+      const keypair = btc.Keypair.fromBuffer(bip32.privateKey)
 
-      this.wallets.push(wallet)
-      newWallets.push(wallet)
+      this.keypairs.push(keypair)
+      newWallets.push(keypair)
     }
 
-    return Promise.resolve(newWallets.map(w => w.address))
+    return Promise.resolve(newWallets.map(w => this.getAddress(w)))
   }
 
   getAccounts () {
-    return Promise.resolve(this.wallets.map(w => w.address))
+    return Promise.resolve(this.keypairs.map(w => this.getAddress(w)))
   }
 
   private async initFromMnemonic (mnemonic: string) {
-    const seed = await mnemonicToSeed(mnemonic)
-    this.root = {
-      publicKey: seed.toString(),
-      privateKey: seed.toString(),
-      address: seed.toString(),
-    }
+    this.root = await core.util.deriveFromMnemonic(mnemonic, this.opts.hdPathBase)
   }
 }

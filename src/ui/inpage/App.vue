@@ -22,12 +22,16 @@
     <button @click="onClickGetCurrentKey">
       getCurrentKey
     </button>
+
+    <button @click="onClickSignPlainMessage">
+      signPlainMessage
+    </button>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, toRaw } from 'vue'
-import { Unikey } from '~/background/services/unikey'
+import { KeyObject, KeyObjectType } from '~/background/controllers/provider/index'
 
 export default {
   setup () {
@@ -35,7 +39,8 @@ export default {
 
     // eslint-disable-next-line no-alert
     const alert = (res: any) => window.alert(JSON.stringify(res))
-    const currentUnikeyType = ref<Unikey|null>(null)
+    const currentUnikeyType = ref<KeyObjectType|null>(null)
+    const currentKey = ref<KeyObject>()
 
     return {
       isLocked,
@@ -69,8 +74,20 @@ export default {
       },
 
       async onClickGetCurrentKey () {
-        const res = await window.unisign.request({
+        currentKey.value = await window.unisign.request({
           method: 'getCurrentKey',
+        })
+
+        alert(currentKey.value)
+      },
+
+      async onClickSignPlainMessage () {
+        const res = await window.unisign.request({
+          method: 'signPlainMessage',
+          params: [{
+            key: toRaw(currentKey.value),
+            msg: 'jeff',
+          }],
         })
 
         alert(res)

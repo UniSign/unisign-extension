@@ -65,6 +65,7 @@
     "@metamask/obs-store": "^7.0.0",
     "assert": "^2.0.0",
     "auto-bind": "^5.0.1",
+    "bip32": "^3.0.1",
     "bip39": "^3.0.4",
     "browser-passworder": "^2.0.3",
     "buffer": "^6.0.3",

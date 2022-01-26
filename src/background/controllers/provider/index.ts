@@ -48,6 +48,11 @@ export interface PermittedKeysResponse {
   keys: PermittedKeyObject[]
 }
 
+export interface SignPlainMessageParams {
+  key: KeyObject
+  msg: string
+}
+
 export function composeKeyObjectFromUnikey (unikey: Unikey): KeyObjectType
 export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean): KeyObject
 export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean, permissions: Permissions[]): PermittedKeyObject
@@ -196,9 +201,16 @@ export class ProviderController {
     }
   }
 
+  // todo: add secondary confirmation
   @Reflect.metadata('PROTECTED', true)
-  signPlainMessage () {
+  signPlainMessage ({ data }: ProviderRequest<SignPlainMessageParams>): Promise<string> {
+    // todo: add validation for current key
+    const { key, msg } = data.params[0]
 
+    return keyringService.signPlainMessage({
+      from: key.key,
+      data: msg,
+    })
   }
 
   @Reflect.metadata('PROTECTED', true)

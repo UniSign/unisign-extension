@@ -1,22 +1,35 @@
 import { EventEmitter } from 'events'
 
-interface BtcSimpleKeyringOpts {
-  privateKeys: string[]
+// @ts-ignore
+import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+
+interface SerializedKeypair {
+  privateKey: string
 }
 
-// todo: use real object here
-export interface BtcWallet {
+interface BtcSimpleKeyringOpts {
+  keypairs: SerializedKeypair[]
+}
+
+// copy from unisign-sign-lib
+export interface BtcKeypair {
   privateKey: string
   publicKey: string
-  address: string
+  toAddress: () => {
+    toNativeSegwitAddress(): string
+    // toSegwitAddress(): string
+    // toLegacyAddress(): string
+  }
+  // address: string
 }
+
 export const type = 'BTC Simple Key Pair'
 
 export class BtcSimpleKeyring extends EventEmitter {
   static type = type
   type = type
 
-  wallets: BtcWallet[] = []
+  keypairs: BtcKeypair[] = []
 
   constructor (opts?: BtcSimpleKeyringOpts) {
     super()
@@ -25,18 +38,18 @@ export class BtcSimpleKeyring extends EventEmitter {
   }
 
   async deserialize (opts?: BtcSimpleKeyringOpts): Promise<void> {
-    this.wallets = opts?.privateKeys.map((privateKey) => {
-      return {
-        privateKey,
-        publicKey: `publicKey ${privateKey}`,
-        address: `address of ${privateKey}`,
-      }
+    this.keypairs = opts?.keypairs.map((w) => {
+      return btc.Keypair.fromHex(w.privateKey)
     }) || []
   }
 
   serialize (): Promise<BtcSimpleKeyringOpts> {
     return Promise.resolve({
-      privateKeys: this.wallets.map(w => w.privateKey),
+      keypairs: this.keypairs.map((w) => {
+        return {
+          privateKey: w.privateKey,
+        }
+      }),
     })
   }
 
@@ -47,13 +60,12 @@ export class BtcSimpleKeyring extends EventEmitter {
   /**
    * export the private key controlling the specific address
    * @param address
-   * @param opts
    */
-  exportAccount (address: string, opts = {}): Promise<string|undefined> {
-    const wallet = this.wallets.find(w => w.address === address)
+  exportAccount (address: string): Promise<string|undefined> {
+    const wallet = this.getWallet(address)
 
     if (wallet) {
-      return Promise.resolve(wallet.privateKey)
+      return Promise.resolve(core.util.bufferToHex(wallet.privateKey))
     }
     else {
       return Promise.resolve(undefined)
@@ -61,25 +73,50 @@ export class BtcSimpleKeyring extends EventEmitter {
   }
 
   removeAccount (address: string) {
-    if (!this.wallets.find(w => w.address === address)) {
+    if (!this.getWallet(address)) {
       throw new Error(`Address ${address} not found in this keyring`)
     }
-    this.wallets = this.wallets.filter(w => w.address !== address)
+    this.keypairs = this.keypairs.filter(w => this.getAddress(w) !== address)
   }
 
   getAccounts (): Promise<string[]> {
-    return Promise.resolve(this.wallets.map(w => w.address))
+    return Promise.resolve(this.keypairs.map(w => this.getAddress(w)))
   }
 
-  signTransaction (address: string, tx: any, opts = {}) {
-
+  getWallet (address: string): BtcKeypair|undefined {
+    return this.keypairs.find(w => this.getAddress(w) === address)
   }
 
-  signPlainMessage (address: string, data: string, opts = {}) {
-
+  getAddress (keypair: BtcKeypair) {
+    return keypair.toAddress().toNativeSegwitAddress()
   }
 
-  signStructMessage (address: string, data: string, opts = {}) {
+  async signTransaction (address: string, psbtHex: string) {
+    const keypair = this.getWallet(address)
+    const signProvider = btc.SignProvider.create({
+      keypairs: [keypair],
+    })
 
+    return await signProvider.signTransaction(psbtHex, true)
+  }
+
+  async signPlainMessage (address: string, text: string): Promise<string> {
+    const keypair = this.getWallet(address)
+    const signProvider = btc.SignProvider.create({
+      keypairs: [keypair],
+    })
+
+    const signature = await signProvider.signPlainMessage(keypair, text)
+    return core.util.bufferToHex(signature)
+  }
+
+  async signStructMessage (address: string, data: object) {
+    const keypair = this.getWallet(address)
+    const signProvider = btc.SignProvider.create({
+      keypairs: [keypair],
+    })
+
+    const signature = await signProvider.signStructMessage(keypair, data)
+    return core.util.bufferToHex(signature)
   }
 }

@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer'
+import { Address } from './Address'
 
 import { secp256k1 } from '~/core/crypto'
 import { IKeypair, ParamError, ParamErrorCode, util } from '~/core'
@@ -34,5 +35,9 @@ export class Keypair implements IKeypair {
 
   static async generate (): Promise<Keypair> {
     return new Keypair(Buffer.from(secp256k1.utils.randomPrivateKey()))
+  }
+
+  toAddress (): Address {
+    return Address.fromBuffer(this.#publicKey)
   }
 }
