@@ -21,6 +21,7 @@
     >span {
       font-size: $detail-font-size;
       font-weight: 600;
+      font-family: monospace;
       line-height: 16px;
       color: #6F7684;
     }
@@ -58,15 +59,15 @@ h2 {
 </style>
 
 <template>
-  <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
+  <SignWrapper :title="$tt('Signature Request')" @reject="onRejectClick" @allow="onAllowClick">
     <div class="current-key-box">
       <img src="/assets/page-addAddress/key-btc.png">
       <div>
-        <p>Current Key</p>
+        <p>{{ $tt('Current Key') }}</p>
         <span>0xe7c00a33…a09dc4f6bd</span>
       </div>
     </div>
-    <h2>Sign Plain Message</h2>
+    <h2>{{ $tt('Sign Plain Message') }}</h2>
     <div class="sign-plain-message-box">
       0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD
     </div>
@@ -74,7 +75,7 @@ h2 {
       <div>
         💡
       </div>
-      <p>DO NOT sign any plain message which you don’t know about it’s real means.</p>
+      <p>{{ $tt('DO NOT sign any plain message which you don’t know about it’s real means.') }}</p>
     </div>
   </SignWrapper>
 </template>

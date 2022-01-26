@@ -91,6 +91,7 @@
         font-size: $code-font-size;
         line-height: 29px;
         font-weight: 500;
+        font-family: monospace;
         letter-spacing: 3px;
         color: #576C80;
       }
@@ -181,6 +182,9 @@
       word-break: break-all;
       cursor: pointer;
       background: #F9F7F6;
+      span {
+        font-family: monospace;
+      }
       &:hover {
         .popover {
           display: block;
@@ -241,20 +245,20 @@
 
 <template>
   <div class="page-home">
-    <UniMsg :visible="canShowMsg" content="Copied" @close="canShowMsg= false"></UniMsg>
+    <UniMsg :visible="canShowMsg" :content="$tt('Copied')" @close="canShowMsg= false"></UniMsg>
     <div class="top-bg"></div>
     <div ref="topLineBoxRef" class="top-line-box">
       <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
         <Iconfont name="settings" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
-          Settings
+          {{ $tt('Settings') }}
         </div>
       </div>
       <img class="w-[134px] h-[36px]" :src="`/assets/page-home/nav-${isScroll?'logo-scroll':'logo'}.png`">
       <div class="icon-wrapper cursor-pointer" @click="onClickLock">
         <Iconfont name="lock" size="20" :color="iconFontColor"></Iconfont>
         <div class="popover popover-bottom">
-          Lock
+          {{ $tt('Lock') }}
         </div>
       </div>
     </div>
@@ -262,30 +266,30 @@
     <div class="central-bg-2"></div>
     <div class="central-content">
       <div class="address-part">
-        <h2>{{ currentUnikeyName }} Address</h2>
+        <h2>{{ currentUnikeyName }} {{ $tt('Address') }}</h2>
         <p>{{ currentUnikey?.key }}</p>
         <div>
           <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
             <Iconfont name="copy" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
-              Copy Address
+              {{ $tt('Copy Address') }}
             </div>
           </div>
           <div class="icon-wrapper mr-[16px] cursor-pointer" @click="isShowQRCodeDialog = true">
             <Iconfont name="qrcode" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
-              QR Code
+              {{ $tt('QR Code') }}
             </div>
           </div>
           <i class="mr-[16px]"></i>
           <div class="icon-wrapper cursor-pointer">
             <Iconfont name="switch" size="13" color="#6D88A1"></Iconfont>
             <div class="popover popover-bottom">
-              Transfer
+              {{ $tt('Transfer') }}
             </div>
           </div>
           <div class="switch cursor-pointer" @click="isShowSwitchKeyDialog = true">
-            Switch
+            {{ $tt('Switch') }}
           </div>
         </div>
       </div>
@@ -293,12 +297,12 @@
     <img class="key-icon" :src="getImageUrl(currentUnikey?.keySymbol)">
     <ConnectSites></ConnectSites>
     <Ironman></Ironman>
-    <UniDialog class="qr-code-box" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
+    <UniDialog class="qr-code-box" :title="$tt('Account Detail')" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
       <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
       <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
-        {{ currentUnikey?.key }}
+        <span>{{ currentUnikey?.key }}</span>
         <div class="popover popover-top">
-          Copy Address
+          {{ $tt('Copy Address') }}
         </div>
       </div>
     </UniDialog>

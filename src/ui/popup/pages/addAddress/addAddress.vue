@@ -39,7 +39,7 @@
 
 <template>
   <div class="page-add-address">
-    <UniTab></UniTab>
+    <UniTab :title="$tt('Select Key Type')"></UniTab>
     <div class="key-box">
       <div v-for="(item,index) in keyTypes" :key="index" class="key-item-box" @click="$router.push(`/addAddress/selectWays/${item.unikeySymbol}`)">
         <img :src="getImageUrl(item.unikeySymbol)">

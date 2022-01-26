@@ -23,13 +23,14 @@
 
 <template>
   <button class="uni-btn" :class="{'_disabled':disabled,'_error':error}" @click="click">
-    <slot>Continue</slot>
+    <slot>{{ $tt('Continue') }}</slot>
   </button>
 </template>
 
 <script lang="ts">
 
 export default {
+  name: 'UniBtn',
   props: {
     disabled: {
       type: Boolean,

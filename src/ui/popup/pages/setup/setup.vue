@@ -37,11 +37,11 @@
   <div class="page-setup">
     <img class="w-[350px] h-[78px]" src="/assets/page-setup/page-setup-top-bg.png">
     <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-setup/page-setup-logo.png">
-    <h2>Bring all crypto users into<span>Web3.0</span></h2>
+    <h2>{{ $tt('Bring all crypto users into') }}<span>{{ $tt('Web3.0') }}</span></h2>
 
     <div class="input-box">
-      <UniInput ref="passwordRef" v-model="password" placeholder="Set a password"></UniInput>
-      <UniInput ref="rePasswordRef" v-model="rePassword" :validate-text="validataText" class="mt-[32px] mb-[32px]" placeholder="Repeat"></UniInput>
+      <UniInput ref="passwordRef" v-model="password" :placeholder="$tt('Set a password')"></UniInput>
+      <UniInput ref="rePasswordRef" v-model="rePassword" :validate-text="validataText" class="mt-[32px] mb-[32px]" :placeholder="$tt('Repeat')"></UniInput>
       <UniBtn :disabled="!!(!password || !rePassword)" @click="onClickSetup"></UniBtn>
       <router-link to="/test">
         test
@@ -53,6 +53,7 @@
 <script lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
 
@@ -60,6 +61,7 @@ export default {
   name: 'PageSetup',
   setup (props, context) {
     const router = useRouter()
+    const i18n = useI18n()
 
     const password = ref('')
     const rePassword = ref('')
@@ -69,7 +71,7 @@ export default {
     const onClickSetup = async () => {
       if (!password.value || !rePassword.value) return
       if (rePassword.value !== password.value) {
-        validataText.value = 'The passwords do not match'
+        validataText.value = i18n.$tt('The passwords do not match')
         rePasswordRef.value?.validate()
         return
       }

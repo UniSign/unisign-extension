@@ -60,30 +60,30 @@
 <template>
   <div class="page-security-and-backup">
     <UniMsg :visible="canShowMsg" :content="msgContent" @close="canShowMsg= false"></UniMsg>
-    <UniTab title="Security & Backup"></UniTab>
+    <UniTab :title="$tt('Security & Backup')"></UniTab>
     <div class="settings-box">
       <div class="settings-item-box" @click="isShowPhishingCodeDialog = true">
-        <span>Anti-Phishing Code</span>
+        <span>{{ $tt('Anti-Phishing Code') }}</span>
         <div class="arrow-right">
           <span>{{ antiPhishingCode }}</span>
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
       <div class="settings-item-box" @click="isShowTipsDialog = true">
-        <span>Cancel All Authorized Permissions</span>
+        <span>{{ $tt('Cancel All Authorized Permissions') }}</span>
         <div class="arrow-right">
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
       <div class="settings-item-box" @click="onClickViewMnemonic">
-        <span>Backup Mnemonic</span>
+        <span>{{ $tt('Backup Mnemonic') }}</span>
         <div class="arrow-right">
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
     </div>
     <Ironman ref="ironmanRef"></Ironman>
-    <UniDialog class="phishingCodeDialog" :visible="isShowPhishingCodeDialog" title="Anti-Phishing Code" @cancel="isShowPhishingCodeDialog = false">
+    <UniDialog class="phishingCodeDialog" :visible="isShowPhishingCodeDialog" :title="$tt('Anti-Phishing Code')" @cancel="isShowPhishingCodeDialog = false">
       <div class="slot-container">
         <UniInput
           ref="phishingCodeRef"
@@ -95,17 +95,17 @@
           :placeholder="antiPhishingCode"
         ></UniInput>
         <UniBtn class="uni-btn" :disabled="!phishingCode" @click="handlePhishingCodeCancel">
-          Save
+          {{ $tt('Save') }}
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="tipsDialog" :visible="isShowTipsDialog" title="Tips" @cancel="isShowTipsDialog = false">
+    <UniDialog class="tipsDialog" :visible="isShowTipsDialog" :title="$tt('Tips')" @cancel="isShowTipsDialog = false">
       <div class="slot-container">
         <div class="text">
-          Are you sure cancel all authorized permissions?
+          {{ $tt('Are you sure cancel all authorized permissions?') }}
         </div>
         <UniBtn class="uni-btn" @click="handleTipsCancel">
-          I got it
+          {{ $tt('I got it') }}
         </UniBtn>
       </div>
     </UniDialog>
@@ -115,6 +115,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
@@ -128,6 +129,7 @@ export default {
   setup () {
     const canShowMsg = ref(false)
     const msgContent = ref('')
+    const i18n = useI18n()
 
     // antiPhishingCode
     const antiPhishingCode = ref('')
@@ -148,7 +150,7 @@ export default {
       onPhishingCodeChanged()
       ironmanRef.value?.onAntiPhishingCodeChange()
       isShowPhishingCodeDialog.value = false
-      msgContent.value = 'Saved'
+      msgContent.value = i18n.$tt('Saved')
       canShowMsg.value = true
     }
     onMounted(() => {
@@ -165,7 +167,7 @@ export default {
     const handleTipsCancel = () => {
       isShowTipsDialog.value = false
       wallet.clearAllPermission()
-      msgContent.value = 'Canceled'
+      msgContent.value = i18n.$tt('Canceled')
       canShowMsg.value = true
     }
 

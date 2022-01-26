@@ -59,10 +59,10 @@
 
 <template>
   <div class="page-create-mnemonic">
-    <UniTab title="Create Mnemonic"></UniTab>
+    <UniTab :title="$tt('Create Mnemonic')"></UniTab>
     <div class="central-content">
-      <h2>Keep it carefully</h2>
-      <p>please copy the following contents on paper in order and keep them in a safe place. Do not take screenshots or send them to others</p>
+      <h2>{{ $tt('Keep it carefully') }}</h2>
+      <p>{{ $tt('Please copy the following contents on paper in order and keep them in a safe place. Do not take screenshots or send them to others') }}</p>
       <div class="mnemonic-box">
         <div v-for="(item,index) in mnemonicArr" :key="index" class="mnemonic-item">
           <span>{{ index }}</span>

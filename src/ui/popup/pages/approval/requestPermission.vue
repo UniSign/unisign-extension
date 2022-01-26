@@ -55,6 +55,7 @@
       border-top: 1px solid rgba(220, 229, 240, 0.5);
       font-size: $detail-font-size;
       font-weight: 600;
+      font-family: monospace;
       line-height: 16px;
       word-wrap: break-word;
       word-break: break-all;
@@ -86,15 +87,15 @@
 </style>
 
 <template>
-  <SignWrapper title="request permissions" class="page-request-permission" @reject="onRejectClick" @allow="onAllowClick">
+  <SignWrapper :title="$tt('request permissions')" class="page-request-permission" @reject="onRejectClick" @allow="onAllowClick">
     <h2>
-      Website
+      {{ $tt('Website') }}
     </h2>
     <div class="website-detail-box">
       <img :src="site?.icon">
       <p>{{ substringUrl(approval?.origin,'agreement') }}<span>{{ substringUrl(approval?.origin,'domainName') }}</span></p>
     </div>
-    <h2>Connect Address</h2>
+    <h2>{{ $tt('Connect Address') }}</h2>
     <div class="connect-address-box">
       <div class="connect-address-title">
         <img :src="getImageUrl(currentUnikey?.keySymbol)">
@@ -104,7 +105,7 @@
         {{ currentUnikey?.key }}
       </div>
     </div>
-    <h2>Allow this site to</h2>
+    <h2>{{ $tt('Allow this site to') }}</h2>
     <div class="allow-site-box">
       <div v-for="permission in approval?.params.permissions" :key="permission" class="allow-site-item" @click="onClickChoosePermission(permission)">
         <Iconfont :name="choosePermissions.includes(permission)?'checkbox-check':'checkbox-uncheck'" size="16"></Iconfont>

@@ -40,12 +40,12 @@
   <div class="uni-btn-container">
     <button class="reject" @click="onRejectClick">
       <slot name="reject">
-        Reject
+        {{ $tt('Reject') }}
       </slot>
     </button>
     <button class="allow" :class="{'_disabled':disabled}" @click="onAllowClick">
       <slot name="allow">
-        Allow
+        {{ $tt('Allow') }}
       </slot>
     </button>
   </div>
@@ -55,6 +55,7 @@
 import { toRefs } from 'vue'
 
 export default {
+  name: 'UniDoubleBtn',
   props: {
     disabled: {
       type: Boolean,

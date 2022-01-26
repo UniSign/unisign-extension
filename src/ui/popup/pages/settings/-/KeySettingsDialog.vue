@@ -100,17 +100,17 @@
 
 <template>
   <div class="key-settings-dialog">
-    <UniDialog class="dangerousDialog" error :visible="isShowDangerousDialog" title="Dangerous Action" @cancel="isShowDangerousDialog = false">
+    <UniDialog class="dangerousDialog" error :visible="isShowDangerousDialog" :title="$tt('Dangerous Action')" @cancel="isShowDangerousDialog = false">
       <div class="slot-container">
         <div class="text">
           {{ dangerousText }}
         </div>
         <UniBtn class="uni-btn" error @click="handleDangerousCancel">
-          I got it
+          {{ $tt('I got it') }}
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="securityDialog" :visible="isShowSecurityDialog" title="Security Verification" @cancel="isShowSecurityDialog = false">
+    <UniDialog class="securityDialog" :visible="isShowSecurityDialog" :title="$tt('Security Verification')" @cancel="isShowSecurityDialog = false">
       <div class="slot-container">
         <UniInput
           ref="passwordRef"
@@ -119,22 +119,23 @@
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"
           :validate-text="validataText"
+          :placeholder="$tt('Set a password')"
         ></UniInput>
         <UniBtn class="uni-btn" :disabled="!password" @click="handleSecurityCancel">
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="privateKeyDialog" :visible="isShowPrivateKeyDialog" title="Private Key" @cancel="isShowPrivateKeyDialog= false">
+    <UniDialog class="privateKeyDialog" :visible="isShowPrivateKeyDialog" :title="$tt('Private Key')" @cancel="isShowPrivateKeyDialog= false">
       <div class="slot-container">
         <div class="text">
           {{ selectedprivateKey }}
         </div>
         <UniBtn class="uni-btn" @click="handlePrivateKeyCancel">
-          OK
+          {{ $tt('OK') }}
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="mnemonicDialog" :visible="isShowMnemonicDialog" title="Mnemonic" @cancel="isShowMnemonicDialog= false">
+    <UniDialog class="mnemonicDialog" :visible="isShowMnemonicDialog" :title="$tt('Mnemonic')" @cancel="isShowMnemonicDialog= false">
       <div class="slot-container">
         <div class="mnemonic-box">
           <div v-for="(item,index) in mnemonicArr" :key="index" class="mnemonic-item">
@@ -143,29 +144,29 @@
           </div>
         </div>
         <UniBtn class="uni-btn" @click="handleMnemonicCancel">
-          OK
+          {{ $tt('OK') }}
         </UniBtn>
       </div>
     </UniDialog>
-    <UniDialog class="deleteKeyDialog" error :visible="isShowDeleteKeyDialog" title="Delete Key" @cancel="isShowDeleteKeyDialog= false">
+    <UniDialog class="deleteKeyDialog" error :visible="isShowDeleteKeyDialog" :title="$tt('Delete Key')" @cancel="isShowDeleteKeyDialog= false">
       <div class="slot-container">
-        <p>Confirm to delete,</p>
-        <p>enter <span>Delete Key</span> below.</p>
+        <p>{{ $tt('Confirm to delete,') }}</p>
+        <p>{{ $tt('enter') }} <span>{{ $tt('Delete Key') }}</span> {{ $tt('below.') }}</p>
         <UniInput
           ref="deleteKeyRef"
           v-model="deleteKey"
           width="100%"
           background-color="#F7F8FA"
           class="uni-input mb-[48px]"
-          placeholder="Please enter Delete Key"
-          validate-text="Incorrect input"
+          :placeholder="$tt('Please enter Delete Key')"
+          :validate-text="$tt('Incorrect input')"
         ></UniInput>
         <UniDoubleBtn class="uni-btn" :disabled="!deleteKey" @rejectClick="isShowDeleteKeyDialog= false" @allowClick="handleDeleteKeyCancel">
           <template #reject>
-            Cancle
+            {{ $tt('Cancle') }}
           </template>
           <template #allow>
-            Delete
+            {{ $tt('Delete') }}
           </template>
         </UniDoubleBtn>
       </div>
@@ -175,6 +176,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
 import { Unikey } from '~/background/services/unikey'
@@ -188,6 +190,7 @@ export default {
     const isShowPrivateKeyDialog = ref(false)
     const isShowMnemonicDialog = ref(false)
     const isShowDeleteKeyDialog = ref(false)
+    const i18n = useI18n()
 
     // securityDialog
     let currentEventName: CurrentEventName = null
@@ -239,7 +242,7 @@ export default {
 
     // dangerousDialog
     const isShowDangerousDialog = ref(false)
-    const dangerousText = ref('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.')
+    const dangerousText = ref(i18n.$tt('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.'))
     const handleDangerousCancel = () => {
       isShowDangerousDialog.value = false
       if (currentEventName === 'viewPrivateKey' || currentEventName === 'viewMnemonic') {
@@ -275,7 +278,7 @@ export default {
     const onClickDeletePrivateKey = (unikey: Unikey) => {
       currentUnikey.value = unikey
       currentEventName = 'deletePrivateKey'
-      dangerousText.value = 'You may lost your asset if you are not backup properly.'
+      dangerousText.value = i18n.$tt('You may lost your asset if you are not backup properly.')
       isShowDangerousDialog.value = true
     }
     const handleDeleteKeyCancel = () => {

@@ -24,13 +24,13 @@
 
 <template>
   <div class="page-add-address-success">
-    <UniTab :disabled="true" title="Create Mnemonic"></UniTab>
+    <UniTab :disabled="true" :title="$tt('Create Mnemonic')"></UniTab>
     <div class="central-content">
       <img class="w-[189px] h-[161px] mx-auto mt-[77px]" src="/assets/page-addAddress/success-bg.png">
-      <h2>Success</h2>
+      <h2>{{ $tt('Success') }}</h2>
     </div>
     <UniBtn class="uni-btn" @click="$router.push(`/setup/home`)">
-      Start to use
+      {{ $tt('Start to use') }}
     </UniBtn>
     <Ironman></Ironman>
   </div>

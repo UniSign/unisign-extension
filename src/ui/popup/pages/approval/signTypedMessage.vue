@@ -21,6 +21,7 @@
     >span {
       font-size: $detail-font-size;
       font-weight: 600;
+      font-family: monospace;
       line-height: 16px;
       color: #6F7684;
     }
@@ -93,32 +94,32 @@
 
 <template>
   <div>
-    <SignWrapper @reject="onRejectClick" @allow="onAllowClick">
+    <SignWrapper :title="$tt('Signature Request')" @reject="onRejectClick" @allow="onAllowClick">
       <div class="current-key-box">
         <img src="/assets/page-addAddress/key-btc.png">
         <div>
-          <p>Current Key</p>
+          <p>{{ $tt('Current Key') }}</p>
           <span>0xe7c00a33…a09dc4f6bd</span>
         </div>
       </div>
       <div class="main-title-box">
-        <h2>Sign Typed Message</h2>
+        <h2>{{ $tt('Sign Typed Message') }}</h2>
         <p @click="isShowRawDialog = true">
-          View Raw
+          {{ $tt('View Raw') }}
         </p>
       </div>
       <div class="main-message-box">
         <div class="main-message-title">
-          <span>App</span>
+          <span>{{ $tt('App') }}</span>
           <h2>DAS</h2>
         </div>
         <div class="main-message-content">
-          <span>Details</span>
-          <h2>Transfer Owner of jack.bit to 0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD</h2>
+          <span>{{ $tt('Details') }}</span>
+          <h2>{{ $tt('Transfer Owner of jack.bit to') }} 0xE7c00a33B82AfF42C8Ea4e7B41dB1ea09Dc4f6BD</h2>
         </div>
       </div>
     </SignWrapper>
-    <UniDialog class="raw-box" :visible="isShowRawDialog" @cancel="handleRawCancel">
+    <UniDialog class="raw-box" :title="$tt('Message Detail')" :visible="isShowRawDialog" @cancel="handleRawCancel">
       <div class="raw-container">
         <json-viewer :value="jsonData"></json-viewer>
       </div>

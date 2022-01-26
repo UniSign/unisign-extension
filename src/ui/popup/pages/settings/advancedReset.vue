@@ -47,29 +47,29 @@
 
 <template>
   <div class="page-advanced-reset">
-    <UniTab title="Advanced"></UniTab>
+    <UniTab :title="$tt('Advanced')"></UniTab>
     <div class="settings-box">
       <div class="settings-item-box" @click="$router.push('/settings/importAnotherMnemonic')">
-        <span>Import another Mnemonic</span>
+        <span>{{ $tt('Import another Mnemonic') }}</span>
         <div class="arrow-right">
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
       <div class="settings-item-box" @click="isShowTipsDialog = true">
-        <span>Reset UniSign</span>
+        <span>{{ $tt('Reset UniSign') }}</span>
         <div class="arrow-right">
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>
       </div>
     </div>
     <Ironman></Ironman>
-    <UniDialog class="tipsDialog" error :visible="isShowTipsDialog" title="Reset UniSign?" @cancel="isShowTipsDialog = false">
+    <UniDialog class="tipsDialog" error :visible="isShowTipsDialog" :title="$tt('Reset UniSign?')" @cancel="isShowTipsDialog = false">
       <div class="slot-container">
         <div class="text">
-          After resetting, UniSign will revert to its initial state and all your addresses will be deleted. Please make sure you have backed up before you reset.
+          {{ $tt('After resetting, UniSign will revert to its initial state and all your addresses will be deleted. Please make sure you have backed up before you reset.') }}
         </div>
         <UniBtn class="uni-btn" error @click="handleTipsCancel">
-          Confirm
+          {{ $tt('Confirm') }}
         </UniBtn>
       </div>
     </UniDialog>

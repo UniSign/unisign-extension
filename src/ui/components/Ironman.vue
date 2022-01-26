@@ -62,6 +62,7 @@ import { ref, defineComponent } from 'vue'
 import { wallet } from '~/ui/controllers/wallet'
 
 export default defineComponent({
+  name: 'Ironman',
   setup () {
     const isShowDetail = ref(false)
     const antiPhishingCode = ref('')

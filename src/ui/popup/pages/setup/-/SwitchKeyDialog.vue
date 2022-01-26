@@ -3,7 +3,7 @@
   .switch-key-content {
     overflow: hidden;
     overflow-y: scroll;
-    max-height: 321px;
+    max-height: 290px;
     &::-webkit-scrollbar {
       display: none;
     }
@@ -32,6 +32,7 @@
         span {
           font-size: $detail-font-size;
           font-weight: bold;
+          font-family: monospace;
           color: #242C3F;
           line-height: 16px;
         }
@@ -56,10 +57,10 @@
 </style>
 
 <template>
-  <UniDialog class="switch-key-box" :visible="true" title="Switch Key" @cancel="handleSwitchCancel">
+  <UniDialog class="switch-key-box" :visible="true" :title="$tt('Switch Key')" @cancel="handleSwitchCancel">
     <div class="switch-key-content">
       <div v-if="derivedUniKeys.length" class="derived-box">
-        <h2>Derived from Mnemonic</h2>
+        <h2>{{ $tt('Derived from Mnemonic') }}</h2>
         <div v-for="unikey in derivedUniKeys" :key="unikey.key" @click="onClickSetCurrentUnikey(unikey)">
           <img class="w-[26px] h-[26px]" :src="getImageUrl(unikey.keySymbol)">
           <span>{{ substringKey(unikey.key) }}</span>
@@ -67,7 +68,7 @@
         </div>
       </div>
       <div v-if="importedUniKeys.length" class="imported-box">
-        <h2>Imported</h2>
+        <h2>{{ $tt('Imported') }}</h2>
         <div v-for="unikey in importedUniKeys" :key="unikey.key" @click="onClickSetCurrentUnikey(unikey)">
           <img class="w-[26px] h-[26px]" :src="getImageUrl(unikey.keySymbol)">
           <span>{{ substringKey(unikey.key) }}</span>
@@ -77,7 +78,7 @@
     </div>
     <div class="switch-key-btn-box">
       <UniBtn class="switch-key-btn" @click="$router.push('/addAddress')">
-        Add Key
+        {{ $tt('Add Key') }}
       </UniBtn>
     </div>
   </UniDialog>

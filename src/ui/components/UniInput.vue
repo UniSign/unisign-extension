@@ -68,6 +68,7 @@
 import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'UniInput',
   props: {
     width: {
       type: String,

@@ -45,6 +45,7 @@
 import { ref, toRefs, defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'UniTextArea',
   props: {
     width: {
       type: String,

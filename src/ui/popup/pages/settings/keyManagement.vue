@@ -32,6 +32,7 @@
       span {
         font-size: $input-font-size;
         font-weight: bold;
+        font-family: monospace;
       }
       .arrow-right {
         margin-left: auto;
@@ -180,10 +181,10 @@
 
 <template>
   <div class="page-key-management">
-    <UniTab title="Key Management"></UniTab>
+    <UniTab :title="$tt('Key Management')"></UniTab>
     <div class="settings-box">
       <template v-if="derivedUniKeys.length">
-        <h2>Derived from Mnemonic</h2>
+        <h2>{{ $tt('Derived from Mnemonic') }}</h2>
         <div v-for="unikey in derivedUniKeys" :key="unikey.key" class="settings-item-box">
           <img :src="getImageUrl(unikey.keySymbol,unikey.hidden)">
           <span>{{ substringKey(unikey.key) }}</span>
@@ -192,22 +193,22 @@
           </div>
           <div v-show="unikey.key === isSettingkey" class="popover">
             <div v-if="unikey.hidden" @click="onClickEnable(unikey)">
-              Enable
+              {{ $tt('Enable') }}
             </div>
-            <div v-else @click="onClickDisable(unikey)">
-              Disable
+            <div v-else-if="!unikey.hidden && canDisabled" @click="onClickDisable(unikey)">
+              {{ $tt('Disable') }}
             </div>
             <div @click="onClickViewPrivateKey(unikey)">
-              View Private Key
+              {{ $tt('View Private Key') }}
             </div>
             <div @click="onClickViewMnemonic(unikey)">
-              View Mnemonic
+              {{ $tt('View Mnemonic') }}
             </div>
           </div>
         </div>
       </template>
       <template v-if="importedUniKeys.length">
-        <h2>Imported</h2>
+        <h2>{{ $tt('Imported') }}</h2>
         <div v-for="unikey in importedUniKeys" :key="unikey.key" class="settings-item-box">
           <img :src="getImageUrl(unikey.keySymbol)">
           <span>{{ substringKey(unikey.key) }}</span>
@@ -216,10 +217,10 @@
           </div>
           <div v-show="unikey.key === isSettingkey" class="popover">
             <div @click="onClickDeletePrivateKey(unikey)">
-              Delete
+              {{ $tt('Delete') }}
             </div>
             <div @click="onClickViewPrivateKey(unikey)">
-              View Private Key
+              {{ $tt('View Private Key') }}
             </div>
           </div>
         </div>
@@ -227,7 +228,7 @@
     </div>
     <div class="add-key-btn-box">
       <UniBtn class="add-key-btn" @click="$router.push('/addAddress')">
-        Add Key
+        {{ $tt('Add Key') }}
       </UniBtn>
     </div>
     <Ironman></Ironman>
@@ -255,10 +256,12 @@ export default {
     const unikeys = ref<Unikey[]>([])
     const derivedUniKeys = ref<Unikey[]>([])
     const importedUniKeys = ref<Unikey[]>([])
+    const canDisabled = ref(true)
     const getkeysCategory = async () => {
       unikeys.value = await wallet.getUnikeys()
       derivedUniKeys.value = unikeys.value.filter(key => HDKeyrings.includes(key.keyringType)).sort(a => a.hidden === true ? 1 : -1)
       importedUniKeys.value = unikeys.value.filter(key => !HDKeyrings.includes(key.keyringType))
+      canDisabled.value = derivedUniKeys.value.filter(key => !key.hidden).length > 1
     }
     const onUnikeysChanged = async () => {
       getkeysCategory()
@@ -320,6 +323,7 @@ export default {
       unikeys,
       derivedUniKeys,
       importedUniKeys,
+      canDisabled,
       getImageUrl,
       substringKey,
       onUnikeysChanged,
