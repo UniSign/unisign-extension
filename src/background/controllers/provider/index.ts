@@ -48,6 +48,7 @@ export interface PermittedKeysResponse {
   keys: PermittedKeyObject[]
 }
 
+// signPlainMessage
 export interface SignPlainMessageParams {
   key: KeyObject
   message: string
@@ -57,11 +58,16 @@ export interface SignPlainMessageResult {
   signedMessage: string
 }
 
+// signStructMessage
 export interface SignStructMessageParams {
   key: KeyObject
   message: object
 }
-type SignStructMessageResult = SignPlainMessageResult
+export type SignStructMessageResult = SignPlainMessageResult
+
+// signTransaction
+export type SignTransactionParams = SignPlainMessageParams
+export type SignTransactionResult = SignPlainMessageResult
 
 export function composeKeyObjectFromUnikey (unikey: Unikey): KeyObjectType
 export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean): KeyObject
@@ -283,9 +289,38 @@ export class ProviderController {
     }
   }
 
+  // todo: not finish, need to investigate
   @Reflect.metadata('PROTECTED', true)
-  signTransaction () {
+  async signTransaction ({ session, data }: ProviderRequest<SignTransactionParams>): Promise<SignTransactionResult> {
+    const param = data.params[0]
+    const { key, message } = param
 
+    if (!key) {
+      throw ethErrors.rpc.invalidParams('Missing params when requesting \'signStructMessage\': \'key\'')
+    }
+
+    const currentKey = await this._getCurrentUnikey()
+
+    if (currentKey?.key && currentKey.key === key.key) {
+      await approvalService.requestApproval<Permissions[]>({
+        approvalPage: ApprovalPage.signTransaction,
+        origin: session.origin,
+        params: param,
+      })
+
+      const signedMessage = await keyringService.signTransaction({
+        from: key.key,
+        data: message,
+      })
+
+      return {
+        key: composeKeyObjectFromUnikey(currentKey, true),
+        signedMessage,
+      }
+    }
+    else {
+      throw ethErrors.rpc.invalidParams('Requested key does not match current key')
+    }
   }
 
   async route (req: ProviderRequest): Promise<any> {

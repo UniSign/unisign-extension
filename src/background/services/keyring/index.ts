@@ -711,18 +711,16 @@ export class KeyringService extends EventEmitter {
   //
 
   /**
-   * Sign Ethereum Transaction
+   * Sign A Transaction
    *
-   * Signs an Ethereum transaction object.
-   *
-   * @param {Object} ethTx - The transaction to sign.
-   * @param {string} fromAddress - The transaction 'from' address.
+   * @param msgParams
    * @param {Object} opts - Signing options.
    * @returns {Promise<Object>} The signed transaction object.
    */
-  signTransaction (ethTx: object, fromAddress: string, opts = {}) {
-    return this.getKeyringForAccount(fromAddress).then((keyring) => {
-      return keyring.signTransaction(fromAddress, ethTx, opts)
+  signTransaction (msgParams: MsgParams, opts = {}) {
+    const address = msgParams.from
+    return this.getKeyringForAccount(address).then((keyring) => {
+      return keyring.signTransaction(address, msgParams.data, opts)
     })
   }
 
