@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="switch-key-btn-box">
-      <UniBtn class="switch-key-btn" @click="$router.push('/addAddress')">
+      <UniBtn class="switch-key-btn" @click="onClickAddKey">
         {{ $tt('Add Key') }}
       </UniBtn>
     </div>
@@ -110,6 +110,11 @@ export default {
       context.emit('cancel')
     }
 
+    const onClickAddKey = () => {
+      context.emit('cancel')
+      router.push('/addAddress')
+    }
+
     const currentUnikey = ref(null)
     const visibleUnikeys = ref([])
     const derivedUniKeys = ref([])
@@ -132,6 +137,7 @@ export default {
 
     return {
       handleSwitchCancel,
+      onClickAddKey,
       currentUnikey,
       visibleUnikeys,
       derivedUniKeys,
