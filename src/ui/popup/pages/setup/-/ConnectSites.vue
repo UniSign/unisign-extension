@@ -208,7 +208,8 @@
         <span>{{ $tt('Connected Apps') }}</span>
       </div>
       <div v-for="site in sites" :key="site.name" class="connect-item">
-        <img :src="site?.icon">
+        <img v-if="site.icon" :src="site?.icon">
+        <Iconfont v-else name="connect" size="24"></Iconfont>
         <p>{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></p>
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
