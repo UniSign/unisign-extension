@@ -198,7 +198,8 @@
         <p>{{ $tt('No Connect') }}</p>
       </div>
       <div v-else class="connect-item">
-        <img :src="currentSite?.icon">
+        <img v-if="currentSite.icon" :src="currentSite?.icon">
+        <Iconfont v-else name="connect" size="24"></Iconfont>
         <p>{{ substringUrl(currentSite?.origin,'agreement') }}<span>{{ substringUrl(currentSite?.origin,'domainName') }}</span></p>
       </div>
     </div>
