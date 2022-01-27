@@ -19,7 +19,6 @@ import PageKeyManagement from './pages/settings/keyManagement.vue'
 import PageSecurityAndBackup from './pages/settings/securityAndBackup.vue'
 import PageAdvancedReset from './pages/settings/advancedReset.vue'
 import PageImportAnotherMnemonic from './pages/settings/importAnotherMnemonic.vue'
-import PageConnect from './pages/approval/connect.vue'
 import PageRequestPermission from './pages/approval/requestPermission.vue'
 import PageSignPlainMessage from './pages/approval/signPlainMessage.vue'
 import PageSignStructMessage from './pages/approval/signStructMessage.vue'
@@ -91,9 +90,6 @@ const routes = [{
   }, {
     path: '/settings/importAnotherMnemonic',
     component: PageImportAnotherMnemonic,
-  }, {
-    path: '/approval/connect',
-    component: PageConnect,
   }, {
     path: '/approval/requestPermission',
     component: PageRequestPermission,

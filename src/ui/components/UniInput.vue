@@ -50,7 +50,7 @@
     <input
       :style="{'width':width,'height':height,'backgroundColor':backgroundColor}"
       :class="{'_error':canShowValidateText}"
-      type="text"
+      :type="password?'password':'text'"
       :value="modelValue"
       :placeholder="placeholder"
       @input="onInputChange"
@@ -100,6 +100,11 @@ export default defineComponent({
       default: 'The passwords do not match',
     },
     showLocked: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    password: {
       type: Boolean,
       required: false,
       default: false,

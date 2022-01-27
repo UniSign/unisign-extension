@@ -107,7 +107,7 @@ export default {
     const route = useRoute()
     const onClickDeriveAddress = async () => {
       await wallet.deriveNewAccountFromMnemonic(route.params.key as KeyIdentifier)
-      router.push('/addAddress/addAddressSuccess')
+      router.push('/addAddress/addAddressSuccess?title=Derive From Mnemonic')
     }
 
     return {

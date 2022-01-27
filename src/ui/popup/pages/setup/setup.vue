@@ -40,10 +40,19 @@
     <h2>{{ $tt('Bring all crypto users into') }}<span>{{ $tt('Web3.0') }}</span></h2>
 
     <div class="input-box">
-      <UniInput ref="passwordRef" v-model="password" :placeholder="$tt('Set a password')"></UniInput>
-      <UniInput ref="rePasswordRef" v-model="rePassword" :validate-text="validataText" class="mt-[32px] mb-[32px]" :placeholder="$tt('Repeat')"></UniInput>
+      <UniInput ref="passwordRef" v-model="password" password :placeholder="$tt('Set a password')"></UniInput>
+      <UniInput
+        ref="rePasswordRef"
+        v-model="rePassword"
+        password
+        :validate-text="validataText"
+        class="mt-[32px] mb-[32px]"
+        :placeholder="$tt('Repeat')"
+      ></UniInput>
       <UniBtn :disabled="!!(!password || !rePassword)" @click="onClickSetup"></UniBtn>
-      <!--<router-link to="/test">test</router-link>-->
+      <router-link to="/test">
+        test
+      </router-link>
     </div>
   </div>
 </template>

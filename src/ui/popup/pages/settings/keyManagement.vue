@@ -163,12 +163,12 @@
         }
       }
       .uni-btn {
-        ::v-deep .reject {
+        :deep(.reject) {
           border:none;
           background: #F7F8FA;
           color: #0D0C0C;
         }
-        ::v-deep .allow {
+        :deep(.allow) {
           border:none;
           background: #EE5757;
         }

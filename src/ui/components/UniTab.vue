@@ -22,9 +22,6 @@
         &:hover {
           background: rgba(0, 0, 0, 0.06);
         }
-        &._disabled:hover {
-          background: #FFFFFF;
-        }
       }
       p {
         text-align: center;
@@ -37,15 +34,14 @@
 
 <template>
   <div class="tab-wrapper">
-    <div :class="{'_disabled':disabled}" @click="onClickLeft">
-      <Iconfont name="arrow-left" width="14" height="12" color="#0C0D0D" :opacity="disabled ? '0.3' : '1'"></Iconfont>
+    <div v-if="!disabled" @click="onClickLeft">
+      <Iconfont name="arrow-left" width="14" height="12" color="#0C0D0D"></Iconfont>
     </div>
     <p>{{ title }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -63,12 +59,8 @@ export default {
     },
   },
   setup (props, context) {
-    const { disabled } = toRefs(props)
     const router = useRouter()
     const onClickLeft = () => {
-      if (disabled.value) {
-        return
-      }
       router.go(-1)
     }
     return {

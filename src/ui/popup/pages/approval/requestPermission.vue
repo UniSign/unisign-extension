@@ -23,10 +23,12 @@
     }
     >p {
       margin-left: 12px;
-      font-size: $input-font-size;
+      font-size: $detail-font-size;
       color: #8D919C;
       span {
         margin-left: 0px;
+        font-size: $detail-font-size;
+        font-weight: 500;
         color: #242C3F;
       }
     }
