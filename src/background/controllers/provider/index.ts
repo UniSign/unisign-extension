@@ -13,7 +13,7 @@ import { messageBridge } from '~/utils/messages'
 interface ProviderRequest<T1 = any> {
   data: {
     method: string
-    params: [T1]
+    params: T1
   }
   session: Session
   needApproval: boolean
@@ -113,7 +113,7 @@ export class ProviderController {
 
   @Reflect.metadata('OPEN', true)
   tabCheckin ({ session, data: { params } }: ProviderRequest<SessionData>) {
-    sessionService.update(session.id, params[0])
+    sessionService.update(session.id, params)
   }
 
   @Reflect.metadata('OPEN', true)
@@ -161,7 +161,7 @@ export class ProviderController {
   }
 
   async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>): Promise<{permittedPermissions: Permissions[]; deniedPermissions: Permissions[]}> {
-    const param = data.params[0]
+    const param = data.params
     const meta = param.meta
 
     // todo: use a more proper way to valid the validity of the params
@@ -224,7 +224,7 @@ export class ProviderController {
 
   @Reflect.metadata('PROTECTED', true)
   async signPlainMessage ({ session, data }: ProviderRequest<SignPlainMessageParams>): Promise<SignPlainMessageResult> {
-    const param = data.params[0]
+    const param = data.params
     const { key, message } = param
 
     if (!key) {
@@ -257,7 +257,7 @@ export class ProviderController {
 
   @Reflect.metadata('PROTECTED', true)
   async signStructMessage ({ session, data }: ProviderRequest<SignStructMessageParams>): Promise<SignStructMessageResult> {
-    const param = data.params[0]
+    const param = data.params
     const { key, message } = param
 
     if (!key) {
@@ -292,7 +292,7 @@ export class ProviderController {
   // todo: not finish, need to investigate
   @Reflect.metadata('PROTECTED', true)
   async signTransaction ({ session, data }: ProviderRequest<SignTransactionParams>): Promise<SignTransactionResult> {
-    const param = data.params[0]
+    const param = data.params
     const { key, message } = param
 
     if (!key) {
@@ -369,7 +369,7 @@ export class ProviderController {
           session,
           data: {
             method: 'requestPermissionsOfCurrentKey',
-            params: [permissionReq],
+            params: permissionReq,
           },
           needApproval: true,
         })
