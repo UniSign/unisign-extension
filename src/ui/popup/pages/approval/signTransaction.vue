@@ -129,7 +129,7 @@
     </div>
     <div class="main-message-box">
       <div class="main-message-title">
-        <img src="/assets/connect/icon-btc.png">
+        <img :src="`/assets/connect/icon-btc.png`">
         <h2>{{ $tt('Send BTC') }}</h2>
       </div>
       <div class="main-message-content">

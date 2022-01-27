@@ -54,7 +54,7 @@
 <template>
   <SignWrapper :title="$tt('Signature Request')" @reject="onRejectClick" @allow="onAllowClick">
     <div class="current-key-box">
-      <img src="/assets/page-addAddress/key-btc.png">
+      <img :src="`/assets/page-addAddress/key-btc.png`">
       <div>
         <p>{{ $tt('Current Key') }}</p>
         <span>0xe7c00a33…a09dc4f6bd</span>

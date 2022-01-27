@@ -4,7 +4,7 @@ import { core, btc } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 import { BtcSimpleKeyring, BtcKeypair } from '~/background/services/keyring/btc-simple-keyring'
 
 interface BtcHdKeyringOpts {
-  hdPathBase?: string
+  hdPathBase: string
   mnemonic: string
   numberOfAccounts: number
 }

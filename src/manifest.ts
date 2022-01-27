@@ -14,7 +14,7 @@ export async function getManifest () {
     version: pkg.version,
     description: pkg.description,
     browser_action: {
-      default_icon: './assets/icon-512.png',
+      default_icon: './assets/icon-128.png',
       default_popup: './dist/ui/popup/index.html',
     },
     options_ui: {
@@ -27,9 +27,9 @@ export async function getManifest () {
       persistent: false,
     },
     icons: {
-      16: './assets/icon-512.png',
-      48: './assets/icon-512.png',
-      128: './assets/icon-512.png',
+      16: './assets/icon-128.png',
+      48: './assets/icon-128.png',
+      128: './assets/icon-128.png',
     },
     permissions: [
       'tabs',
@@ -46,6 +46,9 @@ export async function getManifest () {
       'dist/content-scripts/provider.js',
       'dist/content-scripts/style.css',
     ],
+    // todo: figure out how to remove unsafe-eval which introduced by vue-i18n@next
+    // todo: figure out how to remove wasm-eval which introduced by [wasm](https://stackoverflow.com/a/54033309)
+    content_security_policy: `script-src \'self\' \'unsafe-eval\' \'wasm-eval\' http://localhost:${port} https://at.alicdn.com; object-src \'self\'`,
   }
 
   if (isDev) {
@@ -54,10 +57,6 @@ export async function getManifest () {
     // see src/background/contentScriptHMR.ts
     delete manifest.content_scripts
     manifest.permissions?.push('webNavigation')
-
-    // todo: figure out how to remove unsafe-eval which introduced by vue-i18n@next
-    // this is required on dev for Vite script to load
-    manifest.content_security_policy = `script-src \'self\' \'unsafe-eval\' http://localhost:${port} https://at.alicdn.com; object-src \'self\'`
   }
 
   return manifest

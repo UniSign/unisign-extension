@@ -44,7 +44,8 @@
 <template>
   <div class="ironman-wrapper">
     <div class="ironman-box" @mouseover="isShowDetail = true" @mouseleave="isShowDetail = false">
-      <img src="/assets/page-home/identification-icon.png">
+      <!--todo: it is weird that vite will bundle static image as script, so we make it dynamic here for now.-->
+      <img :src="`/assets/page-home/identification-icon.png`">
       <span>{{ antiPhishingCode }}</span>
       <!--<router-link to="/test">test</router-link>-->
     </div>
