@@ -162,7 +162,7 @@ export class KeyringService extends EventEmitter {
    * @param {string} mnemonic - The BIP44-compliant seed phrase.
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
-  createNewVaultAndRestore (mnemonic: string): Promise<KeyringHD> {
+  async createNewVaultAndRestore (mnemonic: string): Promise<KeyringHD> {
     // todo: there is some problem with vite when building bip39, so use sign-lib for now
     if (!core.util.isMnemonicValid(mnemonic)) {
       return Promise.reject(new Error('Mnemonic is invalid.'))
@@ -173,7 +173,7 @@ export class KeyringService extends EventEmitter {
       numberOfAccounts: 1,
     }
 
-    const defaultKeyring = this.createKeyringByType(KeyringType.BtcHD, keyringConfig) as KeyringHD
+    const defaultKeyring = await this.createKeyringByType(KeyringType.BtcHD, keyringConfig) as KeyringHD
 
     return this.clearKeyrings()
       .then(() => this.persistAllKeyrings())
@@ -439,13 +439,16 @@ export class KeyringService extends EventEmitter {
       .then(() => keyring)
   }
 
-  private createKeyringByType (type: string, opts: object) {
+  private async createKeyringByType (type: string, opts: object) {
     const KeyringClass = this.getKeyringClassForType(type)
-    return new KeyringClass(opts)
+    const keyring = new KeyringClass(opts)
+    await keyring.deserialize(opts)
+
+    return keyring
   }
 
-  importPrivateKey (privateKey: string, type: KeyringType): Promise<KeyringSimple> {
-    const keyring = this.createKeyringByType(type, { privateKeys: [privateKey] } as KeyringSimpleOpts) as KeyringSimple
+  async importPrivateKey (privateKey: string, type: KeyringType): Promise<KeyringSimple> {
+    const keyring = await this.createKeyringByType(type, { privateKeys: [privateKey] } as KeyringSimpleOpts) as KeyringSimple
 
     return this.addKeyring(keyring)
       .then(() => this.persistAllKeyrings())
@@ -467,8 +470,8 @@ export class KeyringService extends EventEmitter {
    * @param {Object} opts - The constructor options for the keyring.
    * @returns {Promise<KeyringBase>} The new keyring.
    */
-  addNewKeyring (type: string, opts: object): Promise<KeyringBase> {
-    const keyring = this.createKeyringByType(type, opts)
+  async addNewKeyring (type: string, opts: object): Promise<KeyringBase> {
+    const keyring = await this.createKeyringByType(type, opts)
 
     return this.addKeyring(keyring)
       .then(() => this.persistAllKeyrings())
