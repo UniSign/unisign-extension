@@ -23,7 +23,6 @@ export const sharedConfig: UserConfig = {
       'util': 'util/',
       // some deps like `ethereum-cryptography` need `assert` in node core libs, but vite does not polyfill those libs, so we have to alias them ourselves.
       'assert': 'assert/',
-
       // todo: there may be a chance for a new package polyfills all the missing packages
       // https://github.com/vitejs/vite/issues/847
       // https://github.com/vitejs/vite/issues/728
@@ -35,6 +34,7 @@ export const sharedConfig: UserConfig = {
     'process.env': process.env,
     // readable-stream need `process.version`
     'process.version': `'${process.version}'`,
+    'process.browser': true,
   },
   plugins: [
     Vue(),
@@ -92,6 +92,8 @@ export default defineConfig(({ command }) => ({
     },
   },
   build: {
+    // to make through top-level await and BitInt
+    target: ['edge90', 'chrome90', 'firefox90', 'safari15'],
     outDir: r('extension/dist'),
     emptyOutDir: false,
     sourcemap: isDev ? 'inline' : false,

@@ -3,12 +3,13 @@
 import { EventEmitter } from 'events'
 import { ObservableStore } from '@metamask/obs-store'
 import autoBind from 'auto-bind'
-import { generateMnemonic, validateMnemonic } from 'bip39'
 // @ts-ignore
 import encryptor from 'browser-passworder'
 import { ethErrors } from 'eth-rpc-errors'
 import { EthHdKeyring } from './eth-hd-keyring'
 import { EthSimpleKeyring } from './eth-simple-keyring'
+// @ts-ignore
+import { core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 import { BtcHdKeyring } from '~/background/services/keyring/btc-hd-keyring'
 import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
 import {
@@ -111,7 +112,9 @@ export class KeyringService extends EventEmitter {
   }
 
   async generateMnemonic () {
-    this.mnemonic = generateMnemonic()
+    // todo: there is some problem with vite when building bip39, so use sign-lib for now
+    this.mnemonic = core.util.generateMnemonic()
+
     return this.mnemonic
   }
 
@@ -160,7 +163,8 @@ export class KeyringService extends EventEmitter {
    * @returns {Promise<Object>} A Promise that resolves to the state.
    */
   createNewVaultAndRestore (mnemonic: string): Promise<KeyringHD> {
-    if (!validateMnemonic(mnemonic)) {
+    // todo: there is some problem with vite when building bip39, so use sign-lib for now
+    if (!core.util.isMnemonicValid(mnemonic)) {
       return Promise.reject(new Error('Mnemonic is invalid.'))
     }
 

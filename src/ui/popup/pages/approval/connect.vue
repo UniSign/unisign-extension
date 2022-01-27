@@ -69,7 +69,7 @@ h2 {
     <h2>{{ $tt('Connect Address') }}</h2>
     <div class="connect-address-box">
       <div class="connect-address-title">
-        <img src="/assets/page-addAddress/key-btc.png">
+        <img :src="`/assets/page-addAddress/key-btc.png`">
         <span>BTC</span>
       </div>
       <div class="connect-address-content">

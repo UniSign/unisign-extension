@@ -35,8 +35,8 @@
 
 <template>
   <div class="page-setup">
-    <img class="w-[350px] h-[78px]" src="/assets/page-setup/page-setup-top-bg.png">
-    <img class="w-[96px] h-[123px] mx-auto mt-[3px]" src="/assets/page-setup/page-setup-logo.png">
+    <img class="w-[350px] h-[78px]" :src="`/assets/page-setup/page-setup-top-bg.png`">
+    <img class="w-[96px] h-[123px] mx-auto mt-[3px]" :src="`/assets/page-setup/page-setup-logo.png`">
     <h2>{{ $tt('Bring all crypto users into') }}<span>{{ $tt('Web3.0') }}</span></h2>
 
     <div class="input-box">

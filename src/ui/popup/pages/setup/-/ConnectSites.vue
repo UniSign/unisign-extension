@@ -210,7 +210,7 @@
         <p>{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></p>
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
-            <img class="w-[16px] h-[16px] mt-[2px] ml-[2px]" src="/assets/page-home/icon-disconnect.png">
+            <img class="w-[16px] h-[16px] mt-[2px] ml-[2px]" :src="`/assets/page-home/icon-disconnect.png`">
             <div class="popover popover-top">
               {{ $tt('Disconnect') }}
             </div>
