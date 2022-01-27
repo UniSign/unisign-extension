@@ -105,7 +105,7 @@ export class KeyringService extends EventEmitter {
     this.store.subscribe(value => storage.set(storageKey, value))
 
     this.memStore = new ObservableStore({
-      isUnlocked: true, // todo: it should be locked by default
+      isUnlocked: false,
       keyringTypes: this.keyringTypes.map(krt => krt.type),
       keyrings: [],
     } as MemStoreData)
@@ -124,6 +124,7 @@ export class KeyringService extends EventEmitter {
     }
 
     this.password = password
+    this.setUnlocked()
   }
 
   async isSetup (): Promise<boolean> {
