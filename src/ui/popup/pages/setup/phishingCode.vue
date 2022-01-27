@@ -71,7 +71,7 @@
     <h2>{{ $tt('Set an Anti-Phishing Code') }}</h2>
     <h3>{{ $tt('The Anti-Phishing Code is a security feature. It will be included in all windows about UniSign. This Code helping you to prevent phishing attemtps.') }}</h3>
     <div>
-      <input v-model="antiPhishingCode" :placeholder="$tt('Set a password')" :class="{'_error':isError}" type="text">
+      <input v-model="antiPhishingCode" placeholder="" :class="{'_error':isError}" type="text">
       <p v-show="isError">
         {{ $tt('Supports up to 10 characters') }}
       </p>
