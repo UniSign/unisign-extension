@@ -81,6 +81,7 @@
   "QR Code": "QR Code",
   "Reject": "Reject",
   "Repeat": "Repeat",
+  "Request _7ec": "Request Permissions",
   "Reset Un_7da": "Reset UniSign?",
   "Reset Un_a99": "Reset UniSign",
   "Save": "Save",
@@ -120,6 +121,5 @@
   "enter": "enter",
   "language": "language",
   "private _a8e": "private key",
-  "request _79e": "request permissions",
   "settings": "settings"
 }

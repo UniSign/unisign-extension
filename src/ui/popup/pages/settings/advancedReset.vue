@@ -50,7 +50,7 @@
     <UniTab :title="$tt('Advanced')"></UniTab>
     <div class="settings-box">
       <div class="settings-item-box" @click="$router.push('/settings/importAnotherMnemonic')">
-        <span>{{ $tt('Import another Mnemonic') }}</span>
+        <span>{{ $tt('Import Another Mnemonic') }}</span>
         <div class="arrow-right">
           <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
         </div>

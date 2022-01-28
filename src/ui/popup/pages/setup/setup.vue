@@ -50,9 +50,9 @@
         :placeholder="$tt('Repeat')"
       ></UniInput>
       <UniBtn :disabled="!!(!password || !rePassword)" @click="onClickSetup"></UniBtn>
-      <router-link to="/test">
+      <!-- <router-link to="/test">
         test
-      </router-link>
+      </router-link> -->
     </div>
   </div>
 </template>

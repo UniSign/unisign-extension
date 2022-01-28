@@ -48,7 +48,7 @@ export default {
     const i18n = useI18n()
     const title = ref('')
     onMounted(async () => {
-      if (route.query.title === 'Derive From Mnemonic') {
+      if (route.query.title === 'DeriveFromMnemonic') {
         title.value = i18n.$tt('Derive From Mnemonic')
       }
       else {

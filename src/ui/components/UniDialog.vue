@@ -113,8 +113,8 @@ export default {
         (dom as HTMLDivElement).style.overflow = 'hidden'
       }
       else {
-        (dom as HTMLDivElement).style.height = '630px';
-        (dom as HTMLDivElement).style.overflow = 'inherit'
+        (dom as HTMLDivElement).style.height = '600px';
+        (dom as HTMLDivElement).style.overflow = 'scroll'
       }
     })
 

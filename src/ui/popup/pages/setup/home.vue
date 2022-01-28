@@ -2,7 +2,7 @@
 .page-home {
   position: relative;
   background-color: #DCE5F0;
-  min-height: 630px;
+  min-height: 600px;
   padding-bottom: 38px;
   .top-bg {
     width: 100%;
@@ -338,9 +338,10 @@ export default {
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
     const topLineBoxRef = ref<HTMLDivElement | null>(null)
+    const dom=document.getElementsByClassName('layout-default')[0] as HTMLDivElement
     onMounted(async () => {
-      window.onscroll = () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      dom.onscroll = () => {
+        const scrollTop = dom.scrollTop
         const transferScrollTop = scrollTop / 30
         if (scrollTop > 0) {
           isScroll.value = true

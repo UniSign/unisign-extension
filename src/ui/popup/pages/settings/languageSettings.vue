@@ -34,7 +34,7 @@
 
 <template>
   <div class="page-language-settings">
-    <UniTab :title="$tt('language')"></UniTab>
+    <UniTab :title="$tt('Language')"></UniTab>
     <div class="settings-box">
       <div v-for="lang in LocaleOptions" :key="lang.value" class="settings-item-box" @click="onChangeLocale(lang.value)">
         <span>{{ lang.text }}</span>

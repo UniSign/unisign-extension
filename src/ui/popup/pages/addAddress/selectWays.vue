@@ -40,7 +40,7 @@
 
 <template>
   <div class="page-add-address">
-    <UniTab :title="$tt('Select ways')" />
+    <UniTab :title="$tt('Select Ways')"></UniTab>
     <div class="key-box">
       <div v-if="hasMnemonic" class="key-item-box mb-[24px]" @click="onClickDeriveAddress">
         <div>
@@ -63,7 +63,7 @@
         <span>{{ $tt('Import by priority key') }}</span>
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8" />
       </div>
-      <div v-if="!hasMnemonic" class="key-item-box" style="border-radius: 0px;" @click="$router.push('/import/importMnemonic')">
+      <div v-if="!hasMnemonic" class="key-item-box" style="border-radius: 0px 0px 12px 12px;" @click="$router.push('/import/importMnemonic')">
         <div>
           <Iconfont name="mnemonic" size="17" color="#B2EED7" />
         </div>
@@ -107,7 +107,7 @@ export default {
     const route = useRoute()
     const onClickDeriveAddress = async () => {
       await wallet.deriveNewAccountFromMnemonic(route.params.key as KeyIdentifier)
-      router.push('/addAddress/addAddressSuccess?title=Derive From Mnemonic')
+      router.push('/addAddress/addAddressSuccess?title=DeriveFromMnemonic')
     }
 
     return {
