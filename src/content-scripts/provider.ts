@@ -8,7 +8,7 @@ messageBridge.setNamespace()
 
 interface JsonRpcPayload {
   method: string
-  params: any[]
+  params: object
 }
 
 export class UniSignProvider extends EventEmitter {
@@ -49,9 +49,9 @@ export class UniSignProvider extends EventEmitter {
 
       this.request({
         method: 'tabCheckin',
-        params: [{
+        params: {
           icon, name, origin,
-        }],
+        },
       })
     })
 

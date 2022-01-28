@@ -83,7 +83,7 @@ export default {
         if (approval) {
           await wallet.resolveApproval()
         }
-        router.replace('/')
+        await router.replace('/')
       }
     }
 
