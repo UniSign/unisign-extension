@@ -3,29 +3,28 @@
 import { EventEmitter } from 'events'
 import { ObservableStore } from '@metamask/obs-store'
 import autoBind from 'auto-bind'
-// @ts-ignore
+// @ts-expect-error no type
 import encryptor from 'browser-passworder'
-import { ethErrors } from 'eth-rpc-errors'
-import { EthHdKeyring } from './eth-hd-keyring'
-import { EthSimpleKeyring } from './eth-simple-keyring'
-// @ts-ignore
-import { core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 import { BtcHdKeyring } from '~/background/services/keyring/btc-hd-keyring'
 import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
-import {
+import { CkbHdKeyring } from '~/background/services/keyring/ckb-hd-keyring'
+import { CkbSimpleKeyring } from '~/background/services/keyring/ckb-simple-keyring'
+import type {
   KeyringBase,
   KeyringHD,
   KeyringHdOpts,
   KeyringSimple,
   KeyringSimpleOpts,
-  KeyringType,
   SerializedKeyringData,
 } from '~/background/services/keyring/types'
-import { Unikey, UniKeyChainSimple, UnikeyChainHD } from '~/background/services/unikey'
+import { KeyringType } from '~/background/services/keyring/types'
+import type { UniKeyChainSimple, Unikey, UnikeyChainHD } from '~/background/services/unikey'
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { storage } from '~/background/tools/storage'
+// @ts-expect-error no type
+import { core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
-const keyringTypes = [BtcSimpleKeyring, BtcHdKeyring, EthSimpleKeyring, EthHdKeyring]
+const keyringTypes = [BtcSimpleKeyring, BtcHdKeyring, CkbSimpleKeyring, CkbHdKeyring] as KeyringClassType[]
 
 interface MemStoreKeyring {
   type: string
@@ -44,7 +43,7 @@ interface StoreData {
 }
 
 interface TypedSerializedKeyring {
-  type: string
+  type: KeyringType
   data: SerializedKeyringData
 }
 
@@ -59,7 +58,7 @@ interface Encryptor {
 }
 
 interface KeyringClassType {
-  type: string
+  type: KeyringType
   new(options?: any): KeyringBase
 }
 
@@ -87,7 +86,6 @@ export class KeyringService extends EventEmitter {
   }
 
   private async init (opts: KeyringOpts = {}): Promise<void> {
-    // @ts-ignore
     this.keyringTypes = opts.keyringTypes
       ? keyringTypes.concat(opts.keyringTypes)
       : keyringTypes
@@ -300,7 +298,7 @@ export class KeyringService extends EventEmitter {
   checkForDuplicate (type: string, newAccountArray: string[]) {
     return this.getAccounts().then((accounts) => {
       switch (type) {
-        case EthSimpleKeyring.type:
+        case CkbSimpleKeyring.type:
         case BtcSimpleKeyring.type: {
           const isIncluded = accounts.includes(newAccountArray[0])
 
@@ -440,7 +438,7 @@ export class KeyringService extends EventEmitter {
       .then(() => keyring)
   }
 
-  private async createKeyringByType (type: string, opts: object) {
+  private async createKeyringByType (type: KeyringType, opts?: object) {
     const KeyringClass = this.getKeyringClassForType(type)
     const keyring = new KeyringClass(opts)
     await keyring.deserialize(opts)
@@ -471,7 +469,7 @@ export class KeyringService extends EventEmitter {
    * @param {Object} opts - The constructor options for the keyring.
    * @returns {Promise<KeyringBase>} The new keyring.
    */
-  async addNewKeyring (type: string, opts: object): Promise<KeyringBase> {
+  async addNewKeyring (type: KeyringType, opts?: object): Promise<KeyringBase> {
     const keyring = await this.createKeyringByType(type, opts)
 
     return this.addKeyring(keyring)
@@ -545,7 +543,7 @@ export class KeyringService extends EventEmitter {
    * @param {string} type - The type whose class to get.
    * @returns {KeyringBase|undefined} The class, if it exists.
    */
-  getKeyringClassForType (type: string): KeyringClassType {
+  getKeyringClassForType (type: KeyringType): KeyringClassType {
     return this.keyringTypes.find(keyring => keyring.type === type)!
   }
 
@@ -567,13 +565,7 @@ export class KeyringService extends EventEmitter {
    * @returns {KeyringBase} the keyring
    */
   getKeyringByType (type: KeyringType): KeyringBase {
-    const keyring = this.getKeyringsByType(type)[0]
-
-    if (!keyring) {
-      throw ethErrors.rpc.internal(`No ${KeyringType.BtcHD} keyring found`)
-    }
-
-    return keyring
+    return this.getKeyringsByType(type)[0]
   }
 
   /**
@@ -759,37 +751,6 @@ export class KeyringService extends EventEmitter {
     const address = msgParams.from
     return this.getKeyringForAccount(address).then((keyring) => {
       return keyring.signStructMessage(address, msgParams.data, opts)
-    })
-  }
-
-  /**
-   * Get encryption public key
-   *
-   * Get encryption public key for using in encrypt/decrypt process.
-   *
-   * @param {string} address The address to get the encryption public key for.
-   * @param {object} opts
-   * @returns {Promise<Buffer>} The public key.
-   */
-  getEncryptionPublicKey (address: string, opts = {}) {
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.getEncryptionPublicKey(address, opts)
-    })
-  }
-
-  /**
-   * Decrypt Message
-   *
-   * Attempts to decrypt the provided message parameters.
-   *
-   * @param {Object} msgParams - The decryption message parameters.
-   * @param opts
-   * @returns {Promise<Buffer>} The raw decryption result.
-   */
-  decryptMessage (msgParams: MsgParams, opts = {}) {
-    const address = msgParams.from
-    return this.getKeyringForAccount(address).then((keyring) => {
-      return keyring.decryptMessage(address, msgParams.data, opts)
     })
   }
 }
