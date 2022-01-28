@@ -40,35 +40,35 @@
 
 <template>
   <div class="page-add-address">
-    <UniTab :title="$tt('Select ways')"></UniTab>
+    <UniTab :title="$tt('Select ways')" />
     <div class="key-box">
       <div v-if="hasMnemonic" class="key-item-box mb-[24px]" @click="onClickDeriveAddress">
         <div>
-          <Iconfont name="create" size="17" color="#6D8AF3"></Iconfont>
+          <Iconfont name="create" size="17" color="#6D8AF3" />
         </div>
         <span>{{ $tt('Derive From Mnemonic') }}</span>
-        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
+        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8" />
       </div>
       <div v-else class="key-item-box mb-[24px]" @click="$router.push('/addAddress/createMnemonic')">
         <div>
-          <Iconfont name="create" size="17" color="#6D8AF3"></Iconfont>
+          <Iconfont name="create" size="17" color="#6D8AF3" />
         </div>
         <span>{{ $tt('Create Mnemonic') }}</span>
-        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
+        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8" />
       </div>
       <div class="key-item-box" style="border-radius: 12px 12px 0px 0px;" @click="$router.push(`/import/importPrivateKey/${$route.params.key}`)">
         <div>
-          <Iconfont name="key" size="17" color="#8E98B2"></Iconfont>
+          <Iconfont name="key" size="17" color="#8E98B2" />
         </div>
         <span>{{ $tt('Import by priority key') }}</span>
-        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
+        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8" />
       </div>
       <div v-if="!hasMnemonic" class="key-item-box" style="border-radius: 0px;" @click="$router.push('/import/importMnemonic')">
         <div>
-          <Iconfont name="mnemonic" size="17" color="#B2EED7"></Iconfont>
+          <Iconfont name="mnemonic" size="17" color="#B2EED7" />
         </div>
         <span>{{ $tt('Import by Mnemonic') }}</span>
-        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
+        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8" />
       </div>
       <!-- <div class="key-item-box" style="border-radius: 0px 0px 12px 12px;" @click="$router.push(`/importKeystoreFile/${$route.params.key}`)">
         <div>
@@ -85,14 +85,14 @@
         <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
       </div> -->
     </div>
-    <Ironman></Ironman>
+    <Ironman />
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { KeyIdentifier } from '~/constants'
+import type { KeyIdentifier } from '~/constants'
 import { wallet } from '~/ui/controllers/wallet'
 
 export default {
