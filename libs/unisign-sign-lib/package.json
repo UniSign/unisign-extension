@@ -45,6 +45,7 @@
     "bitcoinjs-lib": "^6.0.1",
     "buffer": "^6.0.3",
     "clone-deep": "^4.0.1",
+    "coininfo": "^5.1.0",
     "decimal.js": "^10.3.1",
     "ecpair": "^2.0.1",
     "ethereum-cryptography": "^0.2.0",

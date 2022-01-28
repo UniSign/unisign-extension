@@ -4,10 +4,9 @@ import * as ecc from 'tiny-secp256k1'
 
 import { secp256k1 } from '~/core/crypto'
 import { ParamError, ParamErrorCode, util } from '~/core'
-import { getNetworkConfig } from '~/btc/util'
-import { Address } from '~/btc/Address'
-import { BTCKeypair } from '~/btc/BTCKeypair'
-import { Network } from '~/btc/const'
+import { BTCKeypair, INetworkConfig, Network } from '~/btc'
+import { getNetworkConfig } from './util'
+import { Address } from './Address'
 
 const ECPair = ECPairFactory(ecc)
 

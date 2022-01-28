@@ -20,6 +20,7 @@ specifiers:
   bitcoinjs-lib: ^6.0.1
   buffer: ^6.0.3
   clone-deep: ^4.0.1
+  coininfo: ^5.1.0
   cross-env: ^7.0.3
   decimal.js: ^10.3.1
   ecpair: ^2.0.1
@@ -56,6 +57,7 @@ dependencies:
   bitcoinjs-lib: 6.0.1
   buffer: 6.0.3
   clone-deep: 4.0.1
+  coininfo: 5.1.0
   decimal.js: 10.3.1
   ecpair: 2.0.1
   ethereum-cryptography: 0.2.0
@@ -3061,6 +3063,12 @@ packages:
     resolution: {integrity: sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
     dev: true
+
+  /coininfo/5.1.0:
+    resolution: {integrity: sha512-q1Bv+yYSca68VpXGvaMwO0xzEJl9Zxxk0g2YWfX8EUHld8t7e3xEnaRa473IqNVWBq9CAwiXzkYR9UCCtUZVrA==}
+    dependencies:
+      safe-buffer: 5.2.1
+    dev: false
 
   /collect-v8-coverage/1.0.1:
     resolution: {integrity: sha512-iBPtljfCNcTKNAto0KEtDfZ3qzjJvqE3aTGZsbhjSBlorqpXJlaWWtPO35D+ZImoC3KWejX64o+yPGxhWSTzfg==}
