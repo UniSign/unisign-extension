@@ -1,10 +1,14 @@
 import { Buffer } from 'buffer'
+import { ECPairFactory } from 'ecpair'
+import * as ecc from 'tiny-secp256k1'
 
 import { secp256k1 } from '~/core/crypto'
-import { IKeypair, ParamError, ParamErrorCode, util } from '~/core'
-import { Address } from './Address'
+import { IKeypair, ParamError, ParamErrorCode } from '~/core'
+import { INetworkConfig, Network } from './const'
 
-export class Keypair implements IKeypair {
+const ECPair = ECPairFactory(ecc)
+
+export abstract class BTCKeypair implements IKeypair {
   #privateKey: Buffer
   #publicKey: Buffer
 
@@ -25,19 +29,10 @@ export class Keypair implements IKeypair {
     return this.#publicKey
   }
 
-  static fromBuffer (privateKey: Buffer): Keypair {
-    return new Keypair(privateKey)
-  }
+  abstract getNetworkConfig (network: Network): INetworkConfig
 
-  static fromHex (privateKey: string): Keypair {
-    return new Keypair(util.hexToBuffer(privateKey))
-  }
-
-  static async generate (): Promise<Keypair> {
-    return new Keypair(Buffer.from(secp256k1.utils.randomPrivateKey()))
-  }
-
-  toAddress (): Address {
-    return Address.fromBuffer(this.publicKey)
+  toWIF (network = Network.Mainnet): string {
+    const networkConfig = this.getNetworkConfig(network)
+    return ECPair.fromPrivateKey(this.#privateKey, { network: networkConfig }).toWIF()
   }
 }
