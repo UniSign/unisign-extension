@@ -1,31 +1,26 @@
 import type { BIP32Interface } from 'bip32'
+import type { BtcHdKeyringOpts } from '~/background/services/keyring/btc/btc-hd-keyring'
+import type { CkbKeypair } from '~/background/services/keyring/ckb/ckb-simple-keyring'
+import { CkbSimpleKeyring } from '~/background/services/keyring/ckb/ckb-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
-import type { BtcKeypair } from '~/background/services/keyring/btc-simple-keyring'
-import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
+import { ckb, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
-export interface BtcHdKeyringOpts {
-  hdPathBase: string
-  mnemonic: string
-  numberOfAccounts: number
-}
-
-export const type = KeyringType.BtcHD
+export const type = KeyringType.CkbHD
 
 const defaultOpts: BtcHdKeyringOpts = {
   mnemonic: '',
-  hdPathBase: 'm/84\'/0\'/0\'/0', // full path m/84'/0'/0'/0/0
+  hdPathBase: 'm/44\'/309\'/0\'/0', // full path m/44'/309'/0'/0/0
   numberOfAccounts: 1,
 }
 
-export class BtcHdKeyring extends BtcSimpleKeyring {
+export class CkbHdKeyring extends CkbSimpleKeyring {
   static type = type
   type = type
 
   opts!: BtcHdKeyringOpts
   mnemonic!: string
-  keypairs!: BtcKeypair[]
+  keypairs!: CkbKeypair[]
   root!: BIP32Interface
 
   async deserialize(opts: any): Promise<void>
@@ -57,11 +52,11 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   addAccounts (numberOfAccounts = 1): Promise<string[]> {
     const oldLen = this.keypairs.length
 
-    const newWallets: BtcKeypair[] = []
+    const newWallets: CkbKeypair[] = []
 
     for (let i = oldLen; i < oldLen + numberOfAccounts; i++) {
       const bip32 = this.root.derive(i)
-      const keypair = btc.Keypair.fromBuffer(bip32.privateKey)
+      const keypair = ckb.Keypair.fromBuffer(bip32.privateKey)
 
       this.keypairs.push(keypair)
       newWallets.push(keypair)

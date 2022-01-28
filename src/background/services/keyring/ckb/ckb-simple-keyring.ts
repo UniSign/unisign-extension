@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import type { BtcSimpleKeyringOpts } from '~/background/services/keyring/btc-simple-keyring'
+import type { BtcSimpleKeyringOpts } from '~/background/services/keyring/btc/btc-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 
 // @ts-expect-error no type

@@ -1,7 +1,7 @@
 import { approvalService } from '~/background/services/approval'
 import { chainService } from '~/background/services/chain'
 import { keyringService } from '~/background/services/keyring'
-import type { BtcHdKeyringOpts } from '~/background/services/keyring/btc-hd-keyring'
+import type { BtcHdKeyringOpts } from '~/background/services/keyring/btc/btc-hd-keyring'
 import type { KeyringBase, KeyringHD } from '~/background/services/keyring/types'
 import { KeyringType } from '~/background/services/keyring/types'
 import { pageCacheService } from '~/background/services/pageCache'

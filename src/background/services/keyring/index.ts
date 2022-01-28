@@ -5,10 +5,10 @@ import { ObservableStore } from '@metamask/obs-store'
 import autoBind from 'auto-bind'
 // @ts-expect-error no type
 import encryptor from 'browser-passworder'
-import { BtcHdKeyring } from '~/background/services/keyring/btc-hd-keyring'
-import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
-import { CkbHdKeyring } from '~/background/services/keyring/ckb-hd-keyring'
-import { CkbSimpleKeyring } from '~/background/services/keyring/ckb-simple-keyring'
+import { BtcHdKeyring } from '~/background/services/keyring/btc/btc-hd-keyring'
+import { BtcSimpleKeyring } from '~/background/services/keyring/btc/btc-simple-keyring'
+import { CkbHdKeyring } from '~/background/services/keyring/ckb/ckb-hd-keyring'
+import { CkbSimpleKeyring } from '~/background/services/keyring/ckb/ckb-simple-keyring'
 import type {
   KeyringBase,
   KeyringHD,
