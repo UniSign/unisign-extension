@@ -31,10 +31,12 @@
       }
       >p {
         margin-left: 12px;
-        font-size: $input-font-size;
+        font-size: $detail-font-size;
         color: #8D919C;
         span {
           margin-left: 0px;
+          font-size: $detail-font-size;
+          font-weight: 500;
           color: #242C3F;
         }
       }
@@ -196,7 +198,8 @@
         <p>{{ $tt('No Connect') }}</p>
       </div>
       <div v-else class="connect-item">
-        <img :src="currentSite?.icon">
+        <img v-if="currentSite.icon" :src="currentSite?.icon">
+        <Iconfont v-else name="connect" size="24"></Iconfont>
         <p>{{ substringUrl(currentSite?.origin,'agreement') }}<span>{{ substringUrl(currentSite?.origin,'domainName') }}</span></p>
       </div>
     </div>
@@ -206,7 +209,8 @@
         <span>{{ $tt('Connected Apps') }}</span>
       </div>
       <div v-for="site in sites" :key="site.name" class="connect-item">
-        <img :src="site?.icon">
+        <img v-if="site.icon" :src="site?.icon">
+        <Iconfont v-else name="connect" size="24"></Iconfont>
         <p>{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></p>
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">

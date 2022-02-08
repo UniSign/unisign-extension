@@ -2,7 +2,7 @@
 .page-home {
   position: relative;
   background-color: #DCE5F0;
-  min-height: 630px;
+  min-height: 600px;
   padding-bottom: 38px;
   .top-bg {
     width: 100%;
@@ -15,7 +15,7 @@
     top: 0;
     transform: translateX(-50%);
     left: 50%;
-    z-index: 999;
+    z-index: 9;
     width: 100%;
     height: 58px;
     padding: 0 20px;
@@ -306,7 +306,7 @@
         </div>
       </div>
     </UniDialog>
-    <SwitchKeyDialog v-if="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></SwitchKeyDialog>
+    <SwitchKeyDialog :visible="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></SwitchKeyDialog>
   </div>
 </template>
 
@@ -338,9 +338,10 @@ export default {
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
     const topLineBoxRef = ref<HTMLDivElement | null>(null)
+    const dom=document.getElementsByClassName('layout-default')[0] as HTMLDivElement
     onMounted(async () => {
-      window.onscroll = () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      dom.onscroll = () => {
+        const scrollTop = dom.scrollTop
         const transferScrollTop = scrollTop / 30
         if (scrollTop > 0) {
           isScroll.value = true

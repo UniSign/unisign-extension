@@ -23,10 +23,12 @@
     }
     >p {
       margin-left: 12px;
-      font-size: $input-font-size;
+      font-size: $detail-font-size;
       color: #8D919C;
       span {
         margin-left: 0px;
+        font-size: $detail-font-size;
+        font-weight: 500;
         color: #242C3F;
       }
     }
@@ -88,12 +90,13 @@
 </style>
 
 <template>
-  <SignWrapper :title="$tt('request permissions')" class="page-request-permission" @reject="onRejectClick" @allow="onAllowClick">
+  <SignWrapper :title="$tt('Request Permissions')" class="page-request-permission" @reject="onRejectClick" @allow="onAllowClick">
     <h2>
       {{ $tt('Website') }}
     </h2>
     <div class="website-detail-box">
-      <img :src="site?.icon">
+      <img v-if="site.icon" :src="site?.icon">
+      <Iconfont v-else name="connect" size="24"></Iconfont>
       <p>{{ substringUrl(approval?.origin,'agreement') }}<span>{{ substringUrl(approval?.origin,'domainName') }}</span></p>
     </div>
     <h2>{{ $tt('Connect Address') }}</h2>

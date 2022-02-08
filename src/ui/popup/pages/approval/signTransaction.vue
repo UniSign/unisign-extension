@@ -1,34 +1,4 @@
 <style lang="scss" scoped>
-.current-key-box {
-  padding: 7px 8px;
-  display: flex;
-  align-items: center;
-  border-radius: 8px;
-  border: 1px solid rgba(191, 191, 191, 0.29);
-  word-break: break-all;
-  background: rgba(247, 245, 244, 0.9);
-
-  >img {
-    margin-right: 5px;
-    width: 26px;
-    height: 26px;
-  }
-  >div {
-    >p {
-      margin-bottom: 4px;
-      font-size: $detail-font-size;
-      line-height: 16px;
-      color: #8D919C;
-    }
-    >span {
-      font-size: $detail-font-size;
-      font-weight: 600;
-      font-family: monospace;
-      line-height: 16px;
-      color: #6F7684;
-    }
-  }
-}
 .main-title-box {
   margin:24px 0 8px;
   display: flex;
@@ -112,21 +82,33 @@
     }
   }
 }
+.raw-box {
+  .raw-container {
+    padding: 24px;
+    border-radius: 8px;
+    .jv-container {
+      overflow: hidden;
+      overflow-y: scroll;
+      max-height: 244px;
+      background: #F1F4F8;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+}
 </style>
 
 <template>
   <SignWrapper :title="$tt('Signature Request')" @reject="onClickReject" @allow="onClickAllow">
-    <div class="current-key-box">
-      <img :src="getImageUrl(currentUnikey?.keySymbol)">
-      <div>
-        <p>{{ $tt('Current Key') }}</p>
-        <span>{{ currentUnikey?.key }}</span>
-      </div>
-    </div>
+    <CurrentKeyBox></CurrentKeyBox>
     <div class="main-title-box">
       <h2>{{ $tt('Sign Bitcoin Transaction') }}</h2>
-      <p>{{ $tt('View Raw') }}</p>
+      <p @click="isShowRawDialog = true">
+        {{ $tt('View Raw') }}
+      </p>
     </div>
+    <!-- todo: Not completed -->
     <div class="main-message-box">
       <div class="main-message-title">
         <img :src="`/assets/connect/icon-btc.png`">
@@ -155,45 +137,58 @@
       </div>
     </div>
   </SignWrapper>
+  <UniDialog class="raw-box" :title="$tt('Message Detail')" :visible="isShowRawDialog" @cancel="handleRawCancel">
+    <div class="raw-container">
+      <json-viewer :value="approval?.params.message"></json-viewer>
+    </div>
+  </UniDialog>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
+import JsonViewer from 'vue-json-viewer'
 import SignWrapper from './-/SignWrapper.vue'
-import { getImageUrl } from '~/utils/index'
+import CurrentKeyBox from './-/CurrentKeyBox.vue'
 import { SignStructMessageParams } from '~/background/controllers/provider/index'
 import { ApprovalData } from '~/background/services/approval'
-import { Unikey } from '~/background/services/unikey'
 import { wallet } from '~/ui/controllers/wallet'
 
 export default {
   name: 'PageSignTransaction',
   components: {
     SignWrapper,
+    JsonViewer,
+    CurrentKeyBox,
   },
   setup () {
-    function onClickReject () {
-      wallet.rejectApproval()
-    }
     function onClickAllow () {
       wallet.resolveApproval()
     }
 
+    function onClickReject () {
+      wallet.rejectApproval()
+    }
+
+    const isShowRawDialog = ref(false)
+    const handleRawCancel = () => {
+      isShowRawDialog.value = false
+    }
+    const jsonData = ref({})
     const approval = ref<ApprovalData<SignStructMessageParams>| null>()
-    const currentUnikey = ref<Unikey|null>()
 
     onMounted(async () => {
       approval.value = await wallet.getApproval()
-      currentUnikey.value = await wallet.getCurrentUnikey()
     })
 
     return {
       onClickReject,
       onClickAllow,
-      getImageUrl,
+
+      isShowRawDialog,
+      handleRawCancel,
+      jsonData,
 
       approval,
-      currentUnikey,
     }
   },
 }

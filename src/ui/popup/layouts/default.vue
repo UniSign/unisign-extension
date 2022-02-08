@@ -1,7 +1,11 @@
 <style lang="scss" scoped>
 .layout-default {
   width: 350px;
-  height: 630px;
+  height: 600px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>
 

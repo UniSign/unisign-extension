@@ -33,34 +33,15 @@
     }
   }
   .mnemonicDialog {
-    .slot-container {
-      padding: 24px;
-      .mnemonic-box {
+    :deep(.slot-container) {
+      padding: 22px;
+      .mnemonics {
         margin-bottom: 40px;
-        display: flex;
-        flex-wrap: wrap;
         .mnemonic-item {
           margin: 0 5px 8px 0;
           width: 86px;
-          height: 32px;
-          box-sizing: border-box;
-          border-radius: 4px;
-          border: 1px solid rgba(191, 191, 191, 0.09);
-          display: flex;
-          align-items: center;
-          background: #F9F7F6;
-          &:nth-child(3n) {
-            margin: 0 0 8px 0;
-          }
           span {
-            margin: 0 9px 0 8px;
-            line-height: 14px;
-            color: #C9CCD3;
-          }
-          p {
-            font-size: $detail-font-size;
-            font-weight: bold;
-            line-height: 16px;
+            margin: 0 8px 0 5px;
           }
         }
       }
@@ -82,12 +63,12 @@
         }
       }
       .uni-btn {
-        ::v-deep .reject {
+        :deep(.reject) {
           border:none;
           background: #F7F8FA;
           color: #0D0C0C;
         }
-        ::v-deep .allow {
+        :deep(.allow) {
           border:none;
           background: #EE5757;
         }
@@ -115,6 +96,7 @@
         <UniInput
           ref="passwordRef"
           v-model="password"
+          password
           width="100%"
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"
@@ -137,12 +119,7 @@
     </UniDialog>
     <UniDialog class="mnemonicDialog" :visible="isShowMnemonicDialog" :title="$tt('Mnemonic')" @cancel="isShowMnemonicDialog= false">
       <div class="slot-container">
-        <div class="mnemonic-box">
-          <div v-for="(item,index) in mnemonicArr" :key="index" class="mnemonic-item">
-            <span>{{ index+1 }}</span>
-            <p>{{ item }}</p>
-          </div>
-        </div>
+        <MnemonicBox class="mnemonics" :mnemonic-arr="mnemonicArr"></MnemonicBox>
         <UniBtn class="uni-btn" @click="handleMnemonicCancel">
           {{ $tt('OK') }}
         </UniBtn>
@@ -177,6 +154,7 @@
 <script lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import MnemonicBox from '../../addAddress/-/MnemonicBox.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import UniInput from '~/ui/components/UniInput.vue'
 import { Unikey } from '~/background/services/unikey'
@@ -185,6 +163,9 @@ type CurrentEventName ='viewPrivateKey' | 'viewMnemonic' | 'deletePrivateKey' | 
 
 export default {
   name: 'KeySettingsDialog',
+  components: {
+    MnemonicBox,
+  },
   emits: ['onUnikeysChanged'],
   setup (props, context) {
     const isShowPrivateKeyDialog = ref(false)
@@ -242,7 +223,7 @@ export default {
 
     // dangerousDialog
     const isShowDangerousDialog = ref(false)
-    const dangerousText = ref(i18n.$tt('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.'))
+    const dangerousText = ref('')
     const handleDangerousCancel = () => {
       isShowDangerousDialog.value = false
       if (currentEventName === 'viewPrivateKey' || currentEventName === 'viewMnemonic') {
@@ -257,6 +238,7 @@ export default {
     const onClickViewPrivateKey = (unikey: Unikey) => {
       currentUnikey.value = unikey
       currentEventName = 'viewPrivateKey'
+      dangerousText.value = i18n.$tt('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.')
       isShowDangerousDialog.value = true
     }
     const handlePrivateKeyCancel = () => {
@@ -266,6 +248,7 @@ export default {
     // viewMnemonic
     const onClickViewMnemonic = () => {
       currentEventName = 'viewMnemonic'
+      dangerousText.value = i18n.$tt('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.')
       isShowDangerousDialog.value = true
     }
     const handleMnemonicCancel = () => {

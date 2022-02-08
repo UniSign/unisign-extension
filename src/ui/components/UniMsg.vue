@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 .uni-msg {
   position: fixed;
-  z-index: 1000;
+  z-index: 10;
   top: 7px;
   left: 50%;
   transform: translateX(-50%);

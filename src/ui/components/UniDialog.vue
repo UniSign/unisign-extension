@@ -5,6 +5,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,6 +80,7 @@
 </template>
 
 <script lang="ts">
+import { watch } from 'vue'
 
 export default {
   name: 'UniDialog',
@@ -104,6 +106,18 @@ export default {
     const cancel = () => {
       context.emit('cancel')
     }
+    watch(() => props.visible, (newVal, oldVal) => {
+      const dom = document.getElementsByClassName('layout-default')[0]
+      if (newVal) {
+        (dom as HTMLDivElement).style.height = '600px';
+        (dom as HTMLDivElement).style.overflow = 'hidden'
+      }
+      else {
+        (dom as HTMLDivElement).style.height = '600px';
+        (dom as HTMLDivElement).style.overflow = 'scroll'
+      }
+    })
+
     return {
       cancel,
     }

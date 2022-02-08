@@ -62,6 +62,7 @@
         <UniInput
           ref="passwordRef"
           v-model="password"
+          password
           width="100%"
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"

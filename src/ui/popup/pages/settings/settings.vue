@@ -33,7 +33,7 @@
 
 <template>
   <div class="page-settings">
-    <UniTab :title="$tt('settings')"></UniTab>
+    <UniTab :title="$tt('Settings')"></UniTab>
     <div class="settings-box">
       <div v-for="(item,index) in settingsArr" :key="index" class="settings-item-box" @click="onClickSettingItem(item)">
         <Iconfont class="icon-key mr-[20px]" :name="item.key" width="16" height="16" :color="item.color"></Iconfont>

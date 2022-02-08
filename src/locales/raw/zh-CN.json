@@ -23,7 +23,6 @@
   "Confirm _e6c": "Confirm to delete,",
   "Connect _1b9": "Connect Address",
   "Connect _24f": "Connect hard wallet",
-  "Connect _7ef": "Connect Request",
   "Connecte_3e1": "Connected Apps",
   "Continue": "Continue",
   "Copied": "Copied",
@@ -82,6 +81,7 @@
   "QR Code": "QR Code",
   "Reject": "Reject",
   "Repeat": "Repeat",
+  "Request _7ec": "Request Permissions",
   "Reset Un_7da": "Reset UniSign?",
   "Reset Un_a99": "Reset UniSign",
   "Save": "Save",
@@ -109,7 +109,6 @@
   "Tips": "Tips",
   "To addre_e6c": "To address",
   "Transfer": "Transfer",
-  "Transfer_838": "Transfer Owner of jack.bit to",
   "Unlike c_d28": "Unlike centralized account systems, such as cell phone numbers/email/social accounts, DAS offers a decentralized and open sourced approach to account systems. DAS can be used as a digital assets collection account, as an account for accessing general Internet services.",
   "View Mne_146": "View Mnemonic",
   "View Pri_bf0": "View Private Key",
@@ -122,6 +121,5 @@
   "enter": "enter",
   "language": "language",
   "private _a8e": "private key",
-  "request _79e": "request permissions",
   "settings": "settings"
 }

@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 .wrapper-sign {
   width: 350px;
-  height: 630px;
+  height: 100%;
   .page-connect {
     position: relative;
     width: 100%;

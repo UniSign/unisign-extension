@@ -24,7 +24,7 @@
 
 <template>
   <div class="page-add-address-success">
-    <UniTab :disabled="true" :title="$tt('Create Mnemonic')"></UniTab>
+    <UniTab :disabled="true" :title="title"></UniTab>
     <div class="central-content">
       <img class="w-[189px] h-[161px] mx-auto mt-[77px]" :src="`/assets/page-addAddress/success-bg.png`">
       <h2>{{ $tt('Success') }}</h2>
@@ -37,10 +37,28 @@
 </template>
 
 <script lang="ts">
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 export default {
   name: 'PageAddAddressSuccess',
   setup () {
+    const route = useRoute()
+    const i18n = useI18n()
+    const title = ref('')
+    onMounted(async () => {
+      if (route.query.title === 'DeriveFromMnemonic') {
+        title.value = i18n.$tt('Derive From Mnemonic')
+      }
+      else {
+        title.value = i18n.$tt('Create Mnemonic')
+      }
+    })
+
+    return {
+      title,
+    }
   },
 }
 </script>

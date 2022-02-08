@@ -57,7 +57,7 @@
 </style>
 
 <template>
-  <UniDialog class="switch-key-box" :visible="true" :title="$tt('Switch Key')" @cancel="handleSwitchCancel">
+  <UniDialog class="switch-key-box" :visible="visible" :title="$tt('Switch Key')" @cancel="handleSwitchCancel">
     <div class="switch-key-content">
       <div v-if="derivedUniKeys.length" class="derived-box">
         <h2>{{ $tt('Derived from Mnemonic') }}</h2>
@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="switch-key-btn-box">
-      <UniBtn class="switch-key-btn" @click="$router.push('/addAddress')">
+      <UniBtn class="switch-key-btn" @click="onClickAddKey">
         {{ $tt('Add Key') }}
       </UniBtn>
     </div>
@@ -95,12 +95,24 @@ export default {
   name: 'SwitchKeyDialog',
   components: {
   },
+  props: {
+    visible: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   emits: ['cancel', 'hasSwitch'],
   setup (props, context) {
     const router = useRouter()
 
     const handleSwitchCancel = () => {
       context.emit('cancel')
+    }
+
+    const onClickAddKey = () => {
+      context.emit('cancel')
+      router.push('/addAddress')
     }
 
     const currentUnikey = ref(null)
@@ -125,6 +137,7 @@ export default {
 
     return {
       handleSwitchCancel,
+      onClickAddKey,
       currentUnikey,
       visibleUnikeys,
       derivedUniKeys,
