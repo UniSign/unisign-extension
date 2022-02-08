@@ -11,6 +11,9 @@
         <el-menu-item index="3">
           <router-link to="/ckb">CKB</router-link>
         </el-menu-item>
+        <el-menu-item index="4">
+          <router-link to="/doge">DOGE</router-link>
+        </el-menu-item>
       </el-menu>
     </el-header>
 
