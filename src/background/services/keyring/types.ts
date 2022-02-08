@@ -4,8 +4,13 @@ export interface SerializedKeyringData {
 
 // export type Keyring = KeyringHD | KeyringBase
 export enum KeyringType {
+  // btc
   BtcSimple = 'BTC Simple Key Pair', // BtcSimpleKeyring.type
   BtcHD = 'BTC HD Key Tree', // BtcHdKeyring.type
+  // ckb
+  CkbSimple = 'CKB Simple Key Pair', // CkbHdKeyring.type
+  CkbHD = 'CKB HD Key Tree', // CkbHdKeyring.type
+  // eth
   EthSimple = 'ETH Simple Key Pair', // EthSimpleKeyring.type
   EthHD = 'ETH HD Key Tree', // EthHdKeyring.type
 
@@ -13,7 +18,7 @@ export enum KeyringType {
   WalletConnect = 'WalletConnect',
   OpenPGP = 'openPGP',
   Ledger = 'Ledger Hardware',
-  Trezor = 'Trezor Hardware'
+  Trezor = 'Trezor Hardware',
 }
 
 // todo: this should be modified to meet our needs
@@ -22,7 +27,7 @@ export interface KeyringBase<T extends SerializedKeyringData = SerializedKeyring
 
   serialize (): Promise<T>
 
-  deserialize (obj: T): Promise<void>
+  deserialize (obj?: T): Promise<void>
 
   addAccounts (n: number): Promise<string[]>
 
@@ -33,10 +38,6 @@ export interface KeyringBase<T extends SerializedKeyringData = SerializedKeyring
   signPlainMessage (address: string, data: string, opts: object): Promise<string>
 
   signStructMessage (address: string, typedData: object, opts: object): Promise<string>
-
-  decryptMessage (withAccount: string, encryptedData: string, opts: object): string
-
-  getEncryptionPublicKey (withAccount: string, opts: object): Promise<string>
 
   exportAccount (address: string, opts?: object): Promise<string>
 

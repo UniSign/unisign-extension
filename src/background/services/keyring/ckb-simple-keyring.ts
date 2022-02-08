@@ -1,35 +1,28 @@
 import { EventEmitter } from 'events'
+import type { BtcSimpleKeyringOpts } from '~/background/services/keyring/btc-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
+
 // @ts-expect-error no type
-import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
-
-export interface SerializedKeypair {
-  privateKey: string
-}
-
-export interface BtcSimpleKeyringOpts {
-  keypairs: SerializedKeypair[]
-}
+import { ckb, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
 // copy from unisign-sign-lib
-export interface BtcKeypair {
+export interface CkbKeypair {
   privateKey: string
   publicKey: string
   toAddress: () => {
-    toNativeSegwitAddress(): string
-    // toSegwitAddress(): string
-    // toLegacyAddress(): string
+    toLegacyShortAddress(): string
+    // toFullAddress(): string
   }
   // address: string
 }
 
-export const type = KeyringType.BtcSimple
+export const type = KeyringType.CkbSimple
 
-export class BtcSimpleKeyring extends EventEmitter {
+export class CkbSimpleKeyring extends EventEmitter {
   static type = type
   type = type
 
-  keypairs: BtcKeypair[] = []
+  keypairs: CkbKeypair[] = []
 
   constructor (opts?: BtcSimpleKeyringOpts) {
     super()
@@ -39,7 +32,7 @@ export class BtcSimpleKeyring extends EventEmitter {
 
   async deserialize (opts?: BtcSimpleKeyringOpts): Promise<void> {
     this.keypairs = opts?.keypairs.map((w) => {
-      return btc.Keypair.fromHex(w.privateKey)
+      return ckb.Keypair.fromHex(w.privateKey)
     }) || []
   }
 
@@ -83,17 +76,17 @@ export class BtcSimpleKeyring extends EventEmitter {
     return Promise.resolve(this.keypairs.map(w => this.getAddress(w)))
   }
 
-  getWallet (address: string): BtcKeypair|undefined {
+  getWallet (address: string): CkbKeypair|undefined {
     return this.keypairs.find(w => this.getAddress(w) === address)
   }
 
-  getAddress (keypair: BtcKeypair) {
-    return keypair.toAddress().toNativeSegwitAddress()
+  getAddress (keypair: CkbKeypair) {
+    return keypair.toAddress().toLegacyShortAddress()
   }
 
   async signTransaction (address: string, psbtHex: string) {
     const keypair = this.getWallet(address)
-    const signProvider = btc.SignProvider.create({
+    const signProvider = ckb.SignProvider.create({
       keypairs: [keypair],
     })
 
@@ -102,7 +95,7 @@ export class BtcSimpleKeyring extends EventEmitter {
 
   async signPlainMessage (address: string, text: string): Promise<string> {
     const keypair = this.getWallet(address)
-    const signProvider = btc.SignProvider.create({
+    const signProvider = ckb.SignProvider.create({
       keypairs: [keypair],
     })
 
@@ -112,7 +105,7 @@ export class BtcSimpleKeyring extends EventEmitter {
 
   async signStructMessage (address: string, data: object): Promise<string> {
     const keypair = this.getWallet(address)
-    const signProvider = btc.SignProvider.create({
+    const signProvider = ckb.SignProvider.create({
       keypairs: [keypair],
     })
 

@@ -1,17 +1,21 @@
 import { approvalService } from '~/background/services/approval'
 import { chainService } from '~/background/services/chain'
 import { keyringService } from '~/background/services/keyring'
-import { KeyringBase, KeyringHD, KeyringType } from '~/background/services/keyring/types'
+import type { BtcHdKeyringOpts } from '~/background/services/keyring/btc-hd-keyring'
+import type { KeyringBase, KeyringHD } from '~/background/services/keyring/types'
+import { KeyringType } from '~/background/services/keyring/types'
 import { pageCacheService } from '~/background/services/pageCache'
 import { permissionService } from '~/background/services/permission'
 import { personalService } from '~/background/services/personal'
 import { sessionService } from '~/background/services/session'
 import { settingsService } from '~/background/services/settings'
-import { SiteData, siteService } from '~/background/services/site'
-import { Unikey, UnikeyChainHD, unikeyService, UnikeyType } from '~/background/services/unikey'
+import type { SiteData } from '~/background/services/site'
+import { siteService } from '~/background/services/site'
+import type { Unikey, UnikeyChainHD } from '~/background/services/unikey'
+import { UnikeyType, unikeyService } from '~/background/services/unikey'
 import { storage } from '~/background/tools/storage'
 import { windows } from '~/background/tools/windows'
-import { KeyIdentifier, CHAINS } from '~/constants'
+import { CHAINS, KeyIdentifier } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
 export const Events = {
@@ -175,8 +179,15 @@ export class WalletController {
   }
 
   async deriveNewAccountFromMnemonic (identifier: KeyIdentifier) {
-    const type = CHAINS[identifier].HDKeyringType
-    const keyring = keyringService.getKeyringByType(type)
+    const chain = CHAINS[identifier]
+    const keyringType = CHAINS[identifier].HDKeyringType
+    let keyring = keyringService.getKeyringByType(keyringType)
+
+    if (!keyring) {
+      keyring = await keyringService.addNewKeyring(keyringType, {
+        mnemonic: this._getMnemonic(),
+      } as Pick<BtcHdKeyringOpts, 'mnemonic'>)
+    }
 
     const newAccount = await keyringService.addNewAccount(keyring)
 
@@ -186,7 +197,7 @@ export class WalletController {
       keyringType: keyring.type,
       nickname: '',
       hidden: false,
-      keySymbol: KeyIdentifier.BTC,
+      keySymbol: chain.unikeySymbol,
     } as UnikeyChainHD, true)
 
     // this should be at the last

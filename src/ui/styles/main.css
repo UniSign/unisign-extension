@@ -11,14 +11,18 @@ html {
   -ms-overflow-style: none; /* IE 10+ */
 }
 
+html::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+
 html,p,h2,span,input,textarea {
   font-weight: 400;
   font-size: 12px;
   color: #242C3F;
 }
 
-html::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+body {
+  overscroll-behavior: none; /* prevent scroll bouncing on mac */
 }
 
 .btn {

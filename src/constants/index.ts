@@ -1,4 +1,4 @@
-import { ChainData } from '~/background/services/chain'
+import type { ChainData } from '~/background/services/chain'
 import { KeyringType } from '~/background/services/keyring/types'
 
 export const UNISIGN_ORIGIN = 'https://unisign.org'
@@ -11,7 +11,7 @@ export enum KeyIdentifier {
   // OpenPGP = 'OpenPGP',
 }
 
-export const HDKeyrings = [KeyringType.BtcHD, KeyringType.EthHD]
+export const HDKeyrings = [KeyringType.BtcHD, KeyringType.CkbHD]
 
 export const CHAINS: Record<KeyIdentifier, ChainData> = {
   [KeyIdentifier.BTC]: {
@@ -44,14 +44,14 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     chainId: undefined,
     logo: '',
     tokenLogo: '',
-    HDKeyringType: KeyringType.BtcHD, // todo: change to ckbHD
-    simpleKeyringType: KeyringType.BtcHD,
+    HDKeyringType: KeyringType.CkbHD,
+    simpleKeyringType: KeyringType.CkbSimple,
   },
 }
 
 export enum LOCALES {
   en = 'en',
-  zhCN = 'zh-CN'
+  zhCN = 'zh-CN',
 }
 
 export const LocaleOptions = [{
