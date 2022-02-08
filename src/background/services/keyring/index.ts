@@ -9,6 +9,8 @@ import { BtcHdKeyring } from '~/background/services/keyring/btc/btc-hd-keyring'
 import { BtcSimpleKeyring } from '~/background/services/keyring/btc/btc-simple-keyring'
 import { CkbHdKeyring } from '~/background/services/keyring/ckb/ckb-hd-keyring'
 import { CkbSimpleKeyring } from '~/background/services/keyring/ckb/ckb-simple-keyring'
+import { DogeHdKeyring } from '~/background/services/keyring/doge/doge-hd-keyring'
+import { DogeSimpleKeyring } from '~/background/services/keyring/doge/doge-simple-keyring'
 import type {
   KeyringBase,
   KeyringHD,
@@ -24,7 +26,7 @@ import { storage } from '~/background/tools/storage'
 // @ts-expect-error no type
 import { core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
-const keyringTypes = [BtcSimpleKeyring, BtcHdKeyring, CkbSimpleKeyring, CkbHdKeyring] as KeyringClassType[]
+const keyringTypes = [BtcSimpleKeyring, BtcHdKeyring, CkbSimpleKeyring, CkbHdKeyring, DogeSimpleKeyring, DogeHdKeyring] as KeyringClassType[]
 
 interface MemStoreKeyring {
   type: string

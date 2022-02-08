@@ -10,6 +10,9 @@ export enum KeyringType {
   // ckb
   CkbSimple = 'CKB Simple Key Pair', // CkbHdKeyring.type
   CkbHD = 'CKB HD Key Tree', // CkbHdKeyring.type
+  // doge
+  DogeSimple = 'DOGE Simple Key Pair', // DogeHdKeyring.type
+  DogeHD = 'DOGE HD Key Tree', // DogeHdKeyring.type
   // eth
   EthSimple = 'ETH Simple Key Pair', // EthSimpleKeyring.type
   EthHD = 'ETH HD Key Tree', // EthHdKeyring.type
