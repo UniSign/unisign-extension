@@ -1,16 +1,16 @@
 import { BaseHdKeyring } from '~/background/services/keyring/base/base-hd-keyring'
-import { getAddress, signPlainMessage, signStructMessage, signTransaction } from '~/background/services/keyring/ckb/ckb-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
+import { getAddress, signPlainMessage, signStructMessage, signTransaction } from '~/background/services/keyring/doge/doge-simple-keyring'
 
-export const type = KeyringType.CkbHD
+export const type = KeyringType.DogeHD
 
-export class CkbHdKeyring extends BaseHdKeyring {
+export class DogeHdKeyring extends BaseHdKeyring {
   static type = type
   type = type
 
   defaultOpts = {
     mnemonic: '',
-    hdPathBase: 'm/44\'/309\'/0\'/0', // full path m/44'/309'/0'/0/0
+    hdPathBase: 'm/44\'/3\'/0\'/0', // full path m/44'/3'/0'/0/0
     numberOfAccounts: 1,
   }
 
