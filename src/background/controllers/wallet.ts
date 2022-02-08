@@ -1,7 +1,7 @@
 import { approvalService } from '~/background/services/approval'
 import { chainService } from '~/background/services/chain'
 import { keyringService } from '~/background/services/keyring'
-import type { BtcHdKeyringOpts } from '~/background/services/keyring/btc-hd-keyring'
+import type { BaseHdKeyringOpts } from '~/background/services/keyring/base/base-hd-keyring'
 import type { KeyringBase, KeyringHD } from '~/background/services/keyring/types'
 import { KeyringType } from '~/background/services/keyring/types'
 import { pageCacheService } from '~/background/services/pageCache'
@@ -186,7 +186,7 @@ export class WalletController {
     if (!keyring) {
       keyring = await keyringService.addNewKeyring(keyringType, {
         mnemonic: this._getMnemonic(),
-      } as Pick<BtcHdKeyringOpts, 'mnemonic'>)
+      } as Pick<BaseHdKeyringOpts, 'mnemonic'>)
     }
 
     const newAccount = await keyringService.addNewAccount(keyring)

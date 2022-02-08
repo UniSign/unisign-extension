@@ -7,43 +7,40 @@ export interface SerializedKeypair {
   privateKey: string
 }
 
-export interface BtcSimpleKeyringOpts {
+export interface BaseSimpleKeyringOpts {
   keypairs: SerializedKeypair[]
 }
 
 // copy from unisign-sign-lib
-export interface BtcKeypair {
+export interface BaseKeypair {
   privateKey: string
   publicKey: string
-  toAddress: () => {
-    toNativeSegwitAddress(): string
-    // toSegwitAddress(): string
-    // toLegacyAddress(): string
-  }
-  // address: string
+  toAddress: () => any
 }
 
-export const type = KeyringType.BtcSimple
+const type = KeyringType.BtcSimple
 
-export class BtcSimpleKeyring extends EventEmitter {
+export abstract class BaseSimpleKeyring<KEY_PAIR extends BaseKeypair = BaseKeypair> extends EventEmitter {
   static type = type
   type = type
 
-  keypairs: BtcKeypair[] = []
+  keypairs: KEY_PAIR[] = []
 
-  constructor (opts?: BtcSimpleKeyringOpts) {
+  constructor (opts?: BaseSimpleKeyringOpts) {
     super()
 
     this.deserialize(opts)
   }
 
-  async deserialize (opts?: BtcSimpleKeyringOpts): Promise<void> {
+  abstract getAddress(keypair: KEY_PAIR): string
+
+  async deserialize (opts?: BaseSimpleKeyringOpts): Promise<void> {
     this.keypairs = opts?.keypairs.map((w) => {
       return btc.Keypair.fromHex(w.privateKey)
     }) || []
   }
 
-  serialize (): Promise<BtcSimpleKeyringOpts> {
+  serialize (): Promise<BaseSimpleKeyringOpts> {
     return Promise.resolve({
       keypairs: this.keypairs.map((w) => {
         return {
@@ -83,12 +80,8 @@ export class BtcSimpleKeyring extends EventEmitter {
     return Promise.resolve(this.keypairs.map(w => this.getAddress(w)))
   }
 
-  getWallet (address: string): BtcKeypair|undefined {
+  getWallet (address: string): KEY_PAIR|undefined {
     return this.keypairs.find(w => this.getAddress(w) === address)
-  }
-
-  getAddress (keypair: BtcKeypair) {
-    return keypair.toAddress().toNativeSegwitAddress()
   }
 
   async signTransaction (address: string, psbtHex: string) {

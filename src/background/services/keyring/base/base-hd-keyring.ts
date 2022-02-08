@@ -1,11 +1,11 @@
 import type { BIP32Interface } from 'bip32'
+import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simple-keyring'
+import type { BaseKeypair } from '~/background/services/keyring/base/base-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
 import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
-import type { BtcKeypair } from '~/background/services/keyring/btc-simple-keyring'
-import { BtcSimpleKeyring } from '~/background/services/keyring/btc-simple-keyring'
 
-export interface BtcHdKeyringOpts {
+export interface BaseHdKeyringOpts {
   hdPathBase: string
   mnemonic: string
   numberOfAccounts: number
@@ -13,24 +13,24 @@ export interface BtcHdKeyringOpts {
 
 export const type = KeyringType.BtcHD
 
-const defaultOpts: BtcHdKeyringOpts = {
-  mnemonic: '',
-  hdPathBase: 'm/84\'/0\'/0\'/0', // full path m/84'/0'/0'/0/0
-  numberOfAccounts: 1,
-}
-
-export class BtcHdKeyring extends BtcSimpleKeyring {
+export abstract class BaseHdKeyring<KEY_PAIR extends BaseKeypair = BaseKeypair> extends BaseSimpleKeyring {
   static type = type
   type = type
 
-  opts!: BtcHdKeyringOpts
+  defaultOpts: BaseHdKeyringOpts = {
+    mnemonic: '',
+    hdPathBase: 'm/84\'/0\'/0\'/0', // full path m/84'/0'/0'/0/0
+    numberOfAccounts: 1,
+  }
+
+  opts!: BaseHdKeyringOpts
   mnemonic!: string
-  keypairs!: BtcKeypair[]
+  keypairs!: KEY_PAIR[]
   root!: BIP32Interface
 
   async deserialize(opts: any): Promise<void>
-  async deserialize (opts: Partial<BtcHdKeyringOpts> = {}): Promise<void> {
-    this.opts = Object.assign({}, defaultOpts, opts)
+  async deserialize (opts: Partial<BaseHdKeyringOpts> = {}): Promise<void> {
+    this.opts = Object.assign({}, this.defaultOpts, opts)
     this.mnemonic = this.opts.mnemonic
     this.keypairs = []
 
@@ -44,7 +44,7 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   }
 
   serialize(): Promise<any>
-  serialize (): Promise<BtcHdKeyringOpts> {
+  serialize (): Promise<BaseHdKeyringOpts> {
     return Promise.resolve({
       mnemonic: this.mnemonic,
       numberOfAccounts: this.keypairs.length,
@@ -57,7 +57,7 @@ export class BtcHdKeyring extends BtcSimpleKeyring {
   addAccounts (numberOfAccounts = 1): Promise<string[]> {
     const oldLen = this.keypairs.length
 
-    const newWallets: BtcKeypair[] = []
+    const newWallets: KEY_PAIR[] = []
 
     for (let i = oldLen; i < oldLen + numberOfAccounts; i++) {
       const bip32 = this.root.derive(i)
