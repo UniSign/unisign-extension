@@ -8,6 +8,7 @@
       height: 58px;
       box-shadow: 0px 1px 0px 0px rgba(141, 145, 156, 0.12);
       background: #FFFFFF;
+      z-index: 1;
       div {
         position: absolute;
         left: 11px;
