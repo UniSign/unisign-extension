@@ -46,7 +46,7 @@ export abstract class BaseSimpleKeyring<KEY_PAIR extends BaseKeypair = BaseKeypa
 
   serialize (): Promise<BaseSimpleKeyringOpts> {
     return Promise.resolve({
-      privateKeys: this.keypairs.map(w => w.privateKey),
+      privateKeys: this.keypairs.map(w => core.util.bufferToHex(w.privateKey)),
     })
   }
 

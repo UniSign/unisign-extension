@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { wallet } from '~/ui/controllers/wallet'
 
 export default defineComponent({

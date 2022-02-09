@@ -1,38 +1,9 @@
 <style lang="scss" scoped>
 .page-add-address {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  .key-box {
-    padding: 70px 16px;
-    .key-item-box {
-      width: 100%;
-      height: 66px;
-
-      margin-top: 12px;
-      padding: 13px 17px 13px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(191, 191, 191, 0.09);
-      display: flex;
-      align-items: center;
-      background: #F9F7F6;
-      cursor: pointer;
-      &:hover {
-        background: #F0EDED;
-      }
-      img {
-        width: 40px;
-        height: 40px;
-        margin-right: 14px;
-      }
-      span {
-        font-size: $input-font-size;
-        font-weight: 500;
-      }
-      .arrow-right {
-        margin-left: auto;
-      }
-    }
+  .icon-img {
+    width: 40px;
+    height: 40px;
+    margin-right: 14px;
   }
 }
 </style>
@@ -40,13 +11,18 @@
 <template>
   <div class="page-add-address">
     <UniTab :title="$tt('Select Key Type')"></UniTab>
-    <div class="key-box">
-      <div v-for="(item,index) in keyTypes" :key="index" class="key-item-box" @click="$router.push(`/addAddress/selectWays/${item.unikeySymbol}`)">
-        <img :src="getImageUrl(item.unikeySymbol)">
-        <span>{{ item.name }}</span>
-        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
-      </div>
-    </div>
+
+    <div style="margin-top: 82px"></div>
+
+    <BoxList v-for="(item,index) in keyTypes" :key="index">
+      <BoxItem :to="`/addAddress/selectWays/${item.unikeySymbol}`">
+        <template #head>
+          <img class="icon-img" :src="getImageUrl(item.unikeySymbol)">
+        </template>
+        {{ item.name }}
+      </BoxItem>
+    </BoxList>
+
     <Ironman></Ironman>
   </div>
 </template>
@@ -54,9 +30,15 @@
 <script lang="ts">
 import { CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
+import BoxItem from '~/ui/components/Box/BoxItem.vue'
+import BoxList from '~/ui/components/Box/BoxList.vue'
 
 export default {
   name: 'PageAddAddress',
+  components: {
+    BoxItem,
+    BoxList,
+  },
   setup () {
     const keyTypes = Object.values(CHAINS)
 

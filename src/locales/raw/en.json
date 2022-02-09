@@ -50,6 +50,7 @@
   "Fee": "Fee",
   "I got it": "I got it",
   "Import": "Import",
+  "Import A_4aa": "Import Another Mnemonic",
   "Import K_186": "Import Keystore File",
   "Import K_f80": "Import Keystore",
   "Import M_9a4": "Import Mnemonic",
@@ -89,7 +90,7 @@
   "Security_2af": "Security & Backup",
   "Security_e30": "Security Verification",
   "Select K_2b9": "Select Key Type",
-  "Select w_94d": "Select ways",
+  "Select W_54d": "Select Ways",
   "Send BTC": "Send BTC",
   "Set a pa_f47": "Set a password",
   "Set an A_2cf": "Set an Anti-Phishing Code",
@@ -119,7 +120,5 @@
   "You may _c7b": "You may lost your asset if you are not backup properly.",
   "below.": "below.",
   "enter": "enter",
-  "language": "language",
-  "private _a8e": "private key",
-  "settings": "settings"
+  "private _a8e": "private key"
 }

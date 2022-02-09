@@ -1,49 +1,25 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .page-security-and-backup {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  .settings-box {
-    padding: 70px 16px 0;
-    .settings-item-box {
-      width: 100%;
-      height: 66px;
-      margin-top: 12px;
-      padding: 0px 17px 0px 24px;
-      border-radius: 12px;
-      border: 1px solid rgba(191, 191, 191, 0.09);
-      display: flex;
-      align-items: center;
-      background: #F9F7F6;
-      cursor: pointer;
-      &:hover {
-        background: #F0EDED;
-      }
-      >span {
-        width: 200px;
-        font-size: $input-font-size;
-        font-weight: 500;
-        line-height: 19px;
-      }
-      .arrow-right {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-        >span {
-          margin-right: 8px;
-          font-size: $input-font-size;
-          font-weight: 500;
-          color: #8D919C;
-          line-height: 24px;
-        }
-      }
+  .box-item {
+    .box-item_head {
+      width: 0;
     }
   }
+
+  .setting-anti-fishing-desc {
+    margin-right: 6px;
+    font-size: $input-font-size;
+    vertical-align: middle;
+    font-weight: 500;
+    color: #8D919C;
+  }
+
   .phishingCodeDialog {
     .slot-container {
       padding: 32px 24px 24px;
     }
   }
+
   .tipsDialog {
     .slot-container {
       padding: 24px;
@@ -59,30 +35,32 @@
 
 <template>
   <div class="page-security-and-backup">
-    <UniMsg :visible="canShowMsg" :content="msgContent" @close="canShowMsg= false"></UniMsg>
-    <UniTab :title="$tt('Security & Backup')"></UniTab>
-    <div class="settings-box">
-      <div class="settings-item-box" @click="isShowPhishingCodeDialog = true">
-        <span>{{ $tt('Anti-Phishing Code') }}</span>
-        <div class="arrow-right">
-          <span>{{ antiPhishingCode }}</span>
-          <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
-        </div>
-      </div>
-      <div class="settings-item-box" @click="isShowTipsDialog = true">
-        <span>{{ $tt('Cancel All Authorized Permissions') }}</span>
-        <div class="arrow-right">
-          <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
-        </div>
-      </div>
-      <div class="settings-item-box" @click="onClickViewMnemonic">
-        <span>{{ $tt('Backup Mnemonic') }}</span>
-        <div class="arrow-right">
-          <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
-        </div>
-      </div>
-    </div>
-    <Ironman ref="ironmanRef"></Ironman>
+    <UniMsg :visible="canShowMsg" :content="msgContent" @close="canShowMsg= false" />
+    <UniTab :title="$tt('Security & Backup')" />
+
+    <BoxList :pad-top="82">
+      <BoxItem @click="isShowPhishingCodeDialog = true">
+        {{ $tt('Anti-Phishing Code') }}
+        <template #tail>
+          <span class="setting-anti-fishing-desc">{{ antiPhishingCode }}</span>
+          <Iconfont name="arrow-right" width="12" height="14" color="#D8D8D8" />
+        </template>
+      </BoxItem>
+    </BoxList>
+
+    <BoxList>
+      <BoxItem @click="isShowTipsDialog = true">
+        {{ $tt('Cancel All Authorized Permissions') }}
+      </BoxItem>
+    </BoxList>
+
+    <BoxList>
+      <BoxItem @click="onClickViewMnemonic">
+        {{ $tt('Backup Mnemonic') }}
+      </BoxItem>
+    </BoxList>
+
+    <Ironman ref="ironmanRef" />
     <UniDialog class="phishingCodeDialog" :visible="isShowPhishingCodeDialog" :title="$tt('Anti-Phishing Code')" @cancel="isShowPhishingCodeDialog = false">
       <div class="slot-container">
         <UniInput
@@ -93,7 +71,7 @@
           class="uni-input mb-[58px]"
           validate-text="Supports up to 10 characters"
           :placeholder="antiPhishingCode"
-        ></UniInput>
+        />
         <UniBtn class="uni-btn" :disabled="!phishingCode" @click="handlePhishingCodeCancel">
           {{ $tt('Save') }}
         </UniBtn>
@@ -109,7 +87,7 @@
         </UniBtn>
       </div>
     </UniDialog>
-    <KeySettingsDialog ref="keySettingsDialogRef"></KeySettingsDialog>
+    <KeySettingsDialog ref="keySettingsDialogRef" />
   </div>
 </template>
 
@@ -118,13 +96,17 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
-import UniInput from '~/ui/components/UniInput.vue'
-import Ironman from '~/ui/components/Ironman.vue'
+import type UniInput from '~/ui/components/UniInput.vue'
+import type Ironman from '~/ui/components/Ironman.vue'
+import BoxList from '~/ui/components/Box/BoxList.vue'
+import BoxItem from '~/ui/components/Box/BoxItem.vue'
 
 export default {
   name: 'PageSecurityAndBackup',
   components: {
     KeySettingsDialog,
+    BoxList,
+    BoxItem,
   },
   setup () {
     const canShowMsg = ref(false)

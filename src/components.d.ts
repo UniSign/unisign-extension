@@ -4,6 +4,8 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BoxItem: typeof import('./ui/components/Box/BoxItem.vue')['default']
+    BoxList: typeof import('./ui/components/Box/BoxList.vue')['default']
     Iconfont: typeof import('./ui/components/Iconfont.vue')['default']
     Ironman: typeof import('./ui/components/Ironman.vue')['default']
     UniBtn: typeof import('./ui/components/UniBtn.vue')['default']

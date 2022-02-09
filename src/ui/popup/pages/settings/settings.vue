@@ -1,46 +1,22 @@
 <style lang="scss" scoped>
 .page-settings {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  .settings-box {
-    padding: 70px 16px 0;
-    .settings-item-box {
-      width: 100%;
-      height: 66px;
-      margin-top: 12px;
-      padding: 13px 17px 13px 24px;
-      border-radius: 12px;
-      border: 1px solid rgba(191, 191, 191, 0.09);
-      display: flex;
-      align-items: center;
-      background: #F9F7F6;
-      cursor: pointer;
-      &:hover {
-        background: #F0EDED;
-      }
-      span {
-        font-size: $input-font-size;
-        font-weight: 500;
-      }
-      .arrow-right {
-        margin-left: auto;
-      }
-    }
-  }
 }
 </style>
 
 <template>
   <div class="page-settings">
     <UniTab :title="$tt('Settings')"></UniTab>
-    <div class="settings-box">
-      <div v-for="(item,index) in settingsArr" :key="index" class="settings-item-box" @click="onClickSettingItem(item)">
-        <Iconfont class="icon-key mr-[20px]" :name="item.key" width="16" height="16" :color="item.color"></Iconfont>
-        <span>{{ item.value }}</span>
-        <Iconfont class="arrow-right" name="arrow-right" width="12" height="14" color="#D8D8D8"></Iconfont>
-      </div>
-    </div>
+
+    <div style="margin-top: 82px"></div>
+
+    <BoxList v-for="(item,index) in settingsArr" :key="index" @click="onClickSettingItem(item)">
+      <BoxItem>
+        <template #head>
+          <Iconfont class="icon-key" :name="item.key" width="16" height="16" :color="item.color" />
+        </template>
+        {{ item.value }}
+      </BoxItem>
+    </BoxList>
     <Ironman></Ironman>
   </div>
 </template>
@@ -50,6 +26,8 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { windows } from '~/background/tools/windows'
+import BoxItem from '~/ui/components/Box/BoxItem.vue'
+import BoxList from '~/ui/components/Box/BoxList.vue'
 
 interface Setting {
   key: string
@@ -59,6 +37,10 @@ interface Setting {
 }
 export default {
   name: 'PageSettings',
+  components: {
+    BoxItem,
+    BoxList,
+  },
   setup () {
     const router = useRouter()
     const i18n = useI18n()
