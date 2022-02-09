@@ -15,7 +15,7 @@ export function getAddress (keypair: BtcKeypair): string {
   return keypair.toAddress().toNativeSegwitAddress()
 }
 
-export const type = KeyringType.BtcSimple
+const type = KeyringType.BtcSimple
 
 export class BtcSimpleKeyring extends BaseSimpleKeyring<BtcKeypair> {
   static type = type

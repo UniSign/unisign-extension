@@ -3,12 +3,8 @@ import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
 import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
-export interface SerializedKeypair {
-  privateKey: string
-}
-
 export interface BaseSimpleKeyringOpts {
-  keypairs: SerializedKeypair[]
+  privateKeys: string[]
 }
 
 // copy from unisign-sign-lib
@@ -43,18 +39,14 @@ export abstract class BaseSimpleKeyring<KEY_PAIR extends BaseKeypair = BaseKeypa
   }
 
   async deserialize (opts?: BaseSimpleKeyringOpts): Promise<void> {
-    this.keypairs = opts?.keypairs.map((w) => {
-      return this.getKeypairFromHex(w.privateKey)
+    this.keypairs = opts?.privateKeys.map((privateKey) => {
+      return this.getKeypairFromHex(privateKey)
     }) || []
   }
 
   serialize (): Promise<BaseSimpleKeyringOpts> {
     return Promise.resolve({
-      keypairs: this.keypairs.map((w) => {
-        return {
-          privateKey: w.privateKey,
-        }
-      }),
+      privateKeys: this.keypairs.map(w => w.privateKey),
     })
   }
 

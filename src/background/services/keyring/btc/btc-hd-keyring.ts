@@ -5,7 +5,7 @@ import { getAddress } from '~/background/services/keyring/btc/btc-simple-keyring
 // @ts-expect-error no type
 import { btc } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
-export const type = KeyringType.BtcHD
+const type = KeyringType.BtcHD
 
 export class BtcHdKeyring extends BaseHdKeyring {
   static type = type

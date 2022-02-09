@@ -46,7 +46,7 @@ export async function signStructMessage (this: CkbSimpleKeyring, address: string
   return core.util.bufferToHex(signature)
 }
 
-export const type = KeyringType.CkbSimple
+const type = KeyringType.CkbSimple
 export class CkbSimpleKeyring extends BaseSimpleKeyring<CkbKeypair> {
   static type = type
   type = type

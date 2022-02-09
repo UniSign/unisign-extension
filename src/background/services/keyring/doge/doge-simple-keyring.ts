@@ -14,7 +14,7 @@ export interface DogeKeypair {
   }
 }
 
-export const type = KeyringType.DogeSimple
+const type = KeyringType.DogeSimple
 
 export function getAddress (keypair: DogeKeypair) {
   return keypair.toAddress().toLegacyAddress()
@@ -50,6 +50,9 @@ export async function signStructMessage (this: DogeSimpleKeyring, address: strin
 }
 
 export class DogeSimpleKeyring extends BaseSimpleKeyring {
+  static type = type
+  type = type
+
   getAddress = getAddress
   signTransaction = signTransaction
   signPlainMessage = signPlainMessage

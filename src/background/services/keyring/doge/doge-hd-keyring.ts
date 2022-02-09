@@ -5,7 +5,7 @@ import { getAddress, signPlainMessage, signStructMessage, signTransaction } from
 // @ts-expect-error no type
 import { doge } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
-export const type = KeyringType.DogeHD
+const type = KeyringType.DogeHD
 
 export class DogeHdKeyring extends BaseHdKeyring {
   static type = type
