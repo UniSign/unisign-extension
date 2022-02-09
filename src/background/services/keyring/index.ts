@@ -174,6 +174,7 @@ export class KeyringService extends EventEmitter {
       numberOfAccounts: 1,
     }
 
+    // todo: creation should use selected type
     const defaultKeyring = await this.createKeyringByType(KeyringType.BtcHD, keyringConfig) as KeyringHD
 
     return this.clearKeyrings()

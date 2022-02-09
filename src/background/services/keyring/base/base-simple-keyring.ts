@@ -34,9 +34,17 @@ export abstract class BaseSimpleKeyring<KEY_PAIR extends BaseKeypair = BaseKeypa
 
   abstract getAddress(keypair: KEY_PAIR): string
 
+  getKeypairFromHex (privateKey: string): KEY_PAIR {
+    return btc.Keypair.fromHex(privateKey)
+  }
+
+  getKeypairFromBuffer (privateKey: Buffer): KEY_PAIR {
+    return btc.Keypair.fromBuffer(privateKey)
+  }
+
   async deserialize (opts?: BaseSimpleKeyringOpts): Promise<void> {
     this.keypairs = opts?.keypairs.map((w) => {
-      return btc.Keypair.fromHex(w.privateKey)
+      return this.getKeypairFromHex(w.privateKey)
     }) || []
   }
 

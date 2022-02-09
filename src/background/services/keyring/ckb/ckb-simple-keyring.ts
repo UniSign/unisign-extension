@@ -1,7 +1,7 @@
 import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { ckb, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
 // copy from unisign-sign-lib
 export interface CkbKeypair {
@@ -19,7 +19,7 @@ export function getAddress (keypair: CkbKeypair) {
 
 export async function signTransaction (this: CkbSimpleKeyring, address: string, psbtHex: string) {
   const keypair = this.getWallet(address)
-  const signProvider = btc.SignProvider.create({
+  const signProvider = ckb.SignProvider.create({
     keypairs: [keypair],
   })
 
@@ -28,7 +28,7 @@ export async function signTransaction (this: CkbSimpleKeyring, address: string, 
 
 export async function signPlainMessage (this: CkbSimpleKeyring, address: string, text: string): Promise<string> {
   const keypair = this.getWallet(address)
-  const signProvider = btc.SignProvider.create({
+  const signProvider = ckb.SignProvider.create({
     keypairs: [keypair],
   })
 
@@ -38,7 +38,7 @@ export async function signPlainMessage (this: CkbSimpleKeyring, address: string,
 
 export async function signStructMessage (this: CkbSimpleKeyring, address: string, data: object): Promise<string> {
   const keypair = this.getWallet(address)
-  const signProvider = btc.SignProvider.create({
+  const signProvider = ckb.SignProvider.create({
     keypairs: [keypair],
   })
 
@@ -55,4 +55,7 @@ export class CkbSimpleKeyring extends BaseSimpleKeyring<CkbKeypair> {
   signTransaction = signTransaction
   signPlainMessage = signPlainMessage
   signStructMessage = signStructMessage
+  getKeypairFromHex (privateKey: string): CkbKeypair {
+    return ckb.Keypair.fromHex(privateKey)
+  }
 }
