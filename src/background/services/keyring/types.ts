@@ -50,7 +50,7 @@ export interface KeyringBase<T extends SerializedKeyringData = SerializedKeyring
 }
 
 export interface KeyringSimpleOpts {
-  privateKeys: string[]
+  privateKeys: Array<string>
 }
 
 export interface KeyringSimple extends KeyringBase<KeyringSimpleOpts> {

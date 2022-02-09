@@ -1,9 +1,9 @@
 import type { BIP32Interface } from 'bip32'
 import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simple-keyring'
 import type { BaseKeypair } from '~/background/services/keyring/base/base-simple-keyring'
-import { KeyringType } from '~/background/services/keyring/types'
+import type { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
 
 export interface BaseHdKeyringOpts {
   hdPathBase: string
@@ -11,11 +11,9 @@ export interface BaseHdKeyringOpts {
   numberOfAccounts: number
 }
 
-export const type = KeyringType.BtcHD
-
 export abstract class BaseHdKeyring<KEY_PAIR extends BaseKeypair = BaseKeypair> extends BaseSimpleKeyring {
-  static type = type
-  type = type
+  static type: KeyringType
+  type!: KeyringType
 
   defaultOpts: BaseHdKeyringOpts = {
     mnemonic: '',
@@ -34,12 +32,12 @@ export abstract class BaseHdKeyring<KEY_PAIR extends BaseKeypair = BaseKeypair> 
     this.mnemonic = this.opts.mnemonic
     this.keypairs = []
 
-    if (this.mnemonic) {
+    if (this.mnemonic && this.opts.hdPathBase) {
       await this.initFromMnemonic(this.mnemonic)
-    }
 
-    if (opts.numberOfAccounts) {
-      await this.addAccounts(opts.numberOfAccounts)
+      if (opts.numberOfAccounts) {
+        await this.addAccounts(opts.numberOfAccounts)
+      }
     }
   }
 
@@ -61,7 +59,7 @@ export abstract class BaseHdKeyring<KEY_PAIR extends BaseKeypair = BaseKeypair> 
 
     for (let i = oldLen; i < oldLen + numberOfAccounts; i++) {
       const bip32 = this.root.derive(i)
-      const keypair = btc.Keypair.fromBuffer(bip32.privateKey)
+      const keypair = this.getKeypairFromBuffer(bip32.privateKey!) as KEY_PAIR
 
       this.keypairs.push(keypair)
       newWallets.push(keypair)

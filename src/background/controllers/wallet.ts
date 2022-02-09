@@ -153,6 +153,7 @@ export class WalletController {
   hasMnemonic = keyringService.hasMnemonic
 
   private _getMnemonic (): string {
+    // todo: there may be not BtcHD
     const keyring = keyringService.getKeyringByType(KeyringType.BtcHD) as KeyringHD
 
     return keyring.mnemonic

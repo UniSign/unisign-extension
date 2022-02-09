@@ -11,7 +11,7 @@ export enum KeyIdentifier {
   // OpenPGP = 'OpenPGP',
 }
 
-export const HDKeyrings = [KeyringType.BtcHD, KeyringType.CkbHD]
+export const HDKeyrings = [KeyringType.BtcHD, KeyringType.CkbHD, KeyringType.DogeHD]
 
 export const CHAINS: Record<KeyIdentifier, ChainData> = {
   [KeyIdentifier.BTC]: {
@@ -33,8 +33,8 @@ export const CHAINS: Record<KeyIdentifier, ChainData> = {
     chainId: undefined,
     logo: '',
     tokenLogo: '',
-    HDKeyringType: KeyringType.BtcHD, // todo: change to dogeHD
-    simpleKeyringType: KeyringType.BtcHD,
+    HDKeyringType: KeyringType.DogeHD,
+    simpleKeyringType: KeyringType.DogeSimple,
   },
   [KeyIdentifier.CKB]: {
     name: 'Nervos',
@@ -57,10 +57,10 @@ export enum LOCALES {
 export const LocaleOptions = [{
   text: 'English',
   value: LOCALES.en,
-}, {
+}, /* {
   text: '中文',
   value: LOCALES.zhCN,
-}]
+} */]
 
 export const UIPopupName = 'ui_popup'
 export const UITabName = 'ui_tab'

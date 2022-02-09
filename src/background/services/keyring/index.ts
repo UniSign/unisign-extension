@@ -174,6 +174,7 @@ export class KeyringService extends EventEmitter {
       numberOfAccounts: 1,
     }
 
+    // todo: creation should use selected type
     const defaultKeyring = await this.createKeyringByType(KeyringType.BtcHD, keyringConfig) as KeyringHD
 
     return this.clearKeyrings()
@@ -300,8 +301,9 @@ export class KeyringService extends EventEmitter {
   checkForDuplicate (type: string, newAccountArray: string[]) {
     return this.getAccounts().then((accounts) => {
       switch (type) {
-        case CkbSimpleKeyring.type:
-        case BtcSimpleKeyring.type: {
+        case KeyringType.BtcSimple:
+        case KeyringType.DogeSimple:
+        case KeyringType.CkbSimple: {
           const isIncluded = accounts.includes(newAccountArray[0])
 
           if (isIncluded) {
@@ -440,7 +442,7 @@ export class KeyringService extends EventEmitter {
       .then(() => keyring)
   }
 
-  private async createKeyringByType (type: KeyringType, opts?: object) {
+  private async createKeyringByType (type: KeyringType, opts?: object): Promise<KeyringBase> {
     const KeyringClass = this.getKeyringClassForType(type)
     const keyring = new KeyringClass(opts)
     await keyring.deserialize(opts)
@@ -449,7 +451,10 @@ export class KeyringService extends EventEmitter {
   }
 
   async importPrivateKey (privateKey: string, type: KeyringType): Promise<KeyringSimple> {
-    const keyring = await this.createKeyringByType(type, { privateKeys: [privateKey] } as KeyringSimpleOpts) as KeyringSimple
+    const opts: KeyringSimpleOpts = {
+      privateKeys: [privateKey],
+    }
+    const keyring = await this.createKeyringByType(type, opts) as KeyringSimple
 
     return this.addKeyring(keyring)
       .then(() => this.persistAllKeyrings())

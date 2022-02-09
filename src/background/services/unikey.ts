@@ -46,7 +46,7 @@ export interface UniKeyOpenPGP extends UnikeyBase {
 }
 
 export interface UnikeyChainHD extends UnikeyChain {
-  keyringType: KeyringType.BtcHD | KeyringType.EthHD
+  keyringType: KeyringType.BtcHD | KeyringType.DogeHD | KeyringType.CkbHD
 }
 
 export interface UniKeyChainSimple extends UnikeyChain {
@@ -96,7 +96,7 @@ class UnikeyService extends AutoBindService {
    */
   addUnikey (newUnikey: Unikey, isHD: boolean) {
     if (isHD) {
-      let lastHDAccountIndex = 0
+      let lastHDAccountIndex = -1
       let length = 0
 
       this.store.unikeys.forEach((unikey, index) => {
@@ -108,7 +108,12 @@ class UnikeyService extends AutoBindService {
 
       newUnikey.nickname = `Mnemonic ${length}`
 
-      this.store.unikeys.splice(lastHDAccountIndex + 1, 0, newUnikey)
+      if (lastHDAccountIndex > -1) {
+        this.store.unikeys.splice(lastHDAccountIndex + 1, 0, newUnikey)
+      }
+      else {
+        this.store.unikeys.push(newUnikey)
+      }
     }
     else {
       this.store.unikeys.push(newUnikey)
