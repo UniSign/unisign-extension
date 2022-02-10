@@ -1,28 +1,29 @@
 import { AutoBindService } from '~/background/services/base/auto-bind'
-import { KeyringType } from '~/background/services/keyring/types'
+import type { KeyringType } from '~/background/services/keyring/types'
 import { personalService } from '~/background/services/personal'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { CHAINS, KeyIdentifier } from '~/constants'
+import type { UnikeySymbol } from '~/constants'
+import { CHAINS } from '~/constants'
 
 export enum UnikeyType {
   blockchain = 'blockchain',
-  openPGP = 'openPGP'
+  openPGP = 'openPGP',
 }
 
 export enum WalletConnectBrand {
   imtoken = 'imtoken',
   tokenPocket = 'tokenPocket',
-  trustWallet = 'trustWallet'
+  trustWallet = 'trustWallet',
 }
 
 export enum HardwareBrand {
   trezor = 'trezor',
-  ledger = 'ledger'
+  ledger = 'ledger',
 }
 
 export interface UnikeyBase {
   // used to identify the type of unikey(CHAINS) across unisign-extension
-  keySymbol: KeyIdentifier
+  keySymbol: UnikeySymbol
 
   key: string
   nickname: string
@@ -40,7 +41,7 @@ export interface UnikeyChain extends UnikeyBase {
 }
 
 export interface UniKeyOpenPGP extends UnikeyBase {
-  // keySymbol: KeyIdentifier.OpenPGP
+  // keySymbol: KeySymbol.OpenPGP
   keyType: UnikeyType.openPGP
   keyringType: KeyringType.OpenPGP
 }

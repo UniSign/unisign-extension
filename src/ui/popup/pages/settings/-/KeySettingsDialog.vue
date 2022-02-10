@@ -101,7 +101,7 @@
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"
           :validate-text="validataText"
-          :placeholder="$tt('Set a password')"
+          :placeholder="$tt('Enter password')"
         ></UniInput>
         <UniBtn class="uni-btn" :disabled="!password" @click="handleSecurityCancel">
         </UniBtn>

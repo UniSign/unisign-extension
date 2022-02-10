@@ -251,10 +251,10 @@
 <script lang="ts">
 import { ref } from 'vue'
 import { ApprovalPage } from '~/background/services/approval'
-import { ChainData } from '~/background/services/chain'
-import { SiteData } from '~/background/services/site'
-import { Unikey } from '~/background/services/unikey'
-import { CHAINS, KeyIdentifier, LocaleOptions, LOCALES } from '~/constants'
+import type { ChainData } from '~/background/services/chain'
+import type { SiteData } from '~/background/services/site'
+import type { Unikey } from '~/background/services/unikey'
+import { CHAINS, UnikeySymbol, LOCALES, LocaleOptions } from '~/constants'
 import { wallet } from '~/ui/controllers/wallet'
 import { sleep } from '~/utils'
 
@@ -346,12 +346,12 @@ export default {
     // Chains
     const supportedChains = ref<ChainData[]>([])
     const enabledChains = ref<ChainData[]>([])
-    async function onClickEnableChain (identifier: KeyIdentifier) {
-      await wallet.enableChain(identifier)
+    async function onClickEnableChain (keySymbol: UnikeySymbol) {
+      await wallet.enableChain(keySymbol)
       enabledChains.value = await wallet.getEnabledChains()
     }
-    async function onClickDisableChain (identifier: KeyIdentifier) {
-      await wallet.disabledChain(identifier)
+    async function onClickDisableChain (keySymbol: UnikeySymbol) {
+      await wallet.disabledChain(keySymbol)
       enabledChains.value = await wallet.getEnabledChains()
     }
     onMounted(async () => {
@@ -397,9 +397,9 @@ export default {
     // keyring
     const importedPrivateKey = ref('')
     const importedMnemonic = ref('')
-    const chain = ref<KeyIdentifier>(KeyIdentifier.BTC)
-    async function onClickDeriveAddress (identifier: KeyIdentifier) {
-      await wallet.deriveNewAccountFromMnemonic(identifier)
+    const chain = ref<UnikeySymbol>(UnikeySymbol.BTC)
+    async function onClickDeriveAddress (keySymbol: UnikeySymbol) {
+      await wallet.deriveNewAccountFromMnemonic(keySymbol)
 
       await onUnikeysChanged()
     }
