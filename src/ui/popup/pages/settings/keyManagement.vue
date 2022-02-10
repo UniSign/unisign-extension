@@ -181,7 +181,7 @@
 
 <template>
   <div class="page-key-management">
-    <UniTab :title="$tt('Key Management')"></UniTab>
+    <UniTab :title="$tt('Key Management')" />
     <div class="settings-box">
       <template v-if="derivedUniKeys.length">
         <h2>{{ $tt('Derived from Mnemonic') }}</h2>
@@ -189,9 +189,9 @@
           <img :src="getImageUrl(unikey.keySymbol,unikey.hidden)">
           <span>{{ substringKey(unikey.key) }}</span>
           <div class="arrow-right" @click="onClickSettings(unikey)">
-            <Iconfont name="more" width="12" height="12" color="#6F7684"></Iconfont>
+            <Iconfont name="more" width="12" height="12" color="#6F7684" />
           </div>
-          <div v-show="unikey.key === isSettingkey" class="popover">
+          <div v-if="unikey.key === isSettingkey" v-click-outside="onClickOutside" class="popover">
             <div v-if="unikey.hidden" @click="onClickEnable(unikey)">
               {{ $tt('Enable') }}
             </div>
@@ -213,9 +213,9 @@
           <img :src="getImageUrl(unikey.keySymbol)">
           <span>{{ substringKey(unikey.key) }}</span>
           <div class="arrow-right" @click="onClickSettings(unikey)">
-            <Iconfont name="more" width="12" height="12" color="#6F7684"></Iconfont>
+            <Iconfont name="more" width="12" height="12" color="#6F7684" />
           </div>
-          <div v-show="unikey.key === isSettingkey" class="popover">
+          <div v-if="unikey.key === isSettingkey" v-click-outside="onClickOutside" class="popover">
             <div @click="onClickDeletePrivateKey(unikey)">
               {{ $tt('Delete') }}
             </div>
@@ -231,8 +231,8 @@
         {{ $tt('Add Key') }}
       </UniBtn>
     </div>
-    <Ironman></Ironman>
-    <KeySettingsDialog ref="keySettingsDialogRef" @onUnikeysChanged="onUnikeysChanged"></KeySettingsDialog>
+    <Ironman />
+    <KeySettingsDialog ref="keySettingsDialogRef" @onUnikeysChanged="onUnikeysChanged" />
   </div>
 </template>
 
@@ -242,7 +242,7 @@ import KeySettingsDialog from './-/KeySettingsDialog.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { HDKeyrings } from '~/constants'
 import { getImageUrl, substringKey } from '~/utils'
-import { Unikey } from '~/background/services/unikey'
+import type { Unikey } from '~/background/services/unikey'
 
 export default {
   name: 'PageKeyManagement',
@@ -346,6 +346,10 @@ export default {
 
       // deletePrivateKey
       onClickDeletePrivateKey,
+
+      onClickOutside () {
+        isSettingkey.value = ''
+      },
     }
   },
 }

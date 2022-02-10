@@ -68,6 +68,7 @@
     "bip39": "^3.0.4",
     "browser-passworder": "^2.0.3",
     "buffer": "^6.0.3",
+    "click-outside-vue3": "^4.0.1",
     "clipboard": "^2.0.8",
     "crx-bridge": "3",
     "eth-hd-keyring": "^3.6.0",
