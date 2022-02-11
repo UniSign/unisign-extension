@@ -26,7 +26,7 @@
     height: 270px;
     box-shadow: 0px 9px 12px 0px rgba(141, 145, 156, 0.2);
     border-radius: 22px;
-    margin: 78px auto 0;
+    margin: 66px auto 0;
     padding: 32px 24px 24px;
     background: rgba(255, 255, 255, 0.45);
   }
@@ -40,16 +40,16 @@
     <h2>{{ $tt('Bring all crypto users into') }}<span>{{ $tt('Web3.0') }}</span></h2>
 
     <div class="input-box">
-      <UniInput ref="passwordRef" v-model="password" password :placeholder="$tt('Set a password')"></UniInput>
+      <UniInput ref="passwordRef" v-model="password" password :placeholder="$tt('Set a password')" />
       <UniInput
         ref="rePasswordRef"
         v-model="rePassword"
         password
-        :validate-text="validataText"
+        :validate-text="validateText"
         class="mt-[32px] mb-[32px]"
         :placeholder="$tt('Repeat')"
-      ></UniInput>
-      <UniBtn :disabled="!!(!password || !rePassword)" @click="onClickSetup"></UniBtn>
+      />
+      <UniBtn :disabled="!(password&&rePassword)" @click="onClickSetup" />
       <!-- <router-link to="/test">
         test
       </router-link> -->
@@ -62,7 +62,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { wallet } from '~/ui/controllers/wallet'
-import UniInput from '~/ui/components/UniInput.vue'
+import type UniInput from '~/ui/components/UniInput.vue'
 
 export default {
   name: 'PageSetup',
@@ -74,16 +74,23 @@ export default {
     const rePassword = ref('')
     const passwordRef = ref(null)
     const rePasswordRef = ref<InstanceType<typeof UniInput>>()
-    const validataText = ref('')
+    const validateText = ref('')
     const onClickSetup = async () => {
       if (!password.value || !rePassword.value) return
       if (rePassword.value !== password.value) {
-        validataText.value = i18n.$tt('The passwords do not match')
+        validateText.value = i18n.$tt('The passwords do not match')
         rePasswordRef.value?.validate()
         return
       }
+
+      if (password.value.length < 8) {
+        validateText.value = i18n.$tt('Password should have at least 8 characters')
+        rePasswordRef.value?.validate()
+        return
+      }
+
       await wallet.setupWallet(password.value).catch((e) => {
-        validataText.value = e
+        validateText.value = e
         rePasswordRef.value?.validate()
         throw new Error(e)
       })
@@ -95,7 +102,7 @@ export default {
       rePassword,
       passwordRef,
       rePasswordRef,
-      validataText,
+      validateText,
       onClickSetup,
     }
   },

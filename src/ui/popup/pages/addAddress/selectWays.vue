@@ -30,7 +30,7 @@
         <template #head>
           <Iconfont name="key" size="17" color="#8E98B2" />
         </template>
-        {{ $tt('Import by priority key') }}
+        {{ $tt('Import by Private Key') }}
       </BoxItem>
 
       <BoxItem v-if="!hasMnemonic" to="/import/importMnemonic">

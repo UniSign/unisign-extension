@@ -25,7 +25,7 @@ export const CHAINS: Record<UnikeySymbol, ChainData> = {
     simpleKeyringType: KeyringType.BtcSimple,
   },
   [UnikeySymbol.DOGE]: {
-    name: 'Doge',
+    name: 'Dogecoin',
     unikeySymbol: UnikeySymbol.DOGE,
     tokenSymbol: UnikeySymbol.DOGE,
     coinType: '3',

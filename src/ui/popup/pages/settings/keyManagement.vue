@@ -185,7 +185,7 @@
     <div class="settings-box">
       <template v-if="derivedUniKeys.length">
         <h2>{{ $tt('Derived from Mnemonic') }}</h2>
-        <div v-for="unikey in derivedUniKeys" :key="unikey.key" class="settings-item-box">
+        <div v-for="unikey in derivedUniKeys" :key="unikey.key" class="settings-item-box" :class="{_hidden: unikey.hidden}">
           <img :src="getImageUrl(unikey.keySymbol,unikey.hidden)">
           <span>{{ substringKey(unikey.key) }}</span>
           <div class="arrow-right" @click="onClickSettings(unikey)">

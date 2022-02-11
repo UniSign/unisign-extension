@@ -9,6 +9,11 @@
     background: $main-btn-bg;
     color: #FFFFFF;
     opacity: 1;
+
+    &:not(._disabled):hover {
+      background-color: $hover-btn-bg;
+    }
+
     &._disabled {
       opacity: 0.4;
     }

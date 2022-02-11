@@ -3,6 +3,8 @@
   position: relative;
   width: 100%;
   height: 100%;
+  padding-top: 122px;
+
   >h2 {
     margin-top: 16px;
     font-size: $title-font-size;
@@ -14,13 +16,13 @@
     margin: 32px auto 0;
     display: block;
   }
-  >p {
+  .locked-help {
     position: absolute;
-    top: 577px;
-    transform: translateX(-50%);
-    left: 50%;
+    bottom: 36px;
+    left: 0;
+    right: 0;
+    text-align: center;
     font-size: $detail-font-size;
-    line-height: 16px;
     color: #2A67C5;
     cursor: pointer;
   }
@@ -29,7 +31,7 @@
 
 <template>
   <div class="page-locked">
-    <img class="w-[122px] h-[122px] mx-auto mt-[119px]" :src="`/assets/page-setup/locked-logo.png`">
+    <img class="w-[122px] h-[122px] mx-auto" :src="`/assets/page-setup/locked-logo.png`">
     <h2>{{ $tt('Welcome Back') }}</h2>
     <UniInput
       ref="passwordRef"
@@ -41,11 +43,12 @@
       :placeholder="$tt('Enter password')"
       @keyup.enter="triggerValidate"
       @triggerValidate="triggerValidate"
-    ></UniInput>
-    <p>
+    />
+    <!--todo: add link-->
+    <a class="locked-help">
       {{ $tt('Need Help?') }}
-    </p>
-    <Ironman></Ironman>
+    </a>
+    <Ironman />
   </div>
 </template>
 
@@ -54,7 +57,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { wallet } from '~/ui/controllers/wallet'
-import UniInput from '~/ui/components/UniInput.vue'
+import type UniInput from '~/ui/components/UniInput.vue'
 
 export default {
   name: 'PageLocked',

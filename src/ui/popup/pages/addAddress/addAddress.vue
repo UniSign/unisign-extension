@@ -1,9 +1,9 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .page-add-address {
-  .icon-img {
-    width: 40px;
-    height: 40px;
-    margin-right: 14px;
+  .box-item {
+    .box-item_head {
+      width: 40px;
+    }
   }
 }
 </style>
@@ -15,7 +15,7 @@
     <div style="margin-top: 82px"></div>
 
     <BoxList v-for="(item,index) in keyTypes" :key="index">
-      <BoxItem :to="`/addAddress/selectWays/${item.unikeySymbol}`">
+      <BoxItem class="box-item" :to="`/addAddress/selectWays/${item.unikeySymbol}`">
         <template #head>
           <img class="icon-img" :src="getImageUrl(item.unikeySymbol)">
         </template>

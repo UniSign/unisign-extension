@@ -41,7 +41,7 @@
   }
   .central-bg-1 {
     position: absolute;
-    top: 294px;
+    top: 292px;
     transform: translateX(-50%);
     left: 50%;
     width: 277px;
@@ -53,7 +53,7 @@
   }
   .central-bg-2 {
     position: absolute;
-    top: 291px;
+    top: 289px;
     transform: translateX(-50%);
     left: 50%;
     width: 295px;
@@ -75,11 +75,12 @@
     height: 267px;
     background: #E9EDF3;
     .address-part {
-      h2 {
+      .address-title {
         margin-top: 64px;
         text-align: center;
         font-size: $detail-font-size;
         line-height: 16px;
+        color: #6D88A1;
       }
       p {
         margin: 16px auto 0;
@@ -104,7 +105,7 @@
         height: 54px;
         display: flex;
         align-items: center;
-        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        border-top: 1px solid rgba(36, 44, 63, 0.05);
         .icon-wrapper {
           position: relative;
           width: 22px;
@@ -162,7 +163,7 @@
   }
   .qr-code-box{
     .qr-code {
-      margin: 42px auto 8px;
+      margin: 42px auto 16px;
       display: block;
       width: 206px;
       height: 206px;
@@ -182,9 +183,17 @@
       word-break: break-all;
       cursor: pointer;
       background: #F9F7F6;
+
       span {
+        font-size: 14px;
+        font-weight: bold;
         font-family: monospace;
+
+        &:hover {
+          opacity: 0.5;
+        }
       }
+
       &:hover {
         .popover {
           display: block;
@@ -194,99 +203,52 @@
   }
 }
 
-.popover {
-  display: none;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 7px 11px;
-  box-sizing: border-box;
-  box-shadow: 0px -5px 6px 0px rgba(0, 0, 0, 0.16);
-  border-radius: 8px;
-  font-size: $detail-font-size;
-  font-weight: 500;
-  white-space: nowrap;
-  background: #11142D;
-  color: #FFFFFF;
-}
-
-.popover-top {
-  top: -42px;
-  &:after {
-    content: "";
-    width: 0;
-    height: 0;
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 6px 6px 0px;
-    border-style: solid;
-    border-color: #0D0C49 transparent transparent;
-  }
-}
-
-.popover-bottom {
-  bottom: -42px;
-  &:after {
-    content: "";
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 0 6px 6px;
-    border-style: solid;
-    border-color: transparent transparent #0D0C49;
-  }
-}
 </style>
 
 <template>
   <div class="page-home">
-    <UniMsg :visible="canShowMsg" :content="$tt('Copied')" @close="canShowMsg= false"></UniMsg>
-    <div class="top-bg"></div>
+    <UniMsg :visible="canShowMsg" :content="$tt('Copied')" @close="canShowMsg= false" />
+    <div class="top-bg" />
     <div ref="topLineBoxRef" class="top-line-box">
       <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
-        <Iconfont name="settings" size="20" :color="iconFontColor"></Iconfont>
-        <div class="popover popover-bottom">
+        <Iconfont name="settings" size="20" :color="iconFontColor" />
+        <Popover bottom>
           {{ $tt('Settings') }}
-        </div>
+        </Popover>
       </div>
       <img class="w-[134px] h-[36px]" :src="`/assets/page-home/nav-${isScroll?'logo-scroll':'logo'}.png`">
       <div class="icon-wrapper cursor-pointer" @click="onClickLock">
-        <Iconfont name="lock" size="20" :color="iconFontColor"></Iconfont>
-        <div class="popover popover-bottom">
+        <Iconfont name="lock" size="20" :color="iconFontColor" />
+        <Popover bottom>
           {{ $tt('Lock') }}
-        </div>
+        </Popover>
       </div>
     </div>
-    <div class="central-bg-1"></div>
-    <div class="central-bg-2"></div>
+    <div class="central-bg-1" />
+    <div class="central-bg-2" />
     <div class="central-content">
       <div class="address-part">
-        <h2>{{ currentUnikeyName }} {{ $tt('Address') }}</h2>
+        <h2 class="address-title">{{ currentUnikeyName }} {{ $tt('Address') }}</h2>
         <p>{{ currentUnikey?.key }}</p>
         <div>
           <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
-            <Iconfont name="copy" size="13" color="#6D88A1"></Iconfont>
-            <div class="popover popover-bottom">
+            <Iconfont name="copy" size="13" color="#6D88A1" />
+            <Popover bottom>
               {{ $tt('Copy Address') }}
-            </div>
+            </Popover>
           </div>
           <div class="icon-wrapper mr-[16px] cursor-pointer" @click="isShowQRCodeDialog = true">
-            <Iconfont name="qrcode" size="13" color="#6D88A1"></Iconfont>
-            <div class="popover popover-bottom">
+            <Iconfont name="qrcode" size="13" color="#6D88A1" />
+            <Popover bottom>
               {{ $tt('QR Code') }}
-            </div>
+            </Popover>
           </div>
-          <i class="mr-[16px]"></i>
+          <i class="mr-[16px]" />
           <div class="icon-wrapper cursor-pointer">
-            <Iconfont name="switch" size="13" color="#6D88A1"></Iconfont>
-            <div class="popover popover-bottom">
+            <Iconfont name="switch" size="13" color="#6D88A1" />
+            <Popover bottom>
               {{ $tt('Transfer') }}
-            </div>
+            </Popover>
           </div>
           <div class="switch cursor-pointer" @click="isShowSwitchKeyDialog = true">
             {{ $tt('Switch') }}
@@ -295,18 +257,18 @@
       </div>
     </div>
     <img class="key-icon" :src="getImageUrl(currentUnikey?.keySymbol)">
-    <ConnectSites></ConnectSites>
-    <Ironman></Ironman>
+    <ConnectSites />
+    <Ironman />
     <UniDialog class="qr-code-box" :title="$tt('Account Detail')" :visible="isShowQRCodeDialog" @cancel="handleQRCancel">
       <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
       <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
         <span>{{ currentUnikey?.key }}</span>
-        <div class="popover popover-top">
+        <Popover bottom>
           {{ $tt('Copy Address') }}
-        </div>
+        </Popover>
       </div>
     </UniDialog>
-    <SwitchKeyDialog :visible="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey"></SwitchKeyDialog>
+    <SwitchKeyDialog :visible="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey" />
   </div>
 </template>
 
@@ -317,10 +279,11 @@ import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
 import SwitchKeyDialog from './-/SwitchKeyDialog.vue'
 import ConnectSites from './-/ConnectSites.vue'
+import Popover from '~/ui/components/Popover.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
-import { Unikey } from '~/background/services/unikey'
+import type { Unikey } from '~/background/services/unikey'
 
 export default {
   name: 'PageHome',
@@ -328,6 +291,7 @@ export default {
     QrcodeVue,
     SwitchKeyDialog,
     ConnectSites,
+    Popover,
   },
   setup (props, context) {
     const router = useRouter()
@@ -338,7 +302,7 @@ export default {
     const iconFontColor = ref('#fff')
     const isScroll = ref(false)
     const topLineBoxRef = ref<HTMLDivElement | null>(null)
-    const dom=document.getElementsByClassName('layout-default')[0] as HTMLDivElement
+    const dom = document.getElementsByClassName('layout-default')[0] as HTMLDivElement
     onMounted(async () => {
       dom.onscroll = () => {
         const scrollTop = dom.scrollTop

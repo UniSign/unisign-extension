@@ -22,7 +22,7 @@
   }
   .uni-btn {
     position: absolute;
-    bottom: 60px;
+    bottom: 45px;
     left: 50%;
     transform: translateX(-50%);
     width: 302px;
@@ -34,8 +34,8 @@
   <div class="page-create-mnemonic">
     <UniTab :title="$tt('Create Mnemonic')"></UniTab>
     <div class="central-content">
-      <h2>{{ $tt('Keep it carefully') }}</h2>
-      <p>{{ $tt('Please copy the following contents on paper in order and keep them in a safe place. Do not take screenshots or send them to others') }}</p>
+      <h2>{{ $tt('Keep It Carefully') }}</h2>
+      <p>{{ $tt('Please copy the following contents on paper in order and keep them in a safe place. Do not take screenshots or send them to others.') }}</p>
       <MnemonicBox :mnemonic-arr="mnemonicArr"></MnemonicBox>
     </div>
     <UniBtn class="uni-btn" @click="$router.push(`/addAddress/chooseTheRightOrder?mnemonic=${mnemonic}`)"></UniBtn>

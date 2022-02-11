@@ -35,7 +35,7 @@
     <UniMsg :visible="canShowMsg" error :content="$tt('Incorrect order')" @close="canShowMsg= false"></UniMsg>
     <UniTab :title="$tt('Create Mnemonic')"></UniTab>
     <div class="central-content">
-      <h2>{{ $tt('Keep it carefully') }}</h2>
+      <h2>{{ $tt('Choose the Right Order') }}</h2>
       <MnemonicBox class="mnemonics" :mnemonic-arr="mnemonicArr"></MnemonicBox>
       <MnemonicBox can-choose :mnemonic-arr="mnemonicChooseArr" @click="chooseMnemonic"></MnemonicBox>
     </div>

@@ -13,7 +13,9 @@
     .ironman-box {
       display: flex;
       align-items: center;
-      cursor: pointer;
+      font-family: monospace;
+      cursor: default;
+
       img {
         width: 8px;
         height: 10px;
@@ -29,14 +31,25 @@
       bottom: 28px;
       transform: translateX(-50%);
       left: 50%;
-      padding: 7px 12px 12px;
+      padding: 8px;
       box-sizing: border-box;
       box-shadow: 0px 5px 6px 0px rgba(0, 0, 0, 0.16);
       border-radius: 8px;
-      font-size: $detail-font-size;
       font-weight: 500;
       background: #11142D;
       color: #FFFFFF;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        background-color: #11142D;
+        height: 12px;
+        width: 12px;
+        transform: translateX(-50%) translateY(40%) rotate(45deg);
+        border-radius: 2px;
+      }
     }
   }
 </style>
@@ -50,7 +63,7 @@
       <!--<router-link to="/test">test</router-link>-->
     </div>
     <div v-show="isShowDetail" class="ironman-detail">
-      {{ antiPhishingCode }}
+      {{ $tt('Anti-Phishing Code') }}
     </div>
   </div>
 </template>

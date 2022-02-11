@@ -34,20 +34,20 @@
 
 <template>
   <div class="page-language-settings">
-    <UniTab :title="$tt('Language')"></UniTab>
+    <UniTab :title="$tt('Language')" />
     <div class="settings-box">
       <div v-for="lang in LocaleOptions" :key="lang.value" class="settings-item-box" @click="onChangeLocale(lang.value)">
         <span>{{ lang.text }}</span>
-        <Iconfont class="icon-font" :name="lang.value==locale?'checked':'unchecked'" size="12" :color="lang.value==locale?'#FFBC5D':'#E1E1E1'"></Iconfont>
+        <Iconfont class="icon-font" :name="lang.value==locale?'checked':'unchecked'" size="12" :color="lang.value==locale?'#FFBC5D':'#E1E1E1'" />
       </div>
     </div>
-    <Ironman></Ironman>
+    <Ironman />
   </div>
 </template>
 
 <script lang="ts">
 import { wallet } from '~/ui/controllers/wallet'
-import { LocaleOptions, LOCALES } from '~/constants'
+import { LOCALES, LocaleOptions } from '~/constants'
 
 export default {
   name: 'PageSettings',

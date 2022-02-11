@@ -106,83 +106,6 @@
     color: #2A67C5;
     cursor: pointer;
   }
-  .qr-code-box{
-    .qr-code {
-      margin: 42px auto 8px;
-      display: block;
-      width: 206px;
-      height: 206px;
-    }
-    .qr-code-detail {
-      margin: 0 auto 64px;
-      padding: 8px 14px;
-      position: relative;
-      border: 1px solid rgba(191, 191, 191, 0.09);
-      border-radius: 8px;
-      width: 220px;
-      font-size: $detail-font-size;
-      font-weight: bold;
-      text-align: center;
-      line-height: 16px;
-      word-wrap: break-word;
-      word-break: break-all;
-      cursor: pointer;
-      background: #F9F7F6;
-      &:hover {
-        .popover {
-          display: block;
-        }
-      }
-    }
-  }
-}
-
-.popover {
-  display: none;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 7px 11px;
-  box-sizing: border-box;
-  box-shadow: 0px -5px 6px 0px rgba(0, 0, 0, 0.16);
-  border-radius: 8px;
-  font-size: $detail-font-size;
-  font-weight: 500;
-  white-space: nowrap;
-  background: #11142D;
-  color: #FFFFFF;
-}
-
-.popover-top {
-  top: -42px;
-  &:after {
-    content: "";
-    width: 0;
-    height: 0;
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 6px 6px 0px;
-    border-style: solid;
-    border-color: #0D0C49 transparent transparent;
-  }
-}
-
-.popover-bottom {
-  bottom: -42px;
-  &:after {
-    content: "";
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 0 6px 6px;
-    border-style: solid;
-    border-color: transparent transparent #0D0C49;
-  }
 }
 </style>
 
@@ -190,40 +113,40 @@
   <div class="page-connect-sites">
     <div class="connect-box">
       <div class="status-item">
-        <Iconfont name="current" size="14"></Iconfont>
-        <span>{{ $tt('Current connect') }}</span>
+        <Iconfont name="current" size="14" />
+        <span>{{ $tt('Current Connected') }}</span>
       </div>
       <div v-if="!currentSite" class="connect-item">
-        <Iconfont name="connect" size="24"></Iconfont>
-        <p>{{ $tt('No Connect') }}</p>
+        <Iconfont name="connect" size="24" />
+        <p>{{ $tt('Not Connected') }}</p>
       </div>
       <div v-else class="connect-item">
         <img v-if="currentSite.icon" :src="currentSite?.icon">
-        <Iconfont v-else name="connect" size="24"></Iconfont>
+        <Iconfont v-else name="connect" size="24" />
         <p>{{ substringUrl(currentSite?.origin,'agreement') }}<span>{{ substringUrl(currentSite?.origin,'domainName') }}</span></p>
       </div>
     </div>
     <div v-if="sites.length" class="await-connect-box">
       <div class="status-item">
-        <Iconfont name="connected" size="14" color="#6F7684"></Iconfont>
+        <Iconfont name="connected" size="14" color="#6F7684" />
         <span>{{ $tt('Connected Apps') }}</span>
       </div>
       <div v-for="site in sites" :key="site.name" class="connect-item">
         <img v-if="site.icon" :src="site?.icon">
-        <Iconfont v-else name="connect" size="24"></Iconfont>
+        <Iconfont v-else name="connect" size="24" />
         <p>{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></p>
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
             <img class="w-[16px] h-[16px] mt-[2px] ml-[2px]" :src="`/assets/page-home/icon-disconnect.png`">
-            <div class="popover popover-top">
+            <Popover top>
               {{ $tt('Disconnect') }}
-            </div>
+            </Popover>
           </div>
           <div @click="onClickPinSite(site)">
-            <img class="w-[8px] h-[11px]" :src="`/assets/page-home/icon-${site.isPinned?'pin':'pin-true'}.png`">
-            <div class="popover popover-top">
-              {{ site.isPinned?'Unpin':"Pin" }}
-            </div>
+            <img class="w-[8px] h-[11px]" :src="`/assets/page-home/icon-${site.isPinned?'pined':'unpin'}.png`">
+            <Popover top>
+              {{ site.isPinned?$tt('Unpin'):$tt("Pin") }}
+            </Popover>
           </div>
         </div>
       </div>
@@ -233,13 +156,15 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import Popover from '~/ui/components/Popover.vue'
 import { wallet } from '~/ui/controllers/wallet'
-import { SiteData } from '~/background/services/site'
+import type { SiteData } from '~/background/services/site'
 import { substringUrl } from '~/utils'
 
 export default {
   name: 'PageConnectSites',
   components: {
+    Popover,
   },
   setup (props, context) {
     const currentSite = ref<SiteData>()
