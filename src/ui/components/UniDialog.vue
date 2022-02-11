@@ -42,7 +42,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 8px;
         cursor: pointer;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.06);
+        }
       }
     }
     .content {

@@ -15,12 +15,22 @@ import type { Unikey, UnikeyChainHD } from '~/background/services/unikey'
 import { UnikeyType, unikeyService } from '~/background/services/unikey'
 import { storage } from '~/background/tools/storage'
 import { windows } from '~/background/tools/windows'
-import { CHAINS, KeyIdentifier } from '~/constants'
+import type { UnikeySymbol } from '~/constants'
+import { CHAINS } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
 export const Events = {
   lockStatusChanged: 'lockStatusChanged',
   currentKeyChanged: 'currentKeyChanged',
+}
+
+export function keyringTypeToKeySymbol (keyringType: KeyringType) {
+  for (const keySymbol in CHAINS) {
+    const chain = CHAINS[keySymbol as UnikeySymbol]
+    if (chain.simpleKeyringType === keyringType || chain.HDKeyringType === keyringType) {
+      return chain.unikeySymbol
+    }
+  }
 }
 
 export class WalletController {
@@ -179,9 +189,9 @@ export class WalletController {
     await personalService.setCurrentUnikey(unikeys[0].key)
   }
 
-  async deriveNewAccountFromMnemonic (identifier: KeyIdentifier) {
-    const chain = CHAINS[identifier]
-    const keyringType = CHAINS[identifier].HDKeyringType
+  async deriveNewAccountFromMnemonic (keySymbol: UnikeySymbol) {
+    const chain = CHAINS[keySymbol]
+    const keyringType = CHAINS[keySymbol].HDKeyringType
     let keyring = keyringService.getKeyringByType(keyringType)
 
     if (!keyring) {
@@ -211,9 +221,10 @@ export class WalletController {
     return keyringService.exportAccount(address, keyringType)
   }
 
-  async importPrivateKey (privateKey: string, type: KeyringType) {
-    const keyring = await keyringService.importPrivateKey(privateKey, type)
+  async importPrivateKey (privateKey: string, keyringType: KeyringType) {
+    const keyring = await keyringService.importPrivateKey(privateKey, keyringType)
     const [newAccount] = await keyring.getAccounts()
+    const keySymbol = keyringTypeToKeySymbol(keyringType)
 
     unikeyService.addUnikey({
       key: newAccount,
@@ -221,7 +232,7 @@ export class WalletController {
       keyringType: keyring.type,
       nickname: 'Private Key',
       hidden: false,
-      keySymbol: KeyIdentifier.BTC,
+      keySymbol,
     } as UnikeyChainHD, false)
 
     await this.setCurrentUnikeyFromKeyring(keyring, -1)

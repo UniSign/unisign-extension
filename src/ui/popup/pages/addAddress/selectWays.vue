@@ -30,7 +30,7 @@
         <template #head>
           <Iconfont name="key" size="17" color="#8E98B2" />
         </template>
-        {{ $tt('Import by priority key') }}
+        {{ $tt('Import by Private Key') }}
       </BoxItem>
 
       <BoxItem v-if="!hasMnemonic" to="/import/importMnemonic">
@@ -61,7 +61,7 @@
 <script lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { KeyIdentifier } from '~/constants'
+import type { UnikeySymbol } from '~/constants'
 import { wallet } from '~/ui/controllers/wallet'
 import BoxList from '~/ui/components/Box/BoxList.vue'
 import BoxItem from '~/ui/components/Box/BoxItem.vue'
@@ -81,7 +81,7 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const onClickDeriveAddress = async () => {
-      await wallet.deriveNewAccountFromMnemonic(route.params.key as KeyIdentifier)
+      await wallet.deriveNewAccountFromMnemonic(route.params.key as UnikeySymbol)
       router.push('/addAddress/addAddressSuccess?title=DeriveFromMnemonic')
     }
 

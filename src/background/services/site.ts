@@ -1,14 +1,15 @@
 import LRU from 'lru-cache'
 import { AutoBindService } from '~/background/services/base/auto-bind'
 import { loadDiskStore } from '~/background/tools/diskStore'
-import { KeyIdentifier, UNISIGN_ORIGIN } from '~/constants'
+import type { UnikeySymbol } from '~/constants'
+import { UNISIGN_ORIGIN } from '~/constants'
 
 export interface SiteData {
   origin: string
   name: string
   icon: string
 
-  unikeySymbol: KeyIdentifier
+  unikeySymbol: UnikeySymbol
 
   isPinned: boolean
   hasSigned: boolean

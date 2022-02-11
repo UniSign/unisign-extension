@@ -28,7 +28,7 @@
 
 <template>
   <div class="page-import-private-key">
-    <UniTab :title="$tt('Import Private Key')"></UniTab>
+    <UniTab :title="$tt('Import Private Key')" />
     <div class="central-content">
       <h2>{{ $tt('Import') }} {{ keyName }}</h2>
       <h2>
@@ -40,19 +40,20 @@
         class="block mt-[32px] mx-auto"
         :validate-text="validataText"
         :placeholder="`${keyName} ${$tt('private key')}`"
-      ></UniTextArea>
-      <UniBtn :disabled="!privateKey" class="uni-btn" @click="onClickSubmit"></UniBtn>
+      />
+      <UniBtn :disabled="!privateKey" class="uni-btn" @click="onClickSubmit" />
     </div>
-    <Ironman></Ironman>
+    <Ironman />
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { CHAINS, KeyIdentifier } from '~/constants'
+import type { UnikeySymbol } from '~/constants'
+import { CHAINS } from '~/constants'
 import { wallet } from '~/ui/controllers/wallet'
-import UniTextArea from '~/ui/components/UniTextArea.vue'
+import type UniTextArea from '~/ui/components/UniTextArea.vue'
 
 export default {
   name: 'PageImportPrivateKey',
@@ -63,10 +64,10 @@ export default {
     const privateKey = ref('')
     const privateKeyRef = ref<InstanceType<typeof UniTextArea>>()
     const validataText = ref('')
-    const keyName = CHAINS[route.params.key as KeyIdentifier].name
+    const keyName = CHAINS[route.params.key as UnikeySymbol].name
     const onClickSubmit = async () => {
       if (!privateKey.value) return
-      await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key as KeyIdentifier].simpleKeyringType).catch((e) => {
+      await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key as UnikeySymbol].simpleKeyringType).catch((e) => {
         validataText.value = e
         privateKeyRef.value?.validate()
         throw new Error(e)

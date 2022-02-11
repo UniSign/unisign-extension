@@ -2,6 +2,25 @@
 .mnemonic-box {
   display: flex;
   flex-wrap: wrap;
+
+  &._can-choose {
+    margin-top: 24px;
+    .mnemonic-item {
+      justify-content: center;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #EEEEEE;
+      }
+
+      &._invisible {
+        border: none;
+        background-color: #ffffff;
+        cursor: default;
+      }
+    }
+  }
+
   .mnemonic-item {
     margin: 0 8px 8px 0;
     width: 99px;
@@ -27,22 +46,10 @@
     }
   }
 }
-
-.can-choose {
-  margin-top: 24px;
-  .mnemonic-item {
-    justify-content: center;
-    cursor: pointer;
-    &._invisible {
-      border: none;
-      background-color: #ffffff;
-    }
-  }
-}
 </style>
 
 <template>
-  <div class="mnemonic-box" :class="{'can-choose':canChoose}">
+  <div class="mnemonic-box" :class="{'_can-choose':canChoose}">
     <div v-for="(item,index) in mnemonicArr" :key="index" :class="{'_invisible': isNullOrEmpty(item)}" class="mnemonic-item" @click="click(index)">
       <span v-if="!canChoose">{{ index+1 }}</span>
       <p>{{ item }}</p>

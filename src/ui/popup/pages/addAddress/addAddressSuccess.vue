@@ -30,7 +30,7 @@
       <h2>{{ $tt('Success') }}</h2>
     </div>
     <UniBtn class="uni-btn" @click="$router.push(`/setup/home`)">
-      {{ $tt('Start to use') }}
+      {{ $tt('Start to Use') }}
     </UniBtn>
     <Ironman></Ironman>
   </div>

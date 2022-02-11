@@ -56,16 +56,16 @@
       @input="onInputChange"
     >
     <div v-if="showLocked" @click="triggerValidate">
-      <Iconfont class="icon-font" name="arrow-enter" size="18"></Iconfont>
+      <Iconfont class="icon-font" name="arrow-enter" size="18" />
     </div>
     <p v-show="canShowValidateText">
-      {{ validateText }}
+      {{ displayValidateText(validateText) }}
     </p>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'UniInput',
@@ -128,6 +128,11 @@ export default defineComponent({
       canShowValidateText,
       validate,
       triggerValidate,
+      displayValidateText (text: string|Error) {
+        if (text?.toString()) {
+          return text.toString().replace('Error: ', '')
+        }
+      },
     }
   },
 })

@@ -5,6 +5,7 @@
   background: url("/assets/page-setup/page-setup-bg.png") no-repeat;
   background-size:100% 100%;
   h2 {
+    width: 302px;
     font-size: $title-font-size;
     font-weight: 800;
     line-height: 29px;
@@ -19,8 +20,9 @@
     text-align: center;
     color: #6F7684;
   }
-  >div {
-    margin-bottom: 143px;
+
+  .phishing-code-container {
+    margin-bottom: 110px;
     position: relative;
     input {
       width: 180px;
@@ -55,6 +57,12 @@
       color: $input-boder-error-color;
     }
   }
+
+  .uni-btn {
+    margin: 0 auto;
+    display: block;
+    width: 80%;
+  }
 }
 </style>
 
@@ -69,8 +77,8 @@
       color="black"
     ></Iconfont>
     <h2>{{ $tt('Set an Anti-Phishing Code') }}</h2>
-    <h3>{{ $tt('The Anti-Phishing Code is a security feature. It will be included in all windows about UniSign. This Code helping you to prevent phishing attemtps.') }}</h3>
-    <div>
+    <h3>{{ $tt('The Anti-Phishing Code is a security feature. It will be displayed in all the windows of UniSign. This code helps you to prevent phishing attempts.') }}</h3>
+    <div class="phishing-code-container">
       <input v-model="antiPhishingCode" placeholder="" :class="{'_error':isError}" type="text">
       <p v-show="isError">
         {{ $tt('Supports up to 10 characters') }}
