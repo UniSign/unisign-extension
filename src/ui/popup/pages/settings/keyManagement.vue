@@ -207,6 +207,7 @@
           </div>
         </div>
       </template>
+
       <template v-if="importedUniKeys.length">
         <h2>{{ $tt('Imported') }}</h2>
         <div v-for="unikey in importedUniKeys" :key="unikey.key" class="settings-item-box">
@@ -265,9 +266,6 @@ export default {
     }
     const onUnikeysChanged = async () => {
       getkeysCategory()
-      console.log(unikeys.value, 'unikeys.value')
-      console.log(derivedUniKeys.value, 'derivedUniKeys.value')
-      console.log(importedUniKeys.value, 'importedUniKeys.value')
     }
     onMounted(() => {
       onUnikeysChanged()

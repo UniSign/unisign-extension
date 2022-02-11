@@ -454,13 +454,7 @@ export class KeyringService extends EventEmitter {
     const opts: KeyringSimpleOpts = {
       privateKeys: [privateKey],
     }
-    const keyring = await this.createKeyringByType(type, opts) as KeyringSimple
-
-    return this.addKeyring(keyring)
-      .then(() => this.persistAllKeyrings())
-      .then(() => this.updateMemStoreKeyrings())
-      .then(() => this.fullUpdate())
-      .then(() => keyring)
+    return (await this.addNewKeyring(type, opts)) as KeyringSimple
   }
 
   /**

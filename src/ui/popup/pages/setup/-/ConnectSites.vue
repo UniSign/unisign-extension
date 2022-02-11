@@ -55,7 +55,7 @@
           cursor: pointer;
           &:hover {
             background: rgba(0, 0, 0, 0.06);
-            .popover {
+            .tooltip {
               display: block;
             }
           }
@@ -138,15 +138,15 @@
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
             <img class="w-[16px] h-[16px] mt-[2px] ml-[2px]" :src="`/assets/page-home/icon-disconnect.png`">
-            <Popover top>
+            <Tooltip top>
               {{ $tt('Disconnect') }}
-            </Popover>
+            </Tooltip>
           </div>
           <div @click="onClickPinSite(site)">
             <img class="w-[8px] h-[11px]" :src="`/assets/page-home/icon-${site.isPinned?'pined':'unpin'}.png`">
-            <Popover top>
+            <Tooltip top>
               {{ site.isPinned?$tt('Unpin'):$tt("Pin") }}
-            </Popover>
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import Popover from '~/ui/components/Popover.vue'
+import Tooltip from '~/ui/components/Tooltip.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import type { SiteData } from '~/background/services/site'
 import { substringUrl } from '~/utils'
@@ -164,7 +164,7 @@ import { substringUrl } from '~/utils'
 export default {
   name: 'PageConnectSites',
   components: {
-    Popover,
+    Tooltip,
   },
   setup (props, context) {
     const currentSite = ref<SiteData>()

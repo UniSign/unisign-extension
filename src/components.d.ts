@@ -8,7 +8,7 @@ declare module 'vue' {
     BoxList: typeof import('./ui/components/Box/BoxList.vue')['default']
     Iconfont: typeof import('./ui/components/Iconfont.vue')['default']
     Ironman: typeof import('./ui/components/Ironman.vue')['default']
-    Popover: typeof import('./ui/components/Popover.vue')['default']
+    Tooltip: typeof import('./ui/components/Tooltip.vue')['default']
     UniBtn: typeof import('./ui/components/UniBtn.vue')['default']
     UniDialog: typeof import('./ui/components/UniDialog.vue')['default']
     UniDoubleBtn: typeof import('./ui/components/UniDoubleBtn.vue')['default']
