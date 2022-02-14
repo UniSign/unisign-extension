@@ -9,6 +9,7 @@
     background: $main-btn-bg;
     color: #FFFFFF;
     opacity: 1;
+    transition: all 0.2s;
 
     &:not(._disabled):hover {
       background-color: $hover-btn-bg;
@@ -17,9 +18,15 @@
     &._disabled {
       opacity: 0.4;
     }
+
     &._error {
       background: $error-btn-bg;
+
+      &:hover {
+        background-color: $error-hover-btn-bg;
+      }
     }
+
     &:focus{
       outline: 0;
     }

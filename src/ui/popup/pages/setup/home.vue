@@ -33,7 +33,7 @@
       background: transparent;
       &:hover {
         background: rgba(0, 0, 0, 0.06);
-        .popover {
+        .tooltip {
           display: block;
         }
       }
@@ -117,7 +117,7 @@
           background: #E9EDF3;
           &:hover {
             background: rgba(0, 0, 0, 0.06);
-            .popover {
+            .tooltip {
               display: block;
             }
           }
@@ -195,7 +195,7 @@
       }
 
       &:hover {
-        .popover {
+        .tooltip {
           display: block;
         }
       }
@@ -212,16 +212,16 @@
     <div ref="topLineBoxRef" class="top-line-box">
       <div class="icon-wrapper cursor-pointer" @click="onClickSettings">
         <Iconfont name="settings" size="20" :color="iconFontColor" />
-        <Popover bottom>
+        <Tooltip bottom>
           {{ $tt('Settings') }}
-        </Popover>
+        </Tooltip>
       </div>
       <img class="w-[134px] h-[36px]" :src="`/assets/page-home/nav-${isScroll?'logo-scroll':'logo'}.png`">
       <div class="icon-wrapper cursor-pointer" @click="onClickLock">
         <Iconfont name="lock" size="20" :color="iconFontColor" />
-        <Popover bottom>
+        <Tooltip bottom>
           {{ $tt('Lock') }}
-        </Popover>
+        </Tooltip>
       </div>
     </div>
     <div class="central-bg-1" />
@@ -233,22 +233,22 @@
         <div>
           <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
             <Iconfont name="copy" size="13" color="#6D88A1" />
-            <Popover bottom>
+            <Tooltip bottom>
               {{ $tt('Copy Address') }}
-            </Popover>
+            </Tooltip>
           </div>
           <div class="icon-wrapper mr-[16px] cursor-pointer" @click="isShowQRCodeDialog = true">
             <Iconfont name="qrcode" size="13" color="#6D88A1" />
-            <Popover bottom>
+            <Tooltip bottom>
               {{ $tt('QR Code') }}
-            </Popover>
+            </Tooltip>
           </div>
           <i class="mr-[16px]" />
           <div class="icon-wrapper cursor-pointer">
             <Iconfont name="switch" size="13" color="#6D88A1" />
-            <Popover bottom>
+            <Tooltip bottom>
               {{ $tt('Transfer') }}
-            </Popover>
+            </Tooltip>
           </div>
           <div class="switch cursor-pointer" @click="isShowSwitchKeyDialog = true">
             {{ $tt('Switch') }}
@@ -263,9 +263,9 @@
       <qrcode-vue class="qr-code" :value="currentUnikey?.key" :size="206" />
       <div class="qr-code-detail copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
         <span>{{ currentUnikey?.key }}</span>
-        <Popover bottom>
+        <Tooltip bottom>
           {{ $tt('Copy Address') }}
-        </Popover>
+        </Tooltip>
       </div>
     </UniDialog>
     <SwitchKeyDialog :visible="isShowSwitchKeyDialog" @cancel="isShowSwitchKeyDialog = false" @hasSwitch="getCurrentUnikey" />
@@ -279,7 +279,7 @@ import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
 import SwitchKeyDialog from './-/SwitchKeyDialog.vue'
 import ConnectSites from './-/ConnectSites.vue'
-import Popover from '~/ui/components/Popover.vue'
+import Tooltip from '~/ui/components/Tooltip.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import { CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
@@ -291,7 +291,7 @@ export default {
     QrcodeVue,
     SwitchKeyDialog,
     ConnectSites,
-    Popover,
+    Tooltip,
   },
   setup (props, context) {
     const router = useRouter()

@@ -17,8 +17,7 @@
           }
         }
         p {
-          margin-top: -4px;
-          margin-left: 16px;
+          margin-left: 4px;
           line-height: 14px;
           color: $input-boder-error-color;
         }

@@ -91,6 +91,7 @@
         </UniBtn>
       </div>
     </UniDialog>
+
     <UniDialog class="securityDialog" :visible="isShowSecurityDialog" :title="$tt('Security Verification')" @cancel="isShowSecurityDialog = false">
       <div class="slot-container">
         <UniInput
@@ -102,11 +103,12 @@
           class="uni-input mb-[58px]"
           :validate-text="validataText"
           :placeholder="$tt('Enter password')"
-        ></UniInput>
-        <UniBtn class="uni-btn" :disabled="!password" @click="handleSecurityCancel">
-        </UniBtn>
+          @keyup.enter="onClickConfirmPassword"
+        />
+        <UniBtn class="uni-btn" :disabled="!password" @click="onClickConfirmPassword" />
       </div>
     </UniDialog>
+
     <UniDialog class="privateKeyDialog" :visible="isShowPrivateKeyDialog" :title="$tt('Private Key')" @cancel="isShowPrivateKeyDialog= false">
       <div class="slot-container">
         <div class="text">
@@ -117,14 +119,16 @@
         </UniBtn>
       </div>
     </UniDialog>
+
     <UniDialog class="mnemonicDialog" :visible="isShowMnemonicDialog" :title="$tt('Mnemonic')" @cancel="isShowMnemonicDialog= false">
       <div class="slot-container">
-        <MnemonicBox class="mnemonics" :mnemonic-arr="mnemonicArr"></MnemonicBox>
+        <MnemonicBox class="mnemonics" :mnemonic-arr="mnemonicArr" />
         <UniBtn class="uni-btn" @click="handleMnemonicCancel">
           {{ $tt('OK') }}
         </UniBtn>
       </div>
     </UniDialog>
+
     <UniDialog class="deleteKeyDialog" error :visible="isShowDeleteKeyDialog" :title="$tt('Delete Key')" @cancel="isShowDeleteKeyDialog= false">
       <div class="slot-container">
         <p>{{ $tt('Confirm to delete,') }}</p>
@@ -137,8 +141,8 @@
           class="uni-input mb-[48px]"
           :placeholder="$tt('Please enter Delete Key')"
           :validate-text="$tt('Incorrect input')"
-        ></UniInput>
-        <UniDoubleBtn class="uni-btn" :disabled="!deleteKey" @rejectClick="isShowDeleteKeyDialog= false" @allowClick="handleDeleteKeyCancel">
+        />
+        <UniDoubleBtn class="uni-btn" :disabled="!deleteKey" @reject="isShowDeleteKeyDialog= false" @allow="handleDeleteKeyCancel">
           <template #reject>
             {{ $tt('Cancle') }}
           </template>
@@ -156,8 +160,8 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MnemonicBox from '../../addAddress/-/MnemonicBox.vue'
 import { wallet } from '~/ui/controllers/wallet'
-import UniInput from '~/ui/components/UniInput.vue'
-import { Unikey } from '~/background/services/unikey'
+import type UniInput from '~/ui/components/UniInput.vue'
+import type { Unikey } from '~/background/services/unikey'
 
 type CurrentEventName ='viewPrivateKey' | 'viewMnemonic' | 'deletePrivateKey' | null
 
@@ -187,7 +191,7 @@ export default {
       passwordRef.value?.validate()
       throw new Error(e)
     }
-    const handleSecurityCancel = async () => {
+    const onClickConfirmPassword = async () => {
       if (!password.value) return
       if (currentEventName === 'viewPrivateKey') {
         try {
@@ -248,7 +252,7 @@ export default {
     // viewMnemonic
     const onClickViewMnemonic = () => {
       currentEventName = 'viewMnemonic'
-      dangerousText.value = i18n.$tt('Do not disclose your private key to anyone. Anyone who has your private key can steal your assets.')
+      dangerousText.value = i18n.$tt('Do not disclose your mnemonic to anyone. Anyone who has your private key can steal your assets.')
       isShowDangerousDialog.value = true
     }
     const handleMnemonicCancel = () => {
@@ -281,7 +285,7 @@ export default {
       validataText,
       isShowSecurityDialog,
       mnemonicArr,
-      handleSecurityCancel,
+      onClickConfirmPassword,
 
       // dangerousDialog
       isShowDangerousDialog,

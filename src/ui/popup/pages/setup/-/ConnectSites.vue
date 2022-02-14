@@ -1,6 +1,7 @@
 <style lang="scss" scoped>
 .page-connect-sites {
-  .connect-box,.await-connect-box {
+  .connect-box,
+  .await-connect-box {
     position: relative;
     margin: 226px auto 0;
     display: block;
@@ -28,8 +29,9 @@
       >img {
         width: 24px;
         height: 24px;
+        border-radius: 4px;
       }
-      >p {
+      >a {
         margin-left: 12px;
         font-size: $detail-font-size;
         color: #8D919C;
@@ -55,7 +57,7 @@
           cursor: pointer;
           &:hover {
             background: rgba(0, 0, 0, 0.06);
-            .popover {
+            .tooltip {
               display: block;
             }
           }
@@ -75,9 +77,8 @@
     .connect-item {
       display: flex;
       align-items: center;
-      >p {
+      >a {
         margin-left: 12px;
-        font-size: $input-font-size;
         color: #8D919C;
         span {
           margin-left: 0px;
@@ -118,12 +119,12 @@
       </div>
       <div v-if="!currentSite" class="connect-item">
         <Iconfont name="connect" size="24" />
-        <p>{{ $tt('Not Connected') }}</p>
+        <p class="ml-[10px]">{{ $tt('Not Connected') }}</p>
       </div>
       <div v-else class="connect-item">
         <img v-if="currentSite.icon" :src="currentSite?.icon">
         <Iconfont v-else name="connect" size="24" />
-        <p>{{ substringUrl(currentSite?.origin,'agreement') }}<span>{{ substringUrl(currentSite?.origin,'domainName') }}</span></p>
+        <a :href="currentSite?.origin" target="_blank">{{ substringUrl(currentSite?.origin,'agreement') }}<span>{{ substringUrl(currentSite?.origin,'domainName') }}</span></a>
       </div>
     </div>
     <div v-if="sites.length" class="await-connect-box">
@@ -134,19 +135,19 @@
       <div v-for="site in sites" :key="site.name" class="connect-item">
         <img v-if="site.icon" :src="site?.icon">
         <Iconfont v-else name="connect" size="24" />
-        <p>{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></p>
+        <a :href="site?.origin" target="_blank">{{ substringUrl(site?.origin,'agreement') }}<span>{{ substringUrl(site?.origin,'domainName') }}</span></a>
         <div>
           <div class="disconnect mr-[7px]" @click="onClickDisconnect(site)">
             <img class="w-[16px] h-[16px] mt-[2px] ml-[2px]" :src="`/assets/page-home/icon-disconnect.png`">
-            <Popover top>
+            <Tooltip top>
               {{ $tt('Disconnect') }}
-            </Popover>
+            </Tooltip>
           </div>
           <div @click="onClickPinSite(site)">
             <img class="w-[8px] h-[11px]" :src="`/assets/page-home/icon-${site.isPinned?'pined':'unpin'}.png`">
-            <Popover top>
+            <Tooltip top>
               {{ site.isPinned?$tt('Unpin'):$tt("Pin") }}
-            </Popover>
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -156,7 +157,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import Popover from '~/ui/components/Popover.vue'
+import Tooltip from '~/ui/components/Tooltip.vue'
 import { wallet } from '~/ui/controllers/wallet'
 import type { SiteData } from '~/background/services/site'
 import { substringUrl } from '~/utils'
@@ -164,7 +165,7 @@ import { substringUrl } from '~/utils'
 export default {
   name: 'PageConnectSites',
   components: {
-    Popover,
+    Tooltip,
   },
   setup (props, context) {
     const currentSite = ref<SiteData>()

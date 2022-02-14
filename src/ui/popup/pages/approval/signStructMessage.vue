@@ -50,11 +50,13 @@
 .raw-box {
   .raw-container {
     padding: 24px;
-    border-radius: 8px;
+
     .jv-container {
       overflow: hidden;
       overflow-y: scroll;
       max-height: 244px;
+      border: 1px solid #E4E9F0;
+      border-radius: 8px;
       background: #F1F4F8;
       &::-webkit-scrollbar {
         display: none;
@@ -67,7 +69,7 @@
 <template>
   <div>
     <SignWrapper :title="$tt('Signature Request')" @reject="onClickReject" @allow="onClickAllow">
-      <CurrentKeyBox></CurrentKeyBox>
+      <CurrentKeyBox />
       <div class="main-title-box">
         <h2>{{ $tt('Sign Typed Message') }}</h2>
         <p @click="isShowRawDialog = true">
@@ -87,7 +89,7 @@
     </SignWrapper>
     <UniDialog class="raw-box" :title="$tt('Message Detail')" :visible="isShowRawDialog" @cancel="handleRawCancel">
       <div class="raw-container">
-        <json-viewer :value="approval?.params.message"></json-viewer>
+        <json-viewer :value="approval?.params.message" />
       </div>
     </UniDialog>
   </div>
@@ -98,8 +100,8 @@ import { ref } from 'vue'
 import JsonViewer from 'vue-json-viewer'
 import SignWrapper from './-/SignWrapper.vue'
 import CurrentKeyBox from './-/CurrentKeyBox.vue'
-import { SignStructMessageParams } from '~/background/controllers/provider/index'
-import { ApprovalData } from '~/background/services/approval'
+import type { SignStructMessageParams } from '~/background/controllers/provider/index'
+import type { ApprovalData } from '~/background/services/approval'
 import { wallet } from '~/ui/controllers/wallet'
 
 export default {

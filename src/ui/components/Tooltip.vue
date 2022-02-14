@@ -1,5 +1,5 @@
 <style lang="scss">
-.popover {
+.tooltip {
   display: none;
   position: absolute;
   left: 50%;
@@ -47,7 +47,7 @@
 </style>
 
 <template>
-  <div class="popover" :class="{_bottom: bottom, _top: top}">
+  <div class="tooltip" :class="{_bottom: bottom, _top: top}">
     <slot />
   </div>
 </template>
@@ -55,7 +55,7 @@
 <script>
 
 export default {
-  name: 'Popover',
+  name: 'Tooltip',
   components: {},
   props: {
     bottom: Boolean,

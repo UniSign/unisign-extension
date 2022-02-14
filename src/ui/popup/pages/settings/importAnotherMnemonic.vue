@@ -17,7 +17,7 @@
       font-size: $detail-font-size;
       line-height: 16px;
       text-align: center;
-      color: #6F7684;
+      color: #242C3F;
       span {
         color: #EE5757;
       }
@@ -40,10 +40,14 @@
 
 <template>
   <div class="page-import-another-mnemonic">
-    <UniTab :title="$tt('Import Mnemonic')"></UniTab>
+    <UniTab :title="$tt('Import Mnemonic')" />
     <div class="central-content">
-      <h2>{{ $tt('Import another Mnemonic') }}</h2>
-      <p>{{ $tt('After importing another helper phrase, your current wallet account will be permanently deleted.') }}<span>{{ $tt('This action cannot be undone.') }} </span>{{ $tt('It is recommended that you back up before doing so.') }}</p>
+      <h2>{{ $tt('Import Another Mnemonic') }}</h2>
+      <p>
+        {{ $tt('After importing another mnemonic, your current wallet account will be permanently deleted.') }}
+        <span>{{ $tt('This action cannot be undone.') }} </span>
+        {{ $tt('It is recommended that you back up before doing so.') }}
+      </p>
       <UniTextArea
         ref="mnemonicRef"
         v-model="mnemonic"
@@ -51,12 +55,12 @@
         height="130px"
         :validate-text="$tt('Error Message')"
         :placeholder="$tt('Enter mnemonic, separated by space')"
-      ></UniTextArea>
+      />
       <UniBtn :disabled="!mnemonic" error class="uni-btn" @click="onClickSubmit">
         {{ $tt('Confirm') }}
       </UniBtn>
     </div>
-    <Ironman></Ironman>
+    <Ironman />
     <UniDialog class="securityDialog" :visible="isShowSecurityDialog" :title="$tt('Security Verification')" @cancel="isShowSecurityDialog = false">
       <div class="slot-container">
         <UniInput
@@ -67,10 +71,10 @@
           background-color="#F7F8FA"
           class="uni-input mb-[58px]"
           :placeholder="$tt('Set a password')"
-          :validate-text="validataText"
-        ></UniInput>
-        <UniBtn class="uni-btn" @click="handleSecurityCancel">
-        </UniBtn>
+          :validate-text="validateText"
+          @keyup.enter="onClickContinue"
+        />
+        <UniBtn class="uni-btn" @click="onClickContinue" />
       </div>
     </UniDialog>
   </div>
@@ -82,8 +86,8 @@ import { ref } from 'vue'
 import { validateMnemonic } from 'bip39'
 import { useRouter } from 'vue-router'
 import { wallet } from '~/ui/controllers/wallet'
-import UniTextArea from '~/ui/components/UniTextArea.vue'
-import UniInput from '~/ui/components/UniInput.vue'
+import type UniTextArea from '~/ui/components/UniTextArea.vue'
+import type UniInput from '~/ui/components/UniInput.vue'
 
 export default {
   name: 'PageImportAnotherMnemonic',
@@ -104,11 +108,11 @@ export default {
 
     const password = ref('')
     const passwordRef = ref<InstanceType<typeof UniInput>>()
-    const validataText = ref('')
-    const handleSecurityCancel = async () => {
+    const validateText = ref('')
+    const onClickContinue = async () => {
       if (!password.value) return
       await wallet.verifyPassword(password.value).catch((e) => {
-        validataText.value = e
+        validateText.value = e
         passwordRef.value?.validate()
         throw new Error(e)
       })
@@ -125,8 +129,8 @@ export default {
 
       password,
       passwordRef,
-      validataText,
-      handleSecurityCancel,
+      validateText,
+      onClickContinue,
     }
   },
 }
