@@ -21,19 +21,34 @@
       align-items: center;
       border-radius: 8px;
       cursor: pointer;
+
+      &:hover {
+        background: #F0EDED;
+      }
+
+      &._hidden {
+        .box_content {
+          color: #8D919C;
+        }
+        .box_content_desc {
+          font-size: 14px;
+          font-weight: 400;
+          font-family: sans-serif;
+        }
+      }
+
+      .box_content {
+        font-size: $input-font-size;
+        font-weight: bold;
+        font-family: monospace;
+      }
+
       img {
         margin-right: 12px;
         width: 26px;
         height: 26px;
       }
-      &:hover {
-        background: #F0EDED;
-      }
-      span {
-        font-size: $input-font-size;
-        font-weight: bold;
-        font-family: monospace;
-      }
+
       .arrow-right {
         margin-left: auto;
         width: 28px;
@@ -65,6 +80,7 @@
           line-height: 16px;
           &:hover {
             background: #EEEEEE;
+            border-radius: 4px;
           }
         }
       }
@@ -81,100 +97,6 @@
       height: 37px;
     }
   }
-  .dangerousDialog {
-    .slot-container {
-      padding: 24px;
-      .text{
-        margin-bottom: 48px;
-        font-size: $input-font-size;
-        line-height: 22px;
-      }
-    }
-  }
-  .securityDialog {
-    .slot-container {
-      padding: 32px 24px 24px;
-    }
-  }
-  .privateKeyDialog {
-    .slot-container {
-      padding: 24px;
-      .text{
-        margin-bottom: 48px;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid rgba(191, 191, 191, 0.09);
-        font-weight: bold;
-        font-size: $input-font-size;
-        line-height: 20px;
-        word-wrap: break-word;
-        word-break: break-all;
-        background: #F9F7F6;
-      }
-    }
-  }
-  .mnemonicDialog {
-    .slot-container {
-      padding: 24px;
-      .mnemonic-box {
-        margin-bottom: 40px;
-        display: flex;
-        flex-wrap: wrap;
-        .mnemonic-item {
-          margin: 0 5px 8px 0;
-          width: 86px;
-          height: 32px;
-          box-sizing: border-box;
-          border-radius: 4px;
-          border: 1px solid rgba(191, 191, 191, 0.09);
-          display: flex;
-          align-items: center;
-          background: #F9F7F6;
-          &:nth-child(3n) {
-            margin: 0 0 8px 0;
-          }
-          span {
-            margin: 0 9px 0 8px;
-            line-height: 14px;
-            color: #C9CCD3;
-          }
-          p {
-            font-size: $detail-font-size;
-            font-weight: bold;
-            line-height: 16px;
-          }
-        }
-      }
-    }
-  }
-  .deleteKeyDialog {
-    .slot-container {
-      padding: 24px;
-      >p {
-        font-size: $main-font-size;
-        line-height: 21px;
-        &:nth-child(2) {
-          margin-bottom: 16px;
-        }
-        >span {
-          font-size: $main-font-size;
-          line-height: 21px;
-          color: $error-btn-bg;
-        }
-      }
-      .uni-btn {
-        :deep(.reject) {
-          border:none;
-          background: #F7F8FA;
-          color: #0D0C0C;
-        }
-        :deep(.allow) {
-          border:none;
-          background: #EE5757;
-        }
-      }
-    }
-  }
 }
 
 </style>
@@ -187,7 +109,12 @@
         <h2>{{ $tt('Derived from Mnemonic') }}</h2>
         <div v-for="unikey in derivedUniKeys" :key="unikey.key" class="settings-item-box" :class="{_hidden: unikey.hidden}">
           <img :src="getImageUrl(unikey.keySymbol,unikey.hidden)">
-          <span>{{ substringKey(unikey.key) }}</span>
+          <span class="box_content">
+            {{ substringKey(unikey.key) }}
+            <div v-if="unikey.hidden" class="box_content_desc">
+              {{ $tt(`Disabled`) }}
+            </div>
+          </span>
           <div class="arrow-right" @click="onClickSettings(unikey)">
             <Iconfont name="more" width="12" height="12" color="#6F7684" />
           </div>

@@ -6,7 +6,6 @@
   border-radius: 8px;
   border: 1px solid rgba(191, 191, 191, 0.29);
   word-break: break-all;
-  background: rgba(247, 245, 244, 0.9);
   >img {
     margin-right: 5px;
     width: 26px;
@@ -35,7 +34,7 @@
     <img :src="getImageUrl(currentUnikey?.keySymbol)">
     <div>
       <p>{{ $tt('Current Key') }}</p>
-      <span>{{ substringKey(currentUnikey?.key) }}</span>
+      <span>{{ substringKey(currentUnikey?.key, 10, 10) }}</span>
     </div>
   </div>
 </template>

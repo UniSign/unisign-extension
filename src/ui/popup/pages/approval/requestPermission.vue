@@ -18,11 +18,12 @@
     background: #F1F4F8;
 
     img {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
     }
     >p {
-      margin-left: 12px;
+      margin-left: 6px;
       font-size: $detail-font-size;
       color: #8D919C;
       span {
@@ -65,7 +66,7 @@
     }
   }
   .allow-site-box {
-    padding: 4px 8px;
+    padding: 4px;
     border-radius: 8px;
     border: 1px solid #E4E9F0;
     background: #F1F4F8;
@@ -74,6 +75,8 @@
       align-items: center;
       width: 100%;
       height: 24px;
+      padding: 0 4px;
+      border-radius: 4px;
       background-color: #F1F4F8;
       cursor: pointer;
       &:hover {
@@ -96,7 +99,7 @@
     </h2>
     <div class="website-detail-box">
       <img v-if="site.icon" :src="site?.icon">
-      <Iconfont v-else name="connect" size="24"></Iconfont>
+      <Iconfont v-else name="connect" size="24" />
       <p>{{ substringUrl(approval?.origin,'agreement') }}<span>{{ substringUrl(approval?.origin,'domainName') }}</span></p>
     </div>
     <h2>{{ $tt('Connect Address') }}</h2>
@@ -112,7 +115,7 @@
     <h2>{{ $tt('Allow this site to') }}</h2>
     <div class="allow-site-box">
       <div v-for="permission in approval?.params.permissions" :key="permission" class="allow-site-item" @click="onClickChoosePermission(permission)">
-        <Iconfont :name="choosePermissions.includes(permission)?'checkbox-check':'checkbox-uncheck'" size="16"></Iconfont>
+        <Iconfont :name="choosePermissions.includes(permission)?'checkbox-check':'checkbox-uncheck'" size="16" />
         <span>{{ permission }}</span>
       </div>
     </div>
@@ -122,9 +125,9 @@
 <script lang="ts">
 import { ref } from 'vue'
 import SignWrapper from './-/SignWrapper.vue'
-import { ApprovalData } from '~/background/services/approval'
-import { PermittedKeyObjectType } from '~/background/controllers/provider/index'
-import { Unikey } from '~/background/services/unikey'
+import type { ApprovalData } from '~/background/services/approval'
+import type { PermittedKeyObjectType } from '~/background/controllers/provider/index'
+import type { Unikey } from '~/background/services/unikey'
 import { wallet } from '~/ui/controllers/wallet'
 import { getImageUrl, substringUrl } from '~/utils'
 

@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import type { UnikeySymbol } from '~/constants'
 import { CHAINS } from '~/constants'
@@ -60,6 +61,7 @@ export default {
   setup () {
     const router = useRouter()
     const route = useRoute()
+    const i18n = useI18n()
 
     const privateKey = ref('')
     const privateKeyRef = ref<InstanceType<typeof UniTextArea>>()
@@ -68,7 +70,7 @@ export default {
     const onClickSubmit = async () => {
       if (!privateKey.value) return
       await wallet.importPrivateKey(privateKey.value, CHAINS[route.params.key as UnikeySymbol].simpleKeyringType).catch((e) => {
-        validataText.value = e
+        validataText.value = i18n.$tt('Private key is not valid')
         privateKeyRef.value?.validate()
         throw new Error(e)
       })

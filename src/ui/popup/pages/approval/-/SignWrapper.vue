@@ -51,7 +51,7 @@
         <slot></slot>
       </div>
       <div class="btn-box">
-        <UniDoubleBtn @rejectClick="onRejectClick" @allowClick="onAllowClick"></UniDoubleBtn>
+        <UniDoubleBtn @reject="onRejectClick" @allow="onAllowClick"></UniDoubleBtn>
       </div>
       <Ironman></Ironman>
     </div>

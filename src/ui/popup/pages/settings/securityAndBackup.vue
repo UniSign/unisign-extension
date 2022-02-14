@@ -72,7 +72,7 @@
           validate-text="Supports up to 10 characters"
           :placeholder="antiPhishingCode"
         />
-        <UniBtn class="uni-btn" :disabled="!phishingCode" @click="handlePhishingCodeCancel">
+        <UniBtn :disabled="!phishingCode" @click="handlePhishingCodeCancel">
           {{ $tt('Save') }}
         </UniBtn>
       </div>
@@ -82,8 +82,8 @@
         <div class="text">
           {{ $tt('Are you sure cancel all authorized permissions?') }}
         </div>
-        <UniBtn class="uni-btn" @click="handleTipsCancel">
-          {{ $tt('I got it') }}
+        <UniBtn @click="onConfirmCancelPermissions" class="mt-[22px]">
+          {{ $tt('Confirm') }}
         </UniBtn>
       </div>
     </UniDialog>
@@ -146,7 +146,7 @@ export default {
     }
 
     const isShowTipsDialog = ref(false)
-    const handleTipsCancel = () => {
+    const onConfirmCancelPermissions = () => {
       isShowTipsDialog.value = false
       wallet.clearAllPermission()
       msgContent.value = i18n.$tt('Canceled')
@@ -171,7 +171,7 @@ export default {
       onClickViewMnemonic,
 
       isShowTipsDialog,
-      handleTipsCancel,
+      onConfirmCancelPermissions,
     }
   },
 }

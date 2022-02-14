@@ -11,10 +11,10 @@ export function sleep (ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export function substringKey (str: string) {
+export function substringKey (str: string, head = 6, tail = 7) {
   if (!str) return
   const len = str.length || 0
-  return `${str.substring(0, 6)}...${str.substring(len - 7)}`
+  return `${str.substring(0, head)}...${str.substring(len - tail)}`
 }
 
 type UrlType = 'agreement' | 'domainName'
