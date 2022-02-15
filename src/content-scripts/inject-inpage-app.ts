@@ -3,7 +3,6 @@ import App from '~/ui/inpage/App.vue'
 
 // todo: only inject test component under development
 // if (process.env.NODE_ENV === 'development') {
-console.info('[unisign] Hello world from content script')
 
 // mount component to context window
 const container = document.createElement('div')

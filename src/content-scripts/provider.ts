@@ -2,6 +2,12 @@ import './inject-inpage-app'
 import { EventEmitter } from 'events'
 import { ethErrors } from 'eth-rpc-errors'
 import { onDomReady } from './utils'
+import type {
+  PermittedKeyObjectType,
+  SignPlainMessageParams,
+  SignStructMessageParams,
+  SignTransactionParams,
+} from '~/background/controllers/provider/index'
 import { messageBridge } from '~/utils/messages'
 
 messageBridge.setNamespace()
@@ -82,6 +88,52 @@ export class UniSignProvider extends EventEmitter {
     }
 
     return messageBridge.send('provider-to-background', data as JsonRpcPayload, 'background')
+  }
+
+  getCurrentKeyType () {
+    return this.request({
+      method: 'getCurrentKeyType',
+    })
+  }
+
+  getPermittedKeys () {
+    return this.request({
+      method: 'getPermittedKeys',
+    })
+  }
+
+  requestPermissionsOfCurrentKey (params: PermittedKeyObjectType) {
+    return this.request({
+      method: 'requestPermissionsOfCurrentKey',
+      params,
+    })
+  }
+
+  getCurrentKey () {
+    return this.request({
+      method: 'getCurrentKey',
+    })
+  }
+
+  signPlainMessage (params: SignPlainMessageParams) {
+    return this.request({
+      method: 'signPlainMessage',
+      params,
+    })
+  }
+
+  signStructMessage (params: SignStructMessageParams) {
+    return this.request({
+      method: 'signPlainMessage',
+      params,
+    })
+  }
+
+  signTransaction (params: SignTransactionParams) {
+    return this.request({
+      method: 'signTransaction',
+      params,
+    })
   }
 }
 

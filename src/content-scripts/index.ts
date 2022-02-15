@@ -7,8 +7,8 @@ messageBridge.allowWindowMessaging()
 ;(() => {
   // inject unisign provider
   const script = document.createElement('script')
-  // @ts-ignore
-  script.src = browser.extension.getURL('dist/content-scripts/provider.js')
+  // @ts-expect-error replaced by vite.config.provider.ts
+  script.textContent = _CONTENT_SCRIPT_PROVIDER_SOURCE_CODE_
 
   ;(document.head || document.documentElement).appendChild(script)
   // remove the injecting tag when loaded

@@ -5,7 +5,7 @@
   "description": "The generic interface between private-key managers and applications for the Web3.0.",
   "private": true,
   "scripts": {
-    "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
+    "dev": "npm run clear && npm run build:provider && cross-env NODE_ENV=development run-p dev:*",
     "dev:i18n": "i18n-abc scan && i18n-abc transform",
     "dev:prepare": "esno scripts/prepare.ts",
     "dev:web": "vite",
@@ -57,6 +57,7 @@
     "unplugin-icons": "^0.13.0",
     "unplugin-vue-components": "^0.17.15",
     "vite": "^2.7.13",
+    "vite-plugin-replace": "^0.1.1",
     "vite-plugin-windicss": "^1.6.3",
     "web-ext": "^6.6.0"
   },

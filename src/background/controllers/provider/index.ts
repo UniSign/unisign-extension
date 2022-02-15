@@ -2,11 +2,14 @@ import { ethErrors } from 'eth-rpc-errors'
 import 'reflect-metadata'
 import { ApprovalPage, approvalService } from '~/background/services/approval'
 import { keyringService } from '~/background/services/keyring'
-import { Permissions, permissionService } from '~/background/services/permission'
+import type { Permissions } from '~/background/services/permission'
+import { permissionService } from '~/background/services/permission'
 import { personalService } from '~/background/services/personal'
-import { Session, SessionData, sessionService } from '~/background/services/session'
+import type { Session, SessionData } from '~/background/services/session'
+import { sessionService } from '~/background/services/session'
 import { siteService } from '~/background/services/site'
-import { Unikey, unikeyService, UnikeyType } from '~/background/services/unikey'
+import type { Unikey } from '~/background/services/unikey'
+import { UnikeyType, unikeyService } from '~/background/services/unikey'
 import { CHAINS } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
@@ -142,7 +145,7 @@ export class ProviderController {
     if (passport) {
       return {
         invoker: origin,
-        // @ts-ignore
+        // @ts-expect-error ts suck
         keys: passport.consents.map((consent) => {
           const unikey = unikeyService.findUnikeyByKey(consent.key)
 
@@ -160,7 +163,7 @@ export class ProviderController {
     }
   }
 
-  async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>): Promise<{permittedPermissions: Permissions[]; deniedPermissions: Permissions[]}> {
+  async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>): Promise<{ permittedPermissions: Permissions[]; deniedPermissions: Permissions[] }> {
     const param = data.params
     const meta = param.meta
 
@@ -325,8 +328,7 @@ export class ProviderController {
 
   async route (req: ProviderRequest): Promise<any> {
     const { data: { method }, session } = req
-    // @ts-ignore
-    const func = this[method] as valueOf<ProviderController>
+    const func = this[method as keyof ProviderController] as valueOf<ProviderController>
 
     // check method exist
     if (!func) {
@@ -377,7 +379,7 @@ export class ProviderController {
     }
 
     if (func) {
-      // @ts-ignore
+      // @ts-expect-error force type
       return func.call(this, req)
     }
     else {
