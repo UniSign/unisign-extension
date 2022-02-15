@@ -4,8 +4,9 @@ type Wildcard = '*'
 
 export enum Permissions {
   all = '*',
-  getCurrentUnikey = 'getCurrentUnikey',
-  signTypedMessage = 'signTypedMessage',
+  getCurrentKey = 'getCurrentKey',
+  signPlainMessage = 'signPlainMessage',
+  signStructMessage = 'signStructMessage',
   signTransaction = 'signTransaction',
 }
 

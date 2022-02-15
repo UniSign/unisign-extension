@@ -2,8 +2,7 @@ import { ethErrors } from 'eth-rpc-errors'
 import 'reflect-metadata'
 import { ApprovalPage, approvalService } from '~/background/services/approval'
 import { keyringService } from '~/background/services/keyring'
-import type { Permissions } from '~/background/services/permission'
-import { permissionService } from '~/background/services/permission'
+import { Permissions, permissionService } from '~/background/services/permission'
 import { personalService } from '~/background/services/personal'
 import type { Session, SessionData } from '~/background/services/session'
 import { sessionService } from '~/background/services/session'
@@ -163,6 +162,19 @@ export class ProviderController {
     }
   }
 
+  // Filter out already permitted permissions
+  private filterNeededPermissions (neededPermissions: Permissions[], currentUnikey: Unikey, session: Session) {
+    const sitePassport = permissionService.getSitePassport(session.origin)
+    if (sitePassport) {
+      const consent = sitePassport.consents.find(consent => consent.key === currentUnikey.key)
+      if (consent) {
+        neededPermissions = neededPermissions.filter(neededPermission => !consent.permissions.includes(neededPermission))
+      }
+    }
+
+    return neededPermissions
+  }
+
   async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>): Promise<{ permittedPermissions: Permissions[]; deniedPermissions: Permissions[] }> {
     const param = data.params
     const meta = param.meta
@@ -177,31 +189,53 @@ export class ProviderController {
       const currentChain = CHAINS[currentUnikey.keySymbol]
 
       if (meta.coinType === currentChain.coinType && meta.chainId === currentChain.chainId) {
-        const permittedPermissions = await approvalService.requestApproval<Permissions[]>({
-          approvalPage: ApprovalPage.requestPermission,
-          origin: session.origin,
-          params: param,
-        }) || []
+        const askedPermissions = param.permissions.includes(Permissions.all)
+          ? [
+            Permissions.getCurrentKey,
+            Permissions.signPlainMessage,
+            Permissions.signStructMessage,
+            Permissions.signTransaction,
+          ]
+          : param.permissions
 
-        const deniedPermissions = param.permissions.filter(perm => !permittedPermissions.includes(perm))
+        const needApprovedPermissions = this.filterNeededPermissions(askedPermissions, currentUnikey, session)
 
-        permissionService.addSitePassport(session.origin, {
-          key: currentUnikey.key,
-          permissions: permittedPermissions,
-        })
+        if (needApprovedPermissions.length) {
+          param.permissions = needApprovedPermissions
 
-        if (!siteService.hasBeenConnected(session.origin)) {
-          siteService.addSite({
+          const approvedPermissions = await approvalService.requestApproval<Permissions[]>({
+            approvalPage: ApprovalPage.requestPermission,
             origin: session.origin,
-            name: session.name,
-            icon: session.icon,
-            unikeySymbol: currentChain.unikeySymbol,
-          })
-        }
+            params: param,
+          }) || []
 
-        return {
-          permittedPermissions,
-          deniedPermissions,
+          const deniedPermissions = needApprovedPermissions.filter(perm => !approvedPermissions.includes(perm))
+          const permittedPermissions = askedPermissions.filter(perm => !deniedPermissions.includes(perm))
+
+          permissionService.addSitePassport(session.origin, {
+            key: currentUnikey.key,
+            permissions: approvedPermissions,
+          })
+
+          if (!siteService.hasBeenConnected(session.origin)) {
+            siteService.addSite({
+              origin: session.origin,
+              name: session.name,
+              icon: session.icon,
+              unikeySymbol: currentChain.unikeySymbol,
+            })
+          }
+
+          return {
+            permittedPermissions,
+            deniedPermissions,
+          }
+        }
+        else {
+          return {
+            permittedPermissions: askedPermissions,
+            deniedPermissions: [],
+          }
         }
       }
       else {
@@ -299,7 +333,7 @@ export class ProviderController {
     const { key, message } = param
 
     if (!key) {
-      throw ethErrors.rpc.invalidParams('Missing params when requesting \'signStructMessage\': \'key\'')
+      throw ethErrors.rpc.invalidParams('Missing params when requesting \'signTransaction\': \'key\'')
     }
 
     const currentKey = await this._getCurrentUnikey()

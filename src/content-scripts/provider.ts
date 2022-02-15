@@ -21,8 +21,7 @@ export class UniSignProvider extends EventEmitter {
   isUniSign = true
 
   private _isConnected = false
-  // private _isInitialized = false
-  private _isUnlocked = false
+  private _isUnlocked = true
 
   async isConnected () {
     return this._isConnected
