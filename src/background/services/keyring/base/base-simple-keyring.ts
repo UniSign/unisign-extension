@@ -90,6 +90,9 @@ export abstract class BaseSimpleKeyring<KEY_PAIR extends BaseKeypair = BaseKeypa
       keypairs: [keypair],
     })
 
+    // set network to testnet
+    // signProvider.setNetwork(1)
+
     return await signProvider.signTransaction(psbtHex, true)
   }
 

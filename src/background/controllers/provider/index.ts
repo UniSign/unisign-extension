@@ -53,7 +53,9 @@ export interface PermittedKeysResponse {
 // signPlainMessage
 export interface SignPlainMessageParams {
   key: KeyObject
-  message: string
+  message: {
+    psbt: string
+  }
 }
 export interface SignPlainMessageResult {
   key: KeyObject
@@ -279,7 +281,7 @@ export class ProviderController {
 
       const signedMessage = await keyringService.signPlainMessage({
         from: key.key,
-        data: message,
+        data: message.psbt,
       })
 
       return {
@@ -347,7 +349,7 @@ export class ProviderController {
 
       const signedMessage = await keyringService.signTransaction({
         from: key.key,
-        data: message,
+        data: message.psbt,
       })
 
       return {

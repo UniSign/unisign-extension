@@ -7,11 +7,12 @@ export interface BtcKeypair {
   privateKey: string
   publicKey: string
   toAddress: () => {
-    toNativeSegwitAddress(): string
+    toNativeSegwitAddress(network?: number): string
   }
 }
 
 export function getAddress (keypair: BtcKeypair): string {
+  // return keypair.toAddress().toNativeSegwitAddress(1) // set network to testnet
   return keypair.toAddress().toNativeSegwitAddress()
 }
 
