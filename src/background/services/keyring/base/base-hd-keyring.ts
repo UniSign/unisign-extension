@@ -17,7 +17,7 @@ export abstract class BaseHdKeyring<KEY_PAIR extends BaseKeypair = BaseKeypair> 
 
   defaultOpts: BaseHdKeyringOpts = {
     mnemonic: '',
-    hdPathBase: 'm/84\'/0\'/0\'/0', // full path m/84'/0'/0'/0/0
+    hdPathBase: '',
     numberOfAccounts: 1,
   }
 

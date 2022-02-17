@@ -4,10 +4,12 @@ import { ApprovalPage, approvalService } from '~/background/services/approval'
 import { keyringService } from '~/background/services/keyring'
 import { Permissions, permissionService } from '~/background/services/permission'
 import { personalService } from '~/background/services/personal'
-import { Session, SessionData, sessionService } from '~/background/services/session'
+import type { Session, SessionData } from '~/background/services/session'
+import { sessionService } from '~/background/services/session'
 import { siteService } from '~/background/services/site'
-import { Unikey, unikeyService, UnikeyType } from '~/background/services/unikey'
-import { CHAINS } from '~/constants'
+import type { Unikey } from '~/background/services/unikey'
+import { unikeyService, UnikeyType } from '~/background/services/unikey'
+import { CHAINS, UnikeySymbol } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
 interface ProviderRequest<T1 = any> {
@@ -66,8 +68,23 @@ export interface SignStructMessageParams {
 export type SignStructMessageResult = SignPlainMessageResult
 
 // signTransaction
-export type SignTransactionParams = SignPlainMessageParams
-export type SignTransactionResult = SignPlainMessageResult
+// btc params payload
+export interface SignTransactionParamsBTCPayload {
+  psbt: string
+}
+// ckb params payload
+export interface SignTransactionParamsCKBPayload {
+  transaction: object
+  cells: object[]
+}
+export interface SignTransactionParams {
+  key: KeyObject
+  message: SignTransactionParamsBTCPayload | SignTransactionParamsCKBPayload
+}
+export interface SignTransactionResult {
+  key: KeyObject
+  signedMessage: string | object
+}
 
 export function composeKeyObjectFromUnikey (unikey: Unikey): KeyObjectType
 export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean): KeyObject
@@ -142,7 +159,7 @@ export class ProviderController {
     if (passport) {
       return {
         invoker: origin,
-        // @ts-ignore
+        // @ts-expect-error ts suck
         keys: passport.consents.map((consent) => {
           const unikey = unikeyService.findUnikeyByKey(consent.key)
 
@@ -160,7 +177,20 @@ export class ProviderController {
     }
   }
 
-  async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>): Promise<{permittedPermissions: Permissions[]; deniedPermissions: Permissions[]}> {
+  // Filter out already permitted permissions
+  private filterNeededPermissions (neededPermissions: Permissions[], currentUnikey: Unikey, session: Session) {
+    const sitePassport = permissionService.getSitePassport(session.origin)
+    if (sitePassport) {
+      const consent = sitePassport.consents.find(consent => consent.key === currentUnikey.key)
+      if (consent) {
+        neededPermissions = neededPermissions.filter(neededPermission => !consent.permissions.includes(neededPermission))
+      }
+    }
+
+    return neededPermissions
+  }
+
+  async requestPermissionsOfCurrentKey ({ session, data }: ProviderRequest<PermittedKeyObjectType>): Promise<{ permittedPermissions: Permissions[]; deniedPermissions: Permissions[] }> {
     const param = data.params
     const meta = param.meta
 
@@ -174,31 +204,53 @@ export class ProviderController {
       const currentChain = CHAINS[currentUnikey.keySymbol]
 
       if (meta.coinType === currentChain.coinType && meta.chainId === currentChain.chainId) {
-        const permittedPermissions = await approvalService.requestApproval<Permissions[]>({
-          approvalPage: ApprovalPage.requestPermission,
-          origin: session.origin,
-          params: param,
-        }) || []
+        const askedPermissions = param.permissions.includes(Permissions.all)
+          ? [
+            Permissions.getCurrentKey,
+            Permissions.signPlainMessage,
+            Permissions.signStructMessage,
+            Permissions.signTransaction,
+          ]
+          : param.permissions
 
-        const deniedPermissions = param.permissions.filter(perm => !permittedPermissions.includes(perm))
+        const needApprovedPermissions = this.filterNeededPermissions(askedPermissions, currentUnikey, session)
 
-        permissionService.addSitePassport(session.origin, {
-          key: currentUnikey.key,
-          permissions: permittedPermissions,
-        })
+        if (needApprovedPermissions.length) {
+          param.permissions = needApprovedPermissions
 
-        if (!siteService.hasBeenConnected(session.origin)) {
-          siteService.addSite({
+          const approvedPermissions = await approvalService.requestApproval<Permissions[]>({
+            approvalPage: ApprovalPage.requestPermission,
             origin: session.origin,
-            name: session.name,
-            icon: session.icon,
-            unikeySymbol: currentChain.unikeySymbol,
-          })
-        }
+            params: param,
+          }) || []
 
-        return {
-          permittedPermissions,
-          deniedPermissions,
+          const deniedPermissions = needApprovedPermissions.filter(perm => !approvedPermissions.includes(perm))
+          const permittedPermissions = askedPermissions.filter(perm => !deniedPermissions.includes(perm))
+
+          permissionService.addSitePassport(session.origin, {
+            key: currentUnikey.key,
+            permissions: approvedPermissions,
+          })
+
+          if (!siteService.hasBeenConnected(session.origin)) {
+            siteService.addSite({
+              origin: session.origin,
+              name: session.name,
+              icon: session.icon,
+              unikeySymbol: currentChain.unikeySymbol,
+            })
+          }
+
+          return {
+            permittedPermissions,
+            deniedPermissions,
+          }
+        }
+        else {
+          return {
+            permittedPermissions: askedPermissions,
+            deniedPermissions: [],
+          }
         }
       }
       else {
@@ -289,14 +341,13 @@ export class ProviderController {
     }
   }
 
-  // todo: not finish, need to investigate
   @Reflect.metadata('PROTECTED', true)
   async signTransaction ({ session, data }: ProviderRequest<SignTransactionParams>): Promise<SignTransactionResult> {
     const param = data.params
     const { key, message } = param
 
     if (!key) {
-      throw ethErrors.rpc.invalidParams('Missing params when requesting \'signStructMessage\': \'key\'')
+      throw ethErrors.rpc.invalidParams('Missing params when requesting \'signTransaction\': \'key\'')
     }
 
     const currentKey = await this._getCurrentUnikey()
@@ -308,14 +359,28 @@ export class ProviderController {
         params: param,
       })
 
-      const signedMessage = await keyringService.signTransaction({
-        from: key.key,
-        data: message,
-      })
-
-      return {
-        key: composeKeyObjectFromUnikey(currentKey, true),
-        signedMessage,
+      if (currentKey.keySymbol === UnikeySymbol.BTC || currentKey.keySymbol === UnikeySymbol.DOGE) {
+        const signedMessage = await keyringService.signTransaction({
+          from: key.key,
+          data: (message as SignTransactionParamsBTCPayload).psbt,
+        })
+        return {
+          key: composeKeyObjectFromUnikey(currentKey, true),
+          signedMessage,
+        }
+      }
+      else if (currentKey.keySymbol === UnikeySymbol.CKB) {
+        const signedMessage = await keyringService.signTransaction({
+          from: key.key,
+          data: message as SignTransactionParamsCKBPayload,
+        })
+        return {
+          key: composeKeyObjectFromUnikey(currentKey, true),
+          signedMessage: JSON.parse(signedMessage),
+        }
+      }
+      else {
+        throw ethErrors.rpc.invalidParams('Unisign does not support requested keySymbol')
       }
     }
     else {
@@ -325,8 +390,7 @@ export class ProviderController {
 
   async route (req: ProviderRequest): Promise<any> {
     const { data: { method }, session } = req
-    // @ts-ignore
-    const func = this[method] as valueOf<ProviderController>
+    const func = this[method as keyof ProviderController] as valueOf<ProviderController>
 
     // check method exist
     if (!func) {
@@ -377,7 +441,7 @@ export class ProviderController {
     }
 
     if (func) {
-      // @ts-ignore
+      // @ts-expect-error force type
       return func.call(this, req)
     }
     else {

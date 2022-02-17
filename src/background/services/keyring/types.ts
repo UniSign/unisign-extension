@@ -36,7 +36,7 @@ export interface KeyringBase<T extends SerializedKeyringData = SerializedKeyring
 
   getAccounts (): Promise<string[]>
 
-  signTransaction (address: string, transaction: string, opts: object): Promise<string>
+  signTransaction (address: string, transaction: any, opts: object): Promise<string>
 
   signPlainMessage (address: string, data: string, opts: object): Promise<string>
 
