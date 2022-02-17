@@ -8,7 +8,7 @@ import type { Session, SessionData } from '~/background/services/session'
 import { sessionService } from '~/background/services/session'
 import { siteService } from '~/background/services/site'
 import type { Unikey } from '~/background/services/unikey'
-import { UnikeyType, unikeyService } from '~/background/services/unikey'
+import { unikeyService, UnikeyType } from '~/background/services/unikey'
 import { CHAINS, UnikeySymbol } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
@@ -359,7 +359,7 @@ export class ProviderController {
         params: param,
       })
 
-      if (currentKey.keySymbol === UnikeySymbol.BTC) {
+      if (currentKey.keySymbol === UnikeySymbol.BTC || currentKey.keySymbol === UnikeySymbol.DOGE) {
         const signedMessage = await keyringService.signTransaction({
           from: key.key,
           data: (message as SignTransactionParamsBTCPayload).psbt,
@@ -380,7 +380,7 @@ export class ProviderController {
         }
       }
       else {
-        throw ethErrors.rpc.invalidParams('Requested key does not match current key')
+        throw ethErrors.rpc.invalidParams('Unisign does not support requested keySymbol')
       }
     }
     else {
