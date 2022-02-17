@@ -9,7 +9,7 @@ import { sessionService } from '~/background/services/session'
 import { siteService } from '~/background/services/site'
 import type { Unikey } from '~/background/services/unikey'
 import { UnikeyType, unikeyService } from '~/background/services/unikey'
-import { CHAINS } from '~/constants'
+import { CHAINS, UnikeySymbol } from '~/constants'
 import { messageBridge } from '~/utils/messages'
 
 interface ProviderRequest<T1 = any> {
@@ -53,9 +53,7 @@ export interface PermittedKeysResponse {
 // signPlainMessage
 export interface SignPlainMessageParams {
   key: KeyObject
-  message: {
-    psbt: string
-  }
+  message: string
 }
 export interface SignPlainMessageResult {
   key: KeyObject
@@ -70,8 +68,23 @@ export interface SignStructMessageParams {
 export type SignStructMessageResult = SignPlainMessageResult
 
 // signTransaction
-export type SignTransactionParams = SignPlainMessageParams
-export type SignTransactionResult = SignPlainMessageResult
+// btc params payload
+export interface SignTransactionParamsBTCPayload {
+  psbt: string
+}
+// ckb params payload
+export interface SignTransactionParamsCKBPayload {
+  transaction: object
+  cells: object[]
+}
+export interface SignTransactionParams {
+  key: KeyObject
+  message: SignTransactionParamsBTCPayload | SignTransactionParamsCKBPayload
+}
+export interface SignTransactionResult {
+  key: KeyObject
+  signedMessage: string | object
+}
 
 export function composeKeyObjectFromUnikey (unikey: Unikey): KeyObjectType
 export function composeKeyObjectFromUnikey (unikey: Unikey, withKey: boolean): KeyObject
@@ -281,7 +294,7 @@ export class ProviderController {
 
       const signedMessage = await keyringService.signPlainMessage({
         from: key.key,
-        data: message.psbt,
+        data: message,
       })
 
       return {
@@ -328,7 +341,6 @@ export class ProviderController {
     }
   }
 
-  // todo: not finish, need to investigate
   @Reflect.metadata('PROTECTED', true)
   async signTransaction ({ session, data }: ProviderRequest<SignTransactionParams>): Promise<SignTransactionResult> {
     const param = data.params
@@ -347,14 +359,28 @@ export class ProviderController {
         params: param,
       })
 
-      const signedMessage = await keyringService.signTransaction({
-        from: key.key,
-        data: message.psbt,
-      })
-
-      return {
-        key: composeKeyObjectFromUnikey(currentKey, true),
-        signedMessage,
+      if (currentKey.keySymbol === UnikeySymbol.BTC) {
+        const signedMessage = await keyringService.signTransaction({
+          from: key.key,
+          data: (message as SignTransactionParamsBTCPayload).psbt,
+        })
+        return {
+          key: composeKeyObjectFromUnikey(currentKey, true),
+          signedMessage,
+        }
+      }
+      else if (currentKey.keySymbol === UnikeySymbol.CKB) {
+        const signedMessage = await keyringService.signTransaction({
+          from: key.key,
+          data: message as SignTransactionParamsCKBPayload,
+        })
+        return {
+          key: composeKeyObjectFromUnikey(currentKey, true),
+          signedMessage: JSON.parse(signedMessage),
+        }
+      }
+      else {
+        throw ethErrors.rpc.invalidParams('Requested key does not match current key')
       }
     }
     else {

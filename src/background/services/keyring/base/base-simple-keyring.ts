@@ -84,7 +84,7 @@ export abstract class BaseSimpleKeyring<KEY_PAIR extends BaseKeypair = BaseKeypa
     return this.keypairs.find(w => this.getAddress(w) === address)
   }
 
-  async signTransaction (address: string, psbtHex: string) {
+  async signTransaction (address: string, psbtHex: any) {
     const keypair = this.getWallet(address)
     const signProvider = btc.SignProvider.create({
       keypairs: [keypair],

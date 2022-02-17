@@ -718,7 +718,7 @@ export class KeyringService extends EventEmitter {
    * @param {Object} opts - Signing options.
    * @returns {Promise<Object>} The signed transaction object.
    */
-  signTransaction (msgParams: MsgParams, opts = {}) {
+  signTransaction<T> (msgParams: MsgParams<T>, opts = {}) {
     const address = msgParams.from
     return this.getKeyringForAccount(address).then((keyring) => {
       return keyring.signTransaction(address, msgParams.data, opts)

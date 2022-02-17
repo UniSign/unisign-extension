@@ -1,3 +1,4 @@
+import type { SignTransactionParamsCKBPayload } from '~/background/controllers/provider/index'
 import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
@@ -8,22 +9,26 @@ export interface CkbKeypair {
   privateKey: string
   publicKey: string
   toAddress: () => {
-    toLegacyShortAddress(): string
-    // toFullAddress(): string
+    toLegacyShortAddress(network?: number): string
+    toFullAddress(network?: number): string
   }
 }
 
 export function getAddress (keypair: CkbKeypair) {
+  // return keypair.toAddress().toLegacyShortAddress(1) // set network to testnet
   return keypair.toAddress().toLegacyShortAddress()
 }
 
-export async function signTransaction (this: CkbSimpleKeyring, address: string, psbtHex: string) {
+export async function signTransaction (this: CkbSimpleKeyring, address: string, data: SignTransactionParamsCKBPayload) {
   const keypair = this.getWallet(address)
   const signProvider = ckb.SignProvider.create({
     keypairs: [keypair],
   })
 
-  return await signProvider.signTransaction(psbtHex, true)
+  // set network to testnet
+  // signProvider.setNetwork(1)
+
+  return await signProvider.signTransaction(JSON.stringify(data), true)
 }
 
 export async function signPlainMessage (this: CkbSimpleKeyring, address: string, text: string): Promise<string> {
