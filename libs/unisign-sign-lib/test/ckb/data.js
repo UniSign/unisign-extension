@@ -89,7 +89,7 @@ const UNSIGNED_TX = `{
         "tx_hash": "0x429c949b807ce7b4ff937eb0c7b7b61efa1bbfceccb5eda0b4ab73ede447bf57",
         "index": "0x0"
       },
-      "cell": {
+      "output": {
         "capacity": "0x174876e800",
         "lock": {
           "args": "0xa3c778981c19e1dcc611fb2132dcdaac075a5064",
@@ -104,7 +104,7 @@ const UNSIGNED_TX = `{
         "tx_hash": "0x430663d7b2ec39cd6e6020ec72ed56f346744c157ed181c844843843354b908b",
         "index": "0x0"
       },
-      "cell": {
+      "output": {
         "capacity": "0x174876e800",
         "lock": {
           "args": "0x75178f34549c5fe9cd1a0c57aebd01e7ddf9249e",

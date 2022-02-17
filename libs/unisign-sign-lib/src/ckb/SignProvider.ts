@@ -116,7 +116,7 @@ export class SignProvider extends BaseSignProvider {
     }
     const cells: Array<{ outPoint: CKBComponents.OutPoint, lock: CKBComponents.Script }> = data.cells.map((item: any) => {
       const outPoint = fromRPCFormatter.toOutPoint(item.out_point)
-      const lock = fromRPCFormatter.toScript(item.cell.lock)
+      const lock = fromRPCFormatter.toScript(item.output.lock)
 
       return { outPoint, lock }
     })
