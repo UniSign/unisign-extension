@@ -1,5 +1,5 @@
 // todo: this is a fork of webext-bridge, fixing a bug relative to webextension-polyfill included by webext-bridge
-import { onMessage, sendMessage, allowWindowMessaging, setNamespace } from '../../libs/webext-bridge'
+import { allowWindowMessaging, onMessage, sendMessage, setNamespace } from '../../libs/webext-bridge'
 
 // there is bug with crx-bridge@3.0 and webext-bridge according to the issue below
 // https://github.com/zikaari/crx-bridge/issues/11

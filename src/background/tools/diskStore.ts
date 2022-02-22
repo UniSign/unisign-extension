@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import debounce from 'lodash/debounce'
 import { storage } from '~/background/tools/storage'
 
