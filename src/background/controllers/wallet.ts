@@ -257,5 +257,5 @@ export function setupWalletController () {
     }
   })
 
-  ;(window as any).walletController = walletController
+  ;(globalThis as any).walletController = walletController
 }

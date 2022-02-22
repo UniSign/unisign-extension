@@ -7,7 +7,7 @@ import { hasAPI, parseEndpoint, getBackgroundPageType } from './utils'
 
 // todo: remove the dependency for webextension-polyfill for compatible reason
 // @ts-ignore
-const browser = window.chrome
+const browser = globalThis.chrome
 declare namespace Runtime {
   type Port = any
 }
