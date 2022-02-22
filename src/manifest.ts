@@ -9,22 +9,20 @@ export async function getManifest () {
   // update this file to update this manifest.json
   // can also be conditional based on your need
   const manifest: Manifest.WebExtensionManifest = {
-    manifest_version: 2,
+    manifest_version: 3,
     name: pkg.displayName || pkg.name,
     version: pkg.version,
     description: pkg.description,
-    browser_action: {
+    action: {
       default_icon: './assets/icon-128.png',
       default_popup: './dist/ui/popup/index.html',
     },
     options_ui: {
       page: './dist/ui/options/index.html',
       open_in_tab: true,
-      chrome_style: false,
     },
     background: {
-      page: './dist/background/index.html',
-      persistent: false,
+      service_worker: './dist/background/index.global.js',
     },
     icons: {
       16: './assets/icon-128.png',
@@ -35,20 +33,31 @@ export async function getManifest () {
       'tabs',
       'storage',
       'activeTab',
-      'http://*/',
-      'https://*/',
+    ],
+    // host_permissions: ['*://*/*'],
+    host_permissions: [
+      'http://localhost:3303/**/*',
+      'http://localhost:3303/*',
     ],
     content_scripts: [{
+      run_at: 'document_end',
       matches: ['http://*/*', 'https://*/*'],
       js: ['./dist/content-scripts/content.js'],
     }],
     web_accessible_resources: [
-      'dist/content-scripts/provider.js',
-      'dist/content-scripts/style.css',
+      {
+        resources: ['dist/content-scripts/provider.js',
+          'dist/content-scripts/style.css',
+        ],
+        matches: ['<all_urls>'],
+      },
     ],
     // todo: figure out how to remove unsafe-eval which introduced by vue-i18n@next
     // todo: figure out how to remove wasm-eval which introduced by [wasm](https://stackoverflow.com/a/54033309)
-    content_security_policy: `script-src \'self\' \'unsafe-eval\' \'wasm-eval\' http://localhost:${port} https://at.alicdn.com; object-src \'self\'`,
+    content_security_policy: {
+      extension_pages: 'script-src http://localhost:3303 http://localhost; script-src-elem \'self\' http://localhost:3303 https://at.alicdn.com; object-src \'self\'',
+    },
+
   }
 
   if (isDev) {

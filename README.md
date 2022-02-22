@@ -85,3 +85,7 @@ pnpm build
 ```
 
 And then pack files under `extension`, you can upload `extension.crx` or `extension.xpi` to appropriate extension store.
+
+# Todo
+There is some bug with Manifest v3, and we can only wait until they fix it.
+https://bugs.chromium.org/p/chromium/issues/detail?id=1173354
