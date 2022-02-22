@@ -23,16 +23,6 @@ async function stubIndexHtml () {
     await fs.writeFile(r(`extension/dist/ui/${view}/index.html`), data, 'utf-8')
     log('PRE', `stub ${view}.html`)
   }
-
-  // background's path is a little bit different
-  const background = 'background'
-  await fs.ensureDir(r(`extension/dist/${background}`))
-  let data = await fs.readFile(r(`src/${background}/index.html`), 'utf-8')
-  data = data
-    .replace('"./main.ts"', `"http://localhost:${port}/${background}/main.ts"`)
-    .replace('<div id="app"></div>', '<div id="app">Vite server did not start</div>')
-  await fs.writeFile(r(`extension/dist/${background}/index.html`), data, 'utf-8')
-  log('PRE', `stub ${background}.html`)
 }
 
 function writeManifest () {
