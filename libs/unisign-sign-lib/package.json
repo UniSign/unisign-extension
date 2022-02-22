@@ -4,6 +4,9 @@
   "author": "Link <xieaolin@gmail.com>",
   "description": "The all in one sign lib for UniSign.",
   "private": true,
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "dev": "webpack -w --mode=development --config build/dist.config.js",
     "analyze": "webpack --mode=production --config build/analyzer.config.js",
@@ -13,6 +16,10 @@
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-wasm": "^5.1.2",
     "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.178",
     "@types/webpack": "^5.28.0",
@@ -23,11 +30,13 @@
     "eslint": "^7.32.0",
     "eslint-config-blockabc": "^0.14.3",
     "jest": "^27.4.3",
+    "rollup-plugin-typescript2": "^0.31.2",
     "semantic-release": "^18.0.1",
     "terser-webpack-plugin": "^5.3.0",
     "ts-loader": "^9.2.6",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "^4.5.2",
+    "url": "^0.11.0",
     "webpack": "^5.65.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1",
@@ -35,6 +44,8 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@nervosnetwork/ckb-sdk-core": "^0.101.0",
     "@nervosnetwork/ckb-sdk-rpc": "^0.101.0",
     "@nervosnetwork/ckb-sdk-utils": "^0.101.0",

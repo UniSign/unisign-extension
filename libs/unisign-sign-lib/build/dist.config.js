@@ -22,7 +22,7 @@ module.exports = async function (env, argv) {
       }
     }),
     merge(baseConfig, {
-      target: 'node',
+      target: 'web',
       output: {
         path: DIST,
         filename: '[name].cjs.js',
