@@ -1,7 +1,7 @@
 import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { btc } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { btc } from '~~/libs/unisign-sign-lib/dist/sign.cjs.js'
 
 export interface BtcKeypair {
   privateKey: string

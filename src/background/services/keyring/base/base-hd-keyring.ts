@@ -3,7 +3,7 @@ import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simpl
 import type { BaseKeypair } from '~/background/services/keyring/base/base-simple-keyring'
 import type { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { core } from '~~/libs/unisign-sign-lib/dist/sign.cjs.js'
 
 export interface BaseHdKeyringOpts {
   hdPathBase: string

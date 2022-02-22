@@ -4,7 +4,7 @@ import { KeyringType } from '~/background/services/keyring/types'
 import type { BtcKeypair } from '~/background/services/keyring/btc/btc-simple-keyring'
 import { getAddress } from '~/background/services/keyring/btc/btc-simple-keyring'
 // @ts-expect-error no type
-import { btc } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { btc } from '~~/libs/unisign-sign-lib/dist/sign.cjs.js'
 
 const type = KeyringType.BtcHD
 
