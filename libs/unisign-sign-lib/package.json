@@ -8,6 +8,7 @@
     "dev": "webpack -w --mode=development --config build/dist.config.js",
     "analyze": "webpack --mode=production --config build/analyzer.config.js",
     "build": "webpack --mode=production --config build/dist.config.js",
+    "cp": "cp dist/sign.mjs lib/sign.mjs && cp dist/*.wasm ../../extension/dist/assets",
     "test": "jest"
   },
   "devDependencies": {
