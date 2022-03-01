@@ -6,7 +6,7 @@ on:
       - "v*.*.*"
 
 jobs:
-  docs:
+  deploy:
     runs-on: ubuntu-latest
 
     env:
@@ -39,8 +39,8 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
 
-      - name: Build documentation site
-        run: yarn build && yarn pack
+      - name: Build & Pack extension
+        run: yarn run build && yarn run pack
 
       - name: Release
         uses: softprops/action-gh-release@v1
