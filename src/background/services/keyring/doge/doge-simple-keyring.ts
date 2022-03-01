@@ -2,7 +2,7 @@ import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simpl
 import type { CkbKeypair } from '~/background/services/keyring/ckb/ckb-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { core, doge } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { core, doge } from '~~/libs/unisign-sign-lib/lib/sign.mjs'
 
 // copy from unisign-sign-lib
 export interface DogeKeypair {
