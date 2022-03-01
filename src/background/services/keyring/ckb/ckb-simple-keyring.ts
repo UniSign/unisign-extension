@@ -2,7 +2,7 @@ import type { SignTransactionParamsCKBPayload } from '~/background/controllers/p
 import { BaseSimpleKeyring } from '~/background/services/keyring/base/base-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { ckb, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { ckb, core } from '~~/libs/unisign-sign-lib/lib/sign.mjs'
 
 // copy from unisign-sign-lib
 export interface CkbKeypair {

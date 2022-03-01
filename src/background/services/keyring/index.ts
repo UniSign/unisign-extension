@@ -24,7 +24,7 @@ import type { UniKeyChainSimple, Unikey, UnikeyChainHD } from '~/background/serv
 import { loadDiskStore } from '~/background/tools/diskStore'
 import { storage } from '~/background/tools/storage'
 // @ts-expect-error no type
-import { core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { core } from '~~/libs/unisign-sign-lib/lib/sign.mjs'
 
 const keyringTypes = [BtcSimpleKeyring, BtcHdKeyring, CkbSimpleKeyring, CkbHdKeyring, DogeSimpleKeyring, DogeHdKeyring] as KeyringClassType[]
 
