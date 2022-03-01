@@ -3,7 +3,7 @@ import type { CkbKeypair } from '~/background/services/keyring/ckb/ckb-simple-ke
 import { KeyringType } from '~/background/services/keyring/types'
 import { getAddress, signPlainMessage, signStructMessage, signTransaction } from '~/background/services/keyring/doge/doge-simple-keyring'
 // @ts-expect-error no type
-import { doge } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { doge } from '~~/libs/unisign-sign-lib/lib/sign.mjs'
 
 const type = KeyringType.DogeHD
 

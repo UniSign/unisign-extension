@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { btc, core } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { btc, core } from '~~/libs/unisign-sign-lib/lib/sign.mjs'
 
 export interface BaseSimpleKeyringOpts {
   privateKeys: string[]

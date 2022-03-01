@@ -8,7 +8,7 @@ import {
 } from '~/background/services/keyring/ckb/ckb-simple-keyring'
 import { KeyringType } from '~/background/services/keyring/types'
 // @ts-expect-error no type
-import { ckb } from '~~/libs/unisign-sign-lib/dist/sign.mjs'
+import { ckb } from '~~/libs/unisign-sign-lib/lib/sign.mjs'
 
 export const type = KeyringType.CkbHD
 
