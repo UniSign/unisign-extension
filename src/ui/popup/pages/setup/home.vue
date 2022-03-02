@@ -228,7 +228,9 @@
     <div class="central-bg-2" />
     <div class="central-content">
       <div class="address-part">
-        <h2 class="address-title">{{ currentUnikeyName }} {{ $tt('Address') }}</h2>
+        <h2 class="address-title">
+          {{ currentUnikeyName }} {{ $tt('Address') }}
+        </h2>
         <p>{{ currentUnikey?.key }}</p>
         <div>
           <div class="icon-wrapper mr-[16px] cursor-pointer copy-address" :data-clipboard-text="currentUnikey?.key" @click="handleCopyAddress">
@@ -244,7 +246,7 @@
             </Tooltip>
           </div>
           <i class="mr-[16px]" />
-          <div class="icon-wrapper cursor-pointer">
+          <div class="icon-wrapper cursor-pointer" @click="onClickTransfer">
             <Iconfont name="switch" size="13" color="#6D88A1" />
             <Tooltip bottom>
               {{ $tt('Transfer') }}
@@ -284,6 +286,7 @@ import { wallet } from '~/ui/controllers/wallet'
 import { CHAINS } from '~/constants'
 import { getImageUrl } from '~/utils'
 import type { Unikey } from '~/background/services/unikey'
+import { windows } from '~/background/tools/windows'
 
 export default {
   name: 'PageHome',
@@ -377,6 +380,9 @@ export default {
       onClickSettings,
 
       handleCopyAddress,
+      onClickTransfer () {
+        windows.createNewTab('https://transfer.unisign.org')
+      },
 
       isShowQRCodeDialog,
       handleQRCancel,
